@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Target, History, Users, Award, BookOpen } from "lucide-react";
+import { Target, History, Users, Award, BookOpen, Shield } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
 import { DosenCarousel, DosenCard } from "../components/sttb/DosenCarousel";
@@ -174,16 +174,16 @@ export function AboutPage() {
             </p>
           </div>
 
-          <div className="max-w-7xl mx-auto flex flex-col gap-16">
+          <div className="max-w-7xl mx-auto flex flex-col gap-8">
             {/* Tier 1: Ketua — offset RIGHT */}
             <div className="relative">
-              <div className="flex justify-end items-center gap-4 mb-6">
+              <div className="flex justify-end items-center gap-4 mb-6 md:pr-24">
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
                 <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
                   Ketua
                 </span>
               </div>
-              <div className="flex justify-center md:justify-end">
+              <div className="flex justify-center md:justify-end md:pr-24">
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -573,6 +573,149 @@ export function AboutPage() {
                 </p>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Yayasan */}
+      <section className="py-20 bg-white" id="yayasan">
+        <div className="container mx-auto px-4 lg:px-8">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <Shield size={20} />
+              <span className="font-bold">YAYASAN</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+              Yayasan STTB
+            </h2>
+            <p className="text-lg text-gray-600">
+              Struktur organisasi yayasan yang menaungi Sekolah Tinggi Teologi Bandung
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto flex flex-col gap-14">
+            {/* Tier 1: Dewan Pembina — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Dewan Pembina
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full sm:w-auto">
+                  {[
+                    { name: "Nama Pembina 1", role: "Ketua Dewan Pembina" },
+                    { name: "Nama Pembina 2", role: "Anggota Dewan Pembina" },
+                    { name: "Nama Pembina 3", role: "Anggota Dewan Pembina" },
+                  ].map((person, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-full sm:w-48"
+                    >
+                      <div className="bg-white rounded-xl p-5 shadow-md border-l-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
+                        <div className="w-10 h-10 bg-[#1e3a8a] rounded-lg flex items-center justify-center mb-3">
+                          <Shield size={18} className="text-white" />
+                        </div>
+                        <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
+                          {person.name}
+                        </h4>
+                        <p className="text-[11px] font-semibold text-[#f59e0b] mt-1">
+                          {person.role}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 2: Dewan Pengurus — offset LEFT */}
+            <div className="relative">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Dewan Pengurus
+                </span>
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
+              </div>
+              <div className="flex justify-center md:justify-start">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 w-full md:w-auto">
+                  {[
+                    { name: "Nama Pengurus 1", role: "Ketua" },
+                    { name: "Nama Pengurus 2", role: "Wakil Ketua" },
+                    { name: "Nama Pengurus 3", role: "Sekretaris" },
+                    { name: "Nama Pengurus 4", role: "Bendahara" },
+                  ].map((person, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-full md:w-48"
+                    >
+                      <div className="bg-white rounded-xl p-5 shadow-md border-t-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
+                        <span className="inline-block bg-[#f59e0b] text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-3">
+                          {person.role}
+                        </span>
+                        <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
+                          {person.name}
+                        </h4>
+                        <p className="text-[11px] text-gray-500 mt-1">
+                          Dewan Pengurus Yayasan
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 3: Anggota — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Anggota
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-4 w-full lg:w-auto">
+                  {[
+                    "Nama Anggota 1",
+                    "Nama Anggota 2",
+                    "Nama Anggota 3",
+                    "Nama Anggota 4",
+                    "Nama Anggota 5",
+                    "Nama Anggota 6",
+                    "Nama Anggota 7",
+                  ].map((name, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="w-full lg:w-36"
+                    >
+                      <div className="bg-white rounded-xl p-4 shadow-md border-l-3 border-[#1e3a8a] hover:shadow-lg transition-shadow">
+                        <h4 className="text-xs font-bold text-[#1e3a8a] leading-tight">
+                          {name}
+                        </h4>
+                        <p className="text-[10px] text-gray-500 mt-1">
+                          Anggota Yayasan
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
