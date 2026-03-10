@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Target, History, Users, Award, BookOpen, Shield } from "lucide-react";
+import { Target, History, Users, Award, BookOpen, Shield, Star } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
 import { DosenCarousel, DosenCard } from "../components/sttb/DosenCarousel";
@@ -49,15 +49,14 @@ export function AboutPage() {
                 Visi Kami
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Menjadi lembaga pendidikan teologi terkemuka yang menghasilkan pemimpin rohani yang transformatif, berkomitmen pada kebenaran Alkitab, dan berdampak bagi transformasi gereja dan masyarakat.
+                Menjadi institusi pendidikan teologi yang mempersiapkan yang transformatif dan memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban.
               </p>
               <h3 className="text-2xl font-bold text-[#1e3a8a] mb-4">Misi Kami</h3>
               <ul className="space-y-3">
                 {[
-                  "Memberikan pendidikan teologi yang berkualitas tinggi dan berlandaskan Alkitab",
-                  "Mengembangkan karakter Kristiani dan keterampilan pelayanan mahasiswa",
-                  "Melakukan penelitian teologi yang relevan dengan konteks Indonesia",
-                  "Membangun kemitraan dengan gereja dan lembaga pelayanan",
+                  "Mempersiapkan pastor-scholar yang transformatif untuk melayanan dalam konteks urban.",
+                  "Memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban melalui penelitian dan pendidikan non-formal.",
+                  "Mengembangkan tim dosen, struktur organisasi dan keuangan, serta kemitraan untuk mendukung pencapaian visi STTB.",
                 ].map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-[#f59e0b] mt-2 flex-shrink-0" />
@@ -80,6 +79,80 @@ export function AboutPage() {
                 className="rounded-2xl shadow-2xl"
               />
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Core Values */}
+      <section className="py-20 bg-gray-50" id="core-values">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <Star size={20} />
+              <span className="font-bold">NILAI-NILAI INTI</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4 uppercase tracking-tight">
+              CORE VALUES
+            </h2>
+            <p className="text-lg text-gray-600">
+              Nilai-nilai utama yang menjadi landasan dan identitas Sekolah Tinggi Teologi Bandung
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+            {[
+              {
+                title: "CHRIST CENTERED",
+                points: [
+                  "Rencana keselamatan Allah atas seisi dunia yg berpusat di dalam karya penebusan Kristus.",
+                  "Mandat budaya dan mandat Injil dalam kerangka metanarasi Alkitab: Penciptaan-Kejatuhan-Penebusan-Penggenapan."
+                ]
+              },
+              {
+                title: "TEKS - KONTEKS",
+                points: [
+                  "Setia kepada teks: Firman Tuhan dan warisan iman Bapa-Bapa Gereja",
+                  "Responsif terhadap konteks: sosial dan generasional"
+                ]
+              },
+              {
+                title: "PENATALAYANAN",
+                points: [
+                  "Integritas (kejujuran, transparansi, akuntabilitas - waktu, uang, relasi)",
+                  "Dedikasi (melayani dan mengupayakan yang terbaik bagi sesama)",
+                  "Kompetensi (kecakapan akademik, pelayanan, dan penelitian)"
+                ]
+              },
+              {
+                title: "TRANSFORMATIF",
+                points: [
+                  "Karya penebusan Kristus yg transformatif dialami oleh semua stakeholder STTB (mahasiswa, dosen, staf, karyawan, yayasan, mitra pelayanan, gereja, dan masyarakat)"
+                ]
+              }
+            ].map((value, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+              >
+                <div className="mb-8">
+                  <h3 className="text-lg font-black text-gray-900 uppercase tracking-wider relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-0 after:w-full after:h-1.5 after:bg-[#f59e0b]">
+                    {value.title}
+                  </h3>
+                </div>
+                <ul className="space-y-4 text-sm text-gray-600 flex-1 flex flex-col">
+                  {value.points.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 flex-shrink-0" />
+                      <span className="leading-relaxed">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
