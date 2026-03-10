@@ -19,7 +19,11 @@ const navItems: NavItem[] = [
     subItems: [
       { label: "Visi & Misi", href: "/about#vision" },
       { label: "Sejarah", href: "/about#history" },
-      { label: "Kepemimpinan", href: "/about#leadership" },
+      { label: "Dewan Dosen", href: "/about#leadership" },
+      { label: "Mars STTB", href: "/about#mars" },
+      { label: "Pengakuan Iman", href: "/about#pengakuan" },
+      { label: "Yayasan", href: "/about#yayasan" },
+
     ],
   },
   {
@@ -91,22 +95,20 @@ export function STTBNavbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/98 backdrop-blur-sm shadow-md py-3"
-          : "bg-[#1e3a8a] py-4"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+        ? "bg-white/98 backdrop-blur-sm shadow-md py-3"
+        : "bg-[#1e3a8a] py-4"
+        }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div
-              className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all ${
-                scrolled
-                  ? "bg-[#1e3a8a] group-hover:bg-[#f59e0b]"
-                  : "bg-white/10 group-hover:bg-[#f59e0b]"
-              }`}
+              className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all ${scrolled
+                ? "bg-[#1e3a8a] group-hover:bg-[#f59e0b]"
+                : "bg-white/10 group-hover:bg-[#f59e0b]"
+                }`}
             >
               <BookOpen
                 className={`${scrolled ? "text-white" : "text-white"}`}
@@ -115,16 +117,14 @@ export function STTBNavbar() {
             </div>
             <div className="flex flex-col">
               <span
-                className={`font-bold text-lg leading-tight tracking-tight ${
-                  scrolled ? "text-[#1e3a8a]" : "text-white"
-                }`}
+                className={`font-bold text-lg leading-tight tracking-tight ${scrolled ? "text-[#1e3a8a]" : "text-white"
+                  }`}
               >
                 STTB
               </span>
               <span
-                className={`text-xs tracking-wider ${
-                  scrolled ? "text-[#f59e0b]" : "text-[#fbbf24]"
-                }`}
+                className={`text-xs tracking-wider ${scrolled ? "text-[#f59e0b]" : "text-[#fbbf24]"
+                  }`}
               >
                 BANDUNG
               </span>
@@ -142,17 +142,15 @@ export function STTBNavbar() {
               >
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-1 transition-colors ${
-                    scrolled
-                      ? "text-gray-700 hover:text-[#1e3a8a]"
-                      : "text-white hover:text-[#fbbf24]"
-                  } ${
-                    pathname === item.href
+                  className={`flex items-center gap-1 transition-colors ${scrolled
+                    ? "text-gray-700 hover:text-[#1e3a8a]"
+                    : "text-white hover:text-[#fbbf24]"
+                    } ${pathname === item.href
                       ? scrolled
                         ? "text-[#1e3a8a] font-semibold"
                         : "text-[#fbbf24] font-semibold"
                       : ""
-                  }`}
+                    }`}
                 >
                   {item.label}
                   {item.subItems && <ChevronDown size={14} className="mt-0.5" />}
@@ -183,16 +181,15 @@ export function STTBNavbar() {
                 )}
               </div>
             ))}
-            
+
             <a
               href="https://siakad.sttb.ac.id"
               target="_blank"
               rel="noopener noreferrer"
-              className={`px-4 py-2 rounded-lg transition-all ${
-                scrolled
-                  ? "bg-[#1e3a8a] text-white hover:bg-[#f59e0b]"
-                  : "bg-[#f59e0b] text-white hover:bg-[#fbbf24]"
-              }`}
+              className={`px-4 py-2 rounded-lg transition-all ${scrolled
+                ? "bg-[#1e3a8a] text-white hover:bg-[#f59e0b]"
+                : "bg-[#f59e0b] text-white hover:bg-[#fbbf24]"
+                }`}
             >
               SIAKAD
             </a>
