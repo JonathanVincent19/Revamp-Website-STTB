@@ -10,4 +10,10 @@
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+    <Folder Include="Responses\" />
+    <Folder Include="Requests\" />
+  </ItemGroup>
+
 </Project>
