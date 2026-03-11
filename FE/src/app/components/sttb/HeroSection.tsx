@@ -72,7 +72,7 @@ export function HeroSection() {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
           >
             {[
-              { value: "2", label: "Program Studi", unit: "" },
+              { value: "8", label: "Program Studi", unit: "" },
               { value: "500+", label: "Mahasiswa Aktif", unit: "" },
               { value: "30+", label: "Dosen Berkualitas", unit: "" },
               { value: "1000+", label: "Alumni Tersebar", unit: "" },

@@ -168,7 +168,7 @@ export function ProgramsPage() {
                 <span className="font-bold">PROGRAM MAGISTER</span>
               </div>
               <h2 className="text-4xl font-black text-[#1e3a8a] mb-6">
-                Magister Teologi Transformasi Budaya & Masyarakat (M.Th.)
+                Magister Teologi  (M.Th.)
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 Program Magister yang fokus pada transformasi budaya dan masyarakat melalui perspektif teologi Kristen, mempersiapkan pemimpin untuk pelayanan urban yang kontekstual dan transformatif.

@@ -54,9 +54,9 @@ const navItems: NavItem[] = [
     label: "Keuangan",
     href: "/finances",
     subItems: [
-      { label: "Biaya Studi", href: "/admissions#fees" },
-      { label: "Beasiswa", href: "" },
-      { label: "Dukung STTB", href: "" },
+      { label: "Biaya Studi", href: "/biaya-studi" },
+      { label: "Beasiswa", href: "/beasiswa" },
+      { label: "Dukung STTB", href: "/dukung-sttb" },
     ],
   },
   {
@@ -64,8 +64,8 @@ const navItems: NavItem[] = [
     href: "/campuslife",
     subItems: [
       { label: "Fasilitas", href: "/facilities" },
-      { label: "Pembinaan", href: "" },
-      { label: "Senat", href: "" },
+      { label: "Pembinaan", href: "/pembinaan" },
+      { label: "Senat", href: "/senat" },
     ],
   },
   {
@@ -174,15 +174,14 @@ export function STTBNavbar() {
                 >
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-1 transition-colors ${
-                      isActive
+                    className={`flex items-center gap-1 transition-colors ${isActive
                         ? scrolled
                           ? "text-[#1e3a8a] font-bold"
                           : "text-[#fbbf24] font-bold"
                         : scrolled
                           ? "text-gray-700 hover:text-[#1e3a8a]"
                           : "text-white hover:text-[#fbbf24]"
-                    }`}
+                      }`}
                   >
                     {item.label}
                     {item.subItems && (
@@ -203,20 +202,19 @@ export function STTBNavbar() {
                           {item.subItems.map((sub) => {
                             const isSubActive =
                               pathname +
-                                (typeof window !== "undefined"
-                                  ? window.location.hash
-                                  : "") ===
+                              (typeof window !== "undefined"
+                                ? window.location.hash
+                                : "") ===
                               sub.href;
 
                             return (
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                className={`block px-4 py-2.5 text-sm transition-colors ${
-                                  isSubActive
+                                className={`block px-4 py-2.5 text-sm transition-colors ${isSubActive
                                     ? "text-[#1e3a8a] font-semibold bg-blue-50"
                                     : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
-                                }`}
+                                  }`}
                               >
                                 {sub.label}
                               </Link>
@@ -237,17 +235,15 @@ export function STTBNavbar() {
               onMouseLeave={() => setActiveDropdown(null)}
             >
               <button
-                className={`flex items-center gap-1 transition-colors ${
-                  scrolled
+                className={`flex items-center gap-1 transition-colors ${scrolled
                     ? "text-gray-700 hover:text-[#1e3a8a]"
                     : "text-white hover:text-[#fbbf24]"
-                } ${
-                  activeDropdown === "side-menu"
+                  } ${activeDropdown === "side-menu"
                     ? scrolled
                       ? "text-[#1e3a8a]"
                       : "text-[#fbbf24]"
                     : ""
-                }`}
+                  }`}
               >
                 Lainnya
                 <ChevronDown size={14} className="mt-0.5" />
@@ -272,21 +268,19 @@ export function STTBNavbar() {
                         <div key={item.label} className="group/sub">
                           <Link
                             href={item.href}
-                            className={`flex justify-between items-center px-4 py-2.5 text-sm transition-colors ${
-                              isActive || isChildActive
+                            className={`flex justify-between items-center px-4 py-2.5 text-sm transition-colors ${isActive || isChildActive
                                 ? "text-[#1e3a8a] font-semibold bg-blue-50"
                                 : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
-                            }`}
+                              }`}
                           >
                             <span>{item.label}</span>
                             {item.subItems && (
                               <ChevronDown
                                 size={14}
-                                className={`transition-transform duration-200 ${
-                                  shouldShowSubItems
+                                className={`transition-transform duration-200 ${shouldShowSubItems
                                     ? "rotate-0"
                                     : "-rotate-90 group-hover/sub:rotate-0"
-                                }`}
+                                  }`}
                               />
                             )}
                           </Link>
@@ -294,11 +288,10 @@ export function STTBNavbar() {
                           {/* Sub-items */}
                           {item.subItems && (
                             <div
-                              className={`bg-gray-50 border-t border-gray-100 py-1 transition-all ${
-                                shouldShowSubItems
+                              className={`bg-gray-50 border-t border-gray-100 py-1 transition-all ${shouldShowSubItems
                                   ? "block"
                                   : "hidden group-hover/sub:block"
-                              }`}
+                                }`}
                             >
                               {item.subItems.map((sub) => {
                                 const isSubActive = pathname === sub.href;
@@ -306,11 +299,10 @@ export function STTBNavbar() {
                                   <Link
                                     key={sub.label}
                                     href={sub.href}
-                                    className={`block px-8 py-2 text-xs transition-colors ${
-                                      isSubActive
+                                    className={`block px-8 py-2 text-xs transition-colors ${isSubActive
                                         ? "text-[#1e3a8a] font-bold bg-blue-100/50"
                                         : "text-gray-600 hover:text-[#1e3a8a] hover:bg-gray-100"
-                                    }`}
+                                      }`}
                                   >
                                     {sub.label}
                                   </Link>
@@ -373,11 +365,10 @@ export function STTBNavbar() {
                     <div key={item.label} className="px-4">
                       <Link
                         href={item.href}
-                        className={`flex justify-between items-center py-2 ${
-                          isActive
+                        className={`flex justify-between items-center py-2 ${isActive
                             ? "text-[#1e3a8a] font-bold border-l-4 border-[#1e3a8a] pl-3 -ml-4"
                             : "text-gray-700 hover:text-[#1e3a8a] pl-3"
-                        }`}
+                          }`}
                       >
                         <span>{item.label}</span>
                         {item.subItems && <ChevronDown size={16} />}
@@ -390,11 +381,10 @@ export function STTBNavbar() {
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                className={`py-1.5 text-sm ${
-                                  isSubActive
+                                className={`py-1.5 text-sm ${isSubActive
                                     ? "text-[#1e3a8a] font-semibold"
                                     : "text-gray-600 hover:text-[#1e3a8a]"
-                                }`}
+                                  }`}
                               >
                                 {sub.label}
                               </Link>
