@@ -27,12 +27,17 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    label: "Program Studi",
+    label: "Akademik",
     href: "/programs",
     subItems: [
-      { label: "Sarjana (S1)", href: "/programs#s1" },
-      { label: "Magister (S2)", href: "/programs#s2" },
-      { label: "Matrikulasi", href: "/programs#matriculation" },
+      { label: "Sarjana Teologi", href: "/programs/sarjana-teologi" },
+      { label: "Sarjana Pendidikan Kristen", href: "/programs/sarjana-pendidikan-kristen" },
+      { label: "Magister Teologi Pelayanan Pastoral Gereja Urban", href: "/programs/magister-teologi-pelayanan-pastoral" },
+      { label: "Magister Teologi Transformasi Budaya & Masyarakat", href: "/programs/magister-teologi-transformasi-budaya" },
+      { label: "Magister Pendidikan Kristen", href: "/programs/magister-pendidikan-kristen" },
+      { label: "Magister Ministri Marketplace", href: "/programs/magister-ministri-marketplace" },
+      { label: "Magister Ministri Kepemimpinan Pastoral", href: "/programs/magister-ministri-kepemimpinan-pastoral" },
+      { label: "Magister Ministri Teologi Pelayanan Gerejawi", href: "/programs/magister-ministri-gerejawi" },
     ],
   },
   {
@@ -164,7 +169,7 @@ export function STTBNavbar() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 mt-2 w-52 bg-white rounded-lg shadow-xl overflow-hidden py-2 border border-gray-100"
+                        className="absolute top-full left-0 mt-2 min-w-52 w-max max-w-[360px] bg-white rounded-lg shadow-xl overflow-hidden py-2 border border-gray-100"
                       >
                         {item.subItems.map((sub) => (
                           <Link

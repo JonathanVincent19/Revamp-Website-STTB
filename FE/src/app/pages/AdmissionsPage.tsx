@@ -120,7 +120,38 @@ export function AdmissionsPage() {
               className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <div className="bg-[#1e3a8a] text-white px-6 py-4">
-                <h3 className="text-xl font-bold">Program Sarjana (S1)</h3>
+                <h3 className="text-xl font-bold">Program Sarjana Teologi (S.Th.)</h3>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3">
+                  {[
+                    "Lulusan SMA/SMK/Sederajat",
+                    "Surat Rekomendasi dari Gereja",
+                    "Fotokopi Ijazah & Transkrip Nilai",
+                    "Fotokopi KTP & KK",
+                    "Pas Foto 4x6 (4 lembar)",
+                    "Surat Keterangan Sehat",
+                    "Formulir Pendaftaran",
+                    "Biaya Pendaftaran Rp 300.000",
+                  ].map((req, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle2 size={20} className="text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{req}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden"
+            >
+              <div className="bg-[#1e3a8a] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Sarjana Teologi (S.Th.)</h3>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
@@ -152,7 +183,69 @@ export function AdmissionsPage() {
               className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <div className="bg-[#f59e0b] text-white px-6 py-4">
-                <h3 className="text-xl font-bold">Program Magister (S2)</h3>
+                <h3 className="text-xl font-bold">Program Magister Teologi (M.Th.)</h3>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3">
+                  {[
+                    "Lulusan S1 Teologi/Sederajat",
+                    "IPK minimal 2.75",
+                    "Surat Rekomendasi (2 lembar)",
+                    "Fotokopi Ijazah & Transkrip S1",
+                    "Fotokopi KTP & KK",
+                    "Pas Foto 4x6 (4 lembar)",
+                    "Proposal Penelitian",
+                    "Biaya Pendaftaran Rp 500.000",
+                  ].map((req, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle2 size={20} className="text-[#1e3a8a] flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{req}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden"
+            >
+              <div className="bg-[#f59e0b] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Magister Teologi (M.Th.)</h3>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3">
+                  {[
+                    "Lulusan S1 Teologi/Sederajat",
+                    "IPK minimal 2.75",
+                    "Surat Rekomendasi (2 lembar)",
+                    "Fotokopi Ijazah & Transkrip S1",
+                    "Fotokopi KTP & KK",
+                    "Pas Foto 4x6 (4 lembar)",
+                    "Proposal Penelitian",
+                    "Biaya Pendaftaran Rp 500.000",
+                  ].map((req, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle2 size={20} className="text-[#1e3a8a] flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{req}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden lg:col-span-2 w-full lg:w-[calc(50%-1rem)] mx-auto"
+            >
+              <div className="justify-center items-center flex bg-[#f59e0b] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Magister Teologi (M.Th.)</h3>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
@@ -202,7 +295,43 @@ export function AdmissionsPage() {
               className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
             >
               <div className="bg-[#1e3a8a] text-white px-6 py-4">
-                <h3 className="text-xl font-bold">Program Sarjana (S1)</h3>
+                <h3 className="text-xl font-bold">Program Sarjana Teologi (S.Th.)</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-bold text-[#1e3a8a]">Komponen</th>
+                      <th className="px-6 py-3 text-right font-bold text-[#1e3a8a]">Biaya</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {[
+                      { item: "Uang Pangkal (Sekali Bayar)", amount: "Rp 5.000.000" },
+                      { item: "SPP per Semester", amount: "Rp 3.500.000" },
+                      { item: "Biaya Praktikum per Semester", amount: "Rp 500.000" },
+                      { item: "Biaya Wisuda", amount: "Rp 1.500.000" },
+                    ].map((row, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-gray-700">{row.item}</td>
+                        <td className="px-6 py-4 text-right font-bold text-[#1e3a8a]">{row.amount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+            >
+              <div className="bg-[#1e3a8a] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Sarjana Pendidikan (S.Pd.)</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -235,10 +364,80 @@ export function AdmissionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 mb-8"
+            >
+              <div className="bg-[#f59e0b] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Magister Teologi (M.Th.)</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-bold text-[#1e3a8a]">Komponen</th>
+                      <th className="px-6 py-3 text-right font-bold text-[#1e3a8a]">Biaya</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {[
+                      { item: "Uang Pangkal (Sekali Bayar)", amount: "Rp 7.500.000" },
+                      { item: "SPP per Semester", amount: "Rp 5.000.000" },
+                      { item: "Biaya Penelitian", amount: "Rp 2.000.000" },
+                      { item: "Biaya Wisuda", amount: "Rp 2.000.000" },
+                    ].map((row, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-gray-700">{row.item}</td>
+                        <td className="px-6 py-4 text-right font-bold text-[#f59e0b]">{row.amount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 mb-8"
+            >
+              <div className="bg-[#f59e0b] text-white px-6 py-4">
+                <h3 className="text-xl font-bold">Program Magister Pendidikan (M.Pd.)</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-bold text-[#1e3a8a]">Komponen</th>
+                      <th className="px-6 py-3 text-right font-bold text-[#1e3a8a]">Biaya</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {[
+                      { item: "Uang Pangkal (Sekali Bayar)", amount: "Rp 7.500.000" },
+                      { item: "SPP per Semester", amount: "Rp 5.000.000" },
+                      { item: "Biaya Penelitian", amount: "Rp 2.000.000" },
+                      { item: "Biaya Wisuda", amount: "Rp 2.000.000" },
+                    ].map((row, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 text-gray-700">{row.item}</td>
+                        <td className="px-6 py-4 text-right font-bold text-[#f59e0b]">{row.amount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
               className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
             >
               <div className="bg-[#f59e0b] text-white px-6 py-4">
-                <h3 className="text-xl font-bold">Program Magister (S2)</h3>
+                <h3 className="text-xl font-bold">Program Magister Ministri (M.Min.)</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
