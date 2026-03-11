@@ -1,6 +1,10 @@
 <Solution>
-  <Project Path="RevampWebSTTB.Commons/RevampWebSTTB.Commons.csproj" />
+  <Project Path="RevampWebSTTB.Commons/RevampWebSTTB.Commons.csproj">
+    <BuildDependency Project="RevampWebSTTB.Contracts/RevampWebSTTB.Contracts.csproj" />
+  </Project>
   <Project Path="RevampWebSTTB.Contracts/RevampWebSTTB.Contracts.csproj" />
-  <Project Path="RevampWebSTTB.Entities/RevampWebSTTB.Entities.csproj" />
+  <Project Path="RevampWebSTTB.Entities/RevampWebSTTB.Entities.csproj">
+    <BuildDependency Project="RevampWebSTTB.Commons/RevampWebSTTB.Commons.csproj" />
+  </Project>
   <Project Path="RevampWebSTTB.WebApi/RevampWebSTTB.WebApi.csproj" />
 </Solution>

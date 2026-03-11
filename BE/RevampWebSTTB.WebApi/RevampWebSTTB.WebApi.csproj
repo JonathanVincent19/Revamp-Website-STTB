@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -19,8 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <ProjectReference Include="..\RevampWebSTTB.Contracts\RevampWebSTTB.Contracts.csproj" />
     <ProjectReference Include="..\RevampWebSTTB.Entities\RevampWebSTTB.Entities.csproj" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

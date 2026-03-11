@@ -14,4 +14,13 @@
     <PackageReference Include="Serilog" Version="4.3.1" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Folder Include="Validators\Announcements\" />
+		<ProjectReference Include="..\RevampWebSTTB.Contracts\RevampWebSTTB.Contracts.csproj" />
+		<ProjectReference Include="..\RevampWebSTTB.Entities\RevampWebSTTB.Entities.csproj" />
+		<Folder Include="RequestHandlers\Announcements\" />
+	</ItemGroup>
+
+
+
 </Project>
