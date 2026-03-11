@@ -1,6 +1,0 @@
-@WEB_STTB_API_HostAddress = http://localhost:5013
-
-GET {{WEB_STTB_API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

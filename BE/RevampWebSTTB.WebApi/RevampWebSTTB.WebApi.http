@@ -1,0 +1,6 @@
+@RevampWebSTTB.WebApi_HostAddress = http://localhost:5067
+
+GET {{RevampWebSTTB.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

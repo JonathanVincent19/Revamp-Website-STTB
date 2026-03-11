@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="RevampWebSTTB.Commons/RevampWebSTTB.Commons.csproj" />
+  <Project Path="RevampWebSTTB.Contracts/RevampWebSTTB.Contracts.csproj" />
+  <Project Path="RevampWebSTTB.Entities/RevampWebSTTB.Entities.csproj" />
+  <Project Path="RevampWebSTTB.WebApi/RevampWebSTTB.WebApi.csproj" />
+</Solution>
