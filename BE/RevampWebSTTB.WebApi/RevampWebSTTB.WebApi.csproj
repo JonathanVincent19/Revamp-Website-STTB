@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>b052bcd7-1a47-4975-b43d-16f6f00c76e7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,12 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RevampWebSTTB.Entities\RevampWebSTTB.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Services\" />
+    <ProjectReference Include="..\RevampWebSTTB.Entities\RevampWebSTTB.Entities.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
