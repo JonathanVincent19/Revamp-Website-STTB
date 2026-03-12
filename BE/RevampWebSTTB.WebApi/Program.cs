@@ -1,11 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-using RevampWebSTTB.Entities.Data;
-using Serilog;
-using MediatR;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using RevampWebSTTB.Commons.Validators.News;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Commons.RequestHandlers.News;
+using RevampWebSTTB.Commons.Validators.News;
+using RevampWebSTTB.Entities.Data;
+using Serilog;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,21 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseDeveloperExceptionPage();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<STTBContext>();
+        RevampWebSTTB.Entities.Data.DbSeeder.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
 }
 
 app.UseHttpsRedirection();
