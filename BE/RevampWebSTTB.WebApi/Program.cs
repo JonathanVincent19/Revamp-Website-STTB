@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Commons.RequestHandlers.News;
@@ -80,6 +81,19 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.UseCors("AllowNextJS");
+
+// Configure Static Files for Uploads
+var uploadsPath = Path.Combine(builder.Environment.ContentRootPath, "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
