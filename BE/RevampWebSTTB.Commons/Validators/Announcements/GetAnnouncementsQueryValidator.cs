@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using FluentValidation;
 using RevampWebSTTB.Contracts.Requests.Announcements;
 
 namespace RevampWebSTTB.Commons.Validators.Announcements
