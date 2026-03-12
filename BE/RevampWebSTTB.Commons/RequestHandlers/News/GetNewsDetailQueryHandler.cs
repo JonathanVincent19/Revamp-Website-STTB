@@ -47,8 +47,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                     Id = news.Id,
                     Title = news.Title,
                     Content = news.Content,
-                    FeaturedImage = news.FeaturedImage,
-                    Author = news.Author,
+                    FeaturedImage = news.FeaturedImage ?? string.Empty,
+                    Author = news.Author ?? string.Empty,
                     ViewCount = news.ViewCount,
                     PublishedAt = news.PublishedAt ?? DateTime.MinValue,
                     RelatedNews = relatedNews

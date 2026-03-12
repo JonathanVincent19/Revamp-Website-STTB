@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Entities.Data;
 using Serilog;
+using MediatR;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using RevampWebSTTB.Commons.Validators.News;
+using RevampWebSTTB.Commons.RequestHandlers.News;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,10 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssembly(typeof(GetNewsDetailQueryValidator).Assembly);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetNewsDetailQueryHandler).Assembly));
 
 var connectionString = builder.Configuration.GetConnectionString("SQLServerDB");
 
@@ -45,6 +54,7 @@ app.UseCors("AllowNextJS");
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

@@ -35,6 +35,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
             int totalPages = (int)Math.Ceiling(totalItems / (double)limit);
 
             var items = await query
+                .Include(n => n.Category)
                 .OrderByDescending(n => n.PublishedAt)
                 .Skip((page - 1) * limit)
                 .Take(limit)
@@ -43,9 +44,9 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                     Id = n.Id,
                     Title = n.Title,
                     Slug = n.Slug,
-                    Category = n.Category.Name, // Assuming navigation property
-                    FeaturedImage = n.FeaturedImage,
-                    Author = n.Author,
+                    Category = n.Category != null ? n.Category.Name : string.Empty,
+                    FeaturedImage = n.FeaturedImage ?? string.Empty,
+                    Author = n.Author ?? string.Empty,
                     PublishedAt = n.PublishedAt ?? DateTime.MinValue
                 })
                 .ToListAsync(cancellationToken);

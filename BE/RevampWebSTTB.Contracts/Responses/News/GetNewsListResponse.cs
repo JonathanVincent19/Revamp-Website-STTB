@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RevampWebSTTB.Contracts.Responses.News
+﻿namespace RevampWebSTTB.Contracts.Responses.News
 {
     public record GetNewsListResponse
     {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RevampWebSTTB.Contracts.Responses.News
+﻿namespace RevampWebSTTB.Contracts.Responses.News
 {
     public record GetNewsDetailResponse
     {
         public bool Success { get; init; }
-        public NewsDetailDto Data { get; init; } = new();
+        public NewsDetailDto? Data { get; init; } = new();
     }
 
     public record NewsDetailDto
