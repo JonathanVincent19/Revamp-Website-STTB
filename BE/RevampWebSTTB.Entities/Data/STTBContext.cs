@@ -21,6 +21,7 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<GalleryMedia> GalleryMedia { get; set; } = null!;
         public DbSet<Testimonial> Testimonials { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<ContactMessage> ContactMessages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +58,14 @@ namespace RevampWebSTTB.Entities.Data
             modelBuilder.Entity<GalleryMedia>()
                 .Property(m => m.MediaType)
                 .HasDefaultValue("image");
+
+            modelBuilder.Entity<ContactMessage>()
+                .Property(c => c.IsRead)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<ContactMessage>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
     }
 }
