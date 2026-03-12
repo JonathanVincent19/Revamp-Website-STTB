@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using RevampWebSTTB.Entities.Models;
@@ -10,6 +10,22 @@ namespace RevampWebSTTB.Entities.Data
     {
         public static void Initialize(STTBContext context)
         {
+            // ==========================================
+            // 0. SEED ADMIN USER
+            // ==========================================
+            if (!context.Users.Any(u => u.Email == "admin@sttb.ac.id"))
+            {
+                var adminUser = new User
+                {
+                    Name = "Admin STTB",
+                    Email = "admin@sttb.ac.id",
+                    Password = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                    IsAdmin = true
+                };
+                context.Users.Add(adminUser);
+                context.SaveChanges();
+            }
+
             // Check if database is already seeded
             if (context.News.Any())
             {

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Entities.Models;
 
 namespace RevampWebSTTB.Entities.Data
@@ -20,6 +20,7 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<GalleryAlbum> GalleryAlbums { get; set; } = null!;
         public DbSet<GalleryMedia> GalleryMedia { get; set; } = null!;
         public DbSet<Testimonial> Testimonials { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
