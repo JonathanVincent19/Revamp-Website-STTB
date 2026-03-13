@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/index.css";
-import { STTBNavbar } from "./components/sttb/STTBNavbar";
-import { STTBFooter } from "./components/sttb/STTBFooter";
+import { LayoutShell } from "./components/LayoutShell";
 
 export const metadata: Metadata = {
   title: "STTB - Sekolah Tinggi Teologi Bandung",
@@ -17,11 +16,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body>
-        <div className="min-h-screen bg-white">
-          <STTBNavbar />
-          <main className="min-h-screen">{children}</main>
-          <STTBFooter />
-        </div>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

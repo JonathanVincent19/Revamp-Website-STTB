@@ -13,7 +13,7 @@ export function AboutPage() {
     target: historyRef,
     offset: ["start center", "end center"],
   });
-  
+
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
@@ -27,7 +27,7 @@ export function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block bg-[#f59e0b] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4 font-bold">
               TENTANG KAMI
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -68,7 +68,7 @@ export function AboutPage() {
                   "Mengembangkan tim dosen, struktur organisasi dan keuangan, serta kemitraan untuk mendukung pencapaian visi STTB.",
                 ].map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#f59e0b] mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-[#dc2626] mt-2 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
@@ -148,14 +148,14 @@ export function AboutPage() {
                 className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
               >
                 <div className="mb-8">
-                  <h3 className="text-lg font-black text-gray-900 uppercase tracking-wider relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-0 after:w-full after:h-1.5 after:bg-[#f59e0b]">
+                  <h3 className="text-lg font-black text-gray-900 uppercase tracking-wider relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-0 after:w-full after:h-1.5 after:bg-[#dc2626]">
                     {value.title}
                   </h3>
                 </div>
                 <ul className="space-y-4 text-sm text-gray-600 flex-1 flex flex-col">
                   {value.points.map((point, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 flex-shrink-0" />
                       <span className="leading-relaxed">{point}</span>
                     </li>
                   ))}
@@ -249,15 +249,15 @@ export function AboutPage() {
                     {/* Circle marker on the line */}
                     <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white border-4 border-gray-300 group-hover:border-[#1e3a8a] shadow-md transition-colors duration-300 relative z-20" />
                   </div>
-                  
+
                   <div className="flex-1 bg-white rounded-xl p-5 md:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                     {/* Card decorative line on left edge */}
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1e3a8a] group-hover:bg-red-500 transition-colors duration-300" />
-                    
+
                     <span className="inline-block text-xl md:text-2xl font-black text-[#1e3a8a] mb-1.5 tracking-tight">
                       {milestone.year}
                     </span>
-                    <h3 className="text-lg md:text-xl font-bold text-[#f59e0b] mb-3">
+                    <h3 className="text-lg md:text-xl font-bold text-[#dc2626] mb-3">
                       {milestone.title}
                     </h3>
                     <div className="space-y-2.5">
@@ -312,8 +312,8 @@ export function AboutPage() {
                   description: "melambangkan panggilan Tuhan untuk menggembalakan umat-Nya.",
                 },
               ].map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`p-10 bg-white flex flex-col items-center text-center
                     ${index === 0 || index === 2 ? 'border-r border-gray-100' : ''}
                     ${index === 0 || index === 1 ? 'border-b border-gray-100' : ''}
@@ -334,9 +334,9 @@ export function AboutPage() {
             <div className="lg:col-span-4 flex flex-col items-center justify-center text-center px-4">
               <div className="w-full max-w-[280px] mb-8">
                 {/* Fallback to BookOpen if no logo image */}
-                <ImageWithFallback 
-                  src="/images/logo-sttb.png" 
-                  alt="Logo STTB" 
+                <ImageWithFallback
+                  src="/images/logo-sttb.png"
+                  alt="Logo STTB"
                   className="w-full h-auto object-contain drop-shadow-md"
                 />
               </div>
@@ -361,7 +361,7 @@ export function AboutPage() {
                 STTB
               </h2>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {[
                 {
@@ -386,9 +386,9 @@ export function AboutPage() {
                   className="bg-white shadow-md p-4 pb-6 flex flex-col items-center border border-gray-100 h-full"
                 >
                   <div className="w-full aspect-[3/4] overflow-hidden mb-6 bg-gray-100 flex items-center justify-center">
-                    <ImageWithFallback 
-                      src={pendiri.image} 
-                      alt={pendiri.name} 
+                    <ImageWithFallback
+                      src={pendiri.image}
+                      alt={pendiri.name}
                       className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                     />
                   </div>
@@ -690,9 +690,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">02</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">02</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">02</span>
+                  <span className="text-3xl font-black text-[#dc2626]">02</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed">
                     bahwa Allah adalah Esa dan kekal, Mahakudus, dan penuh rahmat. Ia adalah pencipta, penguasa, dan pemelihara alam semesta beserta segala isinya, Tritunggal sebagai Bapa, Anak, dan Roh Kudus. Masing-masing adalah Pribadi yang tidak diciptakan, sehakekat, dan setara dalam kuasa dan kemuliaan. Ia berdaulat baik dalam keselamatan maupun dalam penghakiman umat manusia.
@@ -706,9 +706,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">03</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">03</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">03</span>
+                  <span className="text-3xl font-black text-[#dc2626]">03</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed">
                     bahwa manusia, laki-laki dan perempuan, telah diciptakan oleh Allah menurut gambar-Nya, yang telah dimahkotai-Nya dengan kemuliaan serta mandat untuk memenuhi bumi, mengelola dan memelihara seluruh ciptaan-Nya. Tetapi manusia telah jatuh ke dalam dosa, terpisah dari Allah, dan kehilangan kemampuan untuk hidup sesuai dengan citranya sebagai ciptaan Allah, sehingga tidak mampu menyelamatkan dirinya sendiri.
@@ -726,9 +726,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">04</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">04</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">04</span>
+                  <span className="text-3xl font-black text-[#dc2626]">04</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed text-xs">
                     bahwa Yesus Kristus adalah Anak Tunggal Allah, Allah sejati dan Manusia sejati, penebus dan satu-satunya jalan keselamatan bagi seluruh umat manusia. Ia dikandung dari Roh Kudus, lahir dari anak dara Maria, hidup tanpa dosa, sempurna dalam pengorbanan dan kasih. Ia mati di atas kayu salib, bangkit kembali dari antara orang mati dalam tubuh kebangkitan yang nyata, naik ke sorga, duduk di sebelah kanan Allah Bapa, menjadi Imam Besar Agung bagi orang percaya, dan pengantara tunggal antara Allah dan manusia, serta Raja di atas segala raja.
@@ -742,9 +742,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">05</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">05</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">05</span>
+                  <span className="text-3xl font-black text-[#dc2626]">05</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed text-xs">
                     bahwa Roh Kudus adalah Allah yang hidup, yang menginsafkan manusia akan dosa, kebenaran, dan penghakiman. Ia melahirbarukan orang berdosa yang percaya, mendiami, menguduskan, dan memberi kuasa serta karunia-karunia kepada setiap orang percaya menurut kehendak-Nya demi kesaksian, persekutuan, dan pelayanan untuk pembangunan tubuh Kristus.
@@ -758,9 +758,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">06</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">06</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">06</span>
+                  <span className="text-3xl font-black text-[#dc2626]">06</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed text-xs">
                     bahwa manusia hanya dapat diselamatkan oleh kasih karunia melalui penebusan oleh Tuhan Yesus Kristus dan dibenarkan melalui iman, tanpa jasa, usaha, ataupun kesalehan dari pihak manusia. Melalui penyelamatan Allah dalam Kristus, gambar Allah pada manusia dipulihkan. Dengan demikian, manusia dimampukan untuk menjalani kehidupan yang penuh tanggung jawab dalam pengabdian dan kasih di hadapan Allah dan manusia.
@@ -776,7 +776,7 @@ export function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="bg-[#f59e0b] rounded-2xl p-8 text-white relative overflow-hidden shadow-lg"
+                className="bg-[#dc2626] rounded-2xl p-8 text-white relative overflow-hidden shadow-lg"
               >
                 <span className="absolute bottom-4 right-6 text-[80px] font-black text-white/15 leading-none select-none">07</span>
                 <div className="relative z-10">
@@ -794,9 +794,9 @@ export function AboutPage() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#f59e0b]/15 leading-none select-none">08</span>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">08</span>
                 <div className="relative z-10">
-                  <span className="text-3xl font-black text-[#f59e0b]">08</span>
+                  <span className="text-3xl font-black text-[#dc2626]">08</span>
                   <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
                   <p className="text-gray-600 leading-relaxed">
                     bahwa kepastian kedatangan kembali Yesus Kristus secara nyata dan pribadi akan terjadi pada akhir zaman untuk menjemput umat-Nya untuk menghakimi seluruh umat manusia, baik yang hidup maupun yang mati. Pada kedatangan-Nya kedua kali itulah setiap orang mati akan dibangkitkan, orang percaya masuk ke dalam kehidupan yang kekal, orang yang tidak percaya masuk ke dalam kebinasaan yang kekal.
@@ -867,13 +867,12 @@ export function AboutPage() {
                       className="w-full sm:w-48"
                     >
                       <div className="bg-white rounded-xl p-5 shadow-md border-l-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
-                        <div className="w-10 h-10 bg-[#1e3a8a] rounded-lg flex items-center justify-center mb-3">
-                          <Shield size={18} className="text-white" />
+                        <div className="">
                         </div>
                         <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
                           {person.name}
                         </h4>
-                        <p className="text-[11px] font-semibold text-[#f59e0b] mt-1">
+                        <p className="text-[11px] font-semibold text-[#dc2626] mt-1">
                           {person.role}
                         </p>
                       </div>
@@ -908,7 +907,7 @@ export function AboutPage() {
                       className="w-full md:w-48"
                     >
                       <div className="bg-white rounded-xl p-5 shadow-md border-t-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
-                        <span className="inline-block bg-[#f59e0b] text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-3">
+                        <span className="inline-block bg-[#dc2626] text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-3">
                           {person.role}
                         </span>
                         <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">

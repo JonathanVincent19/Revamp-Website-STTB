@@ -94,7 +94,7 @@ export function DukungSTTBPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center max-w-4xl mx-auto"
                     >
-                        <span className="inline-block bg-[#f59e0b] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+                        <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4 font-bold">
                             DUKUNG STTB
                         </span>
                         <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -105,17 +105,17 @@ export function DukungSTTBPage() {
                         </p>
                         <div className="flex items-center justify-center gap-8 mt-8">
                             <div className="text-center">
-                                <div className="text-4xl font-black text-[#f59e0b] mb-2">65+</div>
+                                <div className="text-4xl font-black text-[#dc2626] mb-2">65+</div>
                                 <div className="text-sm text-blue-100">Tahun Melayani</div>
                             </div>
                             <div className="w-px h-12 bg-white/30" />
                             <div className="text-center">
-                                <div className="text-4xl font-black text-[#f59e0b] mb-2">1000+</div>
+                                <div className="text-4xl font-black text-[#dc2626] mb-2">1000+</div>
                                 <div className="text-sm text-blue-100">Alumni</div>
                             </div>
                             <div className="w-px h-12 bg-white/30" />
                             <div className="text-center">
-                                <div className="text-4xl font-black text-[#f59e0b] mb-2">200+</div>
+                                <div className="text-4xl font-black text-[#dc2626] mb-2">200+</div>
                                 <div className="text-sm text-blue-100">Gereja Dilayani</div>
                             </div>
                         </div>
@@ -160,7 +160,7 @@ export function DukungSTTBPage() {
                             <p className="text-lg text-gray-700 leading-relaxed mb-6">
                                 Dengan mendukung STTB, Anda tidak hanya membantu satu mahasiswa, tetapi juga ribuan jiwa yang akan mereka layani dalam pelayanan mereka.
                             </p>
-                            <div className="bg-[#f59e0b]/10 border-l-4 border-[#f59e0b] p-4 rounded-lg">
+                            <div className="bg-[#dc2626]/10 border-l-4 border-[#dc2626] p-4 rounded-lg">
                                 <p className="text-[#1e3a8a] font-bold italic">
                                     "Dukungan Anda hari ini adalah pelayanan yang transformatif di masa depan."
                                 </p>
@@ -217,7 +217,7 @@ export function DukungSTTBPage() {
                                         <ul className="space-y-1">
                                             {way.examples.map((example, idx) => (
                                                 <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                                                    <CheckCircle2 size={16} className="text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                                                    <CheckCircle2 size={16} className="text-[#dc2626] flex-shrink-0 mt-0.5" />
                                                     <span>{example}</span>
                                                 </li>
                                             ))}
@@ -250,7 +250,7 @@ export function DukungSTTBPage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="bg-gray-50 rounded-2xl p-6 border-l-4 border-[#f59e0b] shadow-sm hover:shadow-md transition-shadow"
+                                className="bg-gray-50 rounded-2xl p-6 border-l-4 border-[#dc2626] shadow-sm hover:shadow-md transition-shadow"
                             >
                                 <h3 className="text-lg font-bold text-[#1e3a8a] mb-2">
                                     {qa.q}
@@ -268,7 +268,7 @@ export function DukungSTTBPage() {
             <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4 lg:px-8">
                     <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12 items-center lg:items-start justify-center">
-                        
+
                         {/* QRIS / Rekening Column */}
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
@@ -301,8 +301,8 @@ export function DukungSTTBPage() {
                                 Bentuk kontribusi dapat berupa Bank Transfer
                             </div>
                             <div className="text-sm font-bold text-[#1e3a8a] leading-relaxed">
-                                BCA Surya Sumantri<br/>
-                                Account No. 282 300 5555<br/>
+                                BCA Surya Sumantri<br />
+                                Account No. 282 300 5555<br />
                                 Yayasan STT Bandung
                             </div>
                         </motion.div>
@@ -344,7 +344,7 @@ export function DukungSTTBPage() {
                                 </div>
                             </div>
                         </motion.div>
-                        
+
                     </div>
                 </div>
             </section>
@@ -359,7 +359,7 @@ export function DukungSTTBPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center max-w-3xl mx-auto"
                     >
-                        <Heart className="mx-auto text-[#f59e0b] mb-6" size={64} />
+                        <Heart className="mx-auto text-[#dc2626] mb-6" size={64} />
                         <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
                             Mari Berdampak Bersama
                         </h2>
@@ -368,7 +368,7 @@ export function DukungSTTBPage() {
                         </p>
                         <a
                             href="/contact"
-                            className="inline-block bg-[#f59e0b] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#fbbf24] transition-all transform hover:scale-105"
+                            className="inline-block bg-[#dc2626] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#FF4D4D] transition-all transform hover:scale-105"
                         >
                             Hubungi Tim Keuangan
                         </a>

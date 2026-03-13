@@ -26,7 +26,7 @@ export function HeroSection() {
             transition={{ duration: 0.8 }}
           >
             {/* Badge */}
-            <span className="inline-block bg-[#f59e0b] text-white px-5 py-2 rounded-full text-sm tracking-wider mb-6 shadow-lg">
+            <span className="inline-block bg-[#dc2626] text-white px-5 py-2 rounded-full text-sm tracking-wider mb-6 shadow-lg font-semibold">
               CHRIST-CENTERED EDUCATION
             </span>
 
@@ -34,7 +34,7 @@ export function HeroSection() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-6">
               Mempersiapkan
               <br />
-              <span className="text-[#fbbf24]">Pastor-Scholars</span>
+              <span className="text-[#dc2626]">Pastor-Scholars</span>
               <br />
               untuk Transformasi
             </h1>
@@ -48,7 +48,7 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/admissions"
-                className="inline-flex items-center justify-center gap-2 bg-[#f59e0b] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#fbbf24] transition-all transform hover:-translate-y-1 shadow-xl"
+                className="inline-flex items-center justify-center gap-2 bg-[#dc2626] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#FF4D4D] transition-all transform hover:-translate-y-1 shadow-xl"
               >
                 <BookOpen size={22} />
                 Daftar Sekarang
@@ -81,7 +81,7 @@ export function HeroSection() {
                 key={index}
                 className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-center"
               >
-                <div className="text-3xl md:text-4xl font-black text-[#fbbf24] mb-1">
+                <div className="text-3xl md:text-4xl font-black text-[#FF4D4D] mb-1">
                   {stat.value}
                 </div>
                 <div className="text-sm text-blue-100">{stat.label}</div>

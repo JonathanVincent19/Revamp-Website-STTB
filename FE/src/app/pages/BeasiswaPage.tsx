@@ -97,7 +97,7 @@ export function BeasiswaPage() {
                         transition={{ duration: 0.6 }}
                         className="text-center max-w-4xl mx-auto"
                     >
-                        <span className="inline-block bg-[#f59e0b] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+                        <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4 font-bold">
                             PROGRAM BEASISWA
                         </span>
                         <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -133,7 +133,7 @@ export function BeasiswaPage() {
                             <p className="text-lg text-gray-700 leading-relaxed mb-6">
                                 Lebih dari 60% mahasiswa STTB saat ini menerima berbagai bentuk bantuan keuangan, mulai dari beasiswa parsial hingga beasiswa penuh yang mencakup seluruh biaya studi.
                             </p>
-                            <div className="bg-[#f59e0b]/10 border-l-4 border-[#f59e0b] p-4 rounded-lg">
+                            <div className="bg-[#dc2626]/10 border-l-4 border-[#dc2626] p-4 rounded-lg">
                                 <p className="text-[#1e3a8a] font-bold">
                                     "Investasi dalam pendidikan teologi adalah investasi dalam masa depan gereja dan masyarakat."
                                 </p>
@@ -192,7 +192,7 @@ export function BeasiswaPage() {
                                             <p className="text-gray-600 text-sm leading-relaxed mb-3">
                                                 {scholarship.description}
                                             </p>
-                                            <div className="inline-block bg-[#f59e0b]/10 text-[#f59e0b] px-3 py-1.5 rounded-lg text-sm font-bold">
+                                            <div className="inline-block bg-[#dc2626]/10 text-[#dc2626] px-3 py-1.5 rounded-lg text-sm font-bold">
                                                 {scholarship.coverage}
                                             </div>
                                         </div>
@@ -203,7 +203,7 @@ export function BeasiswaPage() {
                                         <ul className="space-y-2">
                                             {scholarship.requirements.map((req, idx) => (
                                                 <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                                                    <CheckCircle2 size={16} className="text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                                                    <CheckCircle2 size={16} className="text-[#dc2626] flex-shrink-0 mt-0.5" />
                                                     <span>{req}</span>
                                                 </li>
                                             ))}
@@ -309,7 +309,7 @@ export function BeasiswaPage() {
                                 className="bg-gradient-to-br from-[#dbeafe]/40 to-white rounded-2xl p-6 border border-[#1e3a8a]/20 shadow-sm hover:border-[#1e3a8a]/40 transition-colors"
                             >
                                 <h3 className="text-lg font-bold text-[#1e3a8a] mb-2 flex gap-3">
-                                    <span className="text-[#f59e0b]">Q:</span>
+                                    <span className="text-[#dc2626]">Q:</span>
                                     {qa.q}
                                 </h3>
                                 <p className="text-gray-700 leading-relaxed flex gap-3 pl-[28px]">
@@ -340,7 +340,7 @@ export function BeasiswaPage() {
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <a
                                 href="/biaya-studi"
-                                className="inline-flex items-center justify-center gap-2 bg-[#f59e0b] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#fbbf24] transition-all transform hover:scale-105"
+                                className="inline-flex items-center justify-center gap-2 bg-[#dc2626] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#FF4D4D] transition-all transform hover:scale-105"
                             >
                                 <FileText size={20} />
                                 Lihat Biaya Studi

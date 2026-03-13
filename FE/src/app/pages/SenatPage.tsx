@@ -137,13 +137,13 @@ export function SenatPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4 font-bold">
               SENAT MAHASISWA
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
               Senat Mahasiswa STTB
             </h1>
-            <p className="text-2xl text-[#fbbf24] font-bold italic mb-4">
+            <p className="text-2xl text-[#dc2626] font-bold italic mb-4">
               Students Today, Leaders Tomorrow!
             </p>
             <p className="text-lg text-blue-50 leading-relaxed max-w-3xl mx-auto">

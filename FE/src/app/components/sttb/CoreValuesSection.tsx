@@ -14,7 +14,7 @@ const values = [
     icon: Book,
     title: "Academic Excellence",
     description: "Keunggulan akademis dengan standar internasional",
-    color: "bg-amber-50 text-[#f59e0b]",
+    color: "bg-red-50 text-[#dc2626]",
   },
   {
     icon: Heart,
@@ -26,7 +26,7 @@ const values = [
     icon: Users,
     title: "Community Focus",
     description: "Membangun komunitas yang solid dan saling mendukung",
-    color: "bg-amber-50 text-[#f59e0b]",
+    color: "bg-red-50 text-[#dc2626]",
   },
   {
     icon: Globe,
@@ -38,7 +38,7 @@ const values = [
     icon: Lightbulb,
     title: "Innovation",
     description: "Inovasi dalam metode pengajaran dan pelayanan",
-    color: "bg-amber-50 text-[#f59e0b]",
+    color: "bg-red-50 text-[#dc2626]",
   },
 ];
 

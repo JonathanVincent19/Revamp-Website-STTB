@@ -529,7 +529,7 @@ export function AdmissionsPage() {
 
             <div className="mt-12 text-center">
               <a
-                href="#"
+                href="/admissions/pendaftaran-online"
                 className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#f59e0b] transition-all shadow-xl"
               >
                 <FileText size={22} />

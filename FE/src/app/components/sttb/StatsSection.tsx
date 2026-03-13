@@ -18,7 +18,7 @@ const stats = [
   },
   {
     icon: BookOpen,
-    value: "144 SKS",
+    value: "148 SKS",
     label: "Program S1",
     description: "Kurikulum lengkap",
   },
@@ -45,12 +45,12 @@ export function StatsSection() {
               className="text-center"
             >
               <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mb-4">
-                <stat.icon className="text-[#fbbf24]" size={32} />
+                <stat.icon className="text-[#dc2626]" size={32} />
               </div>
               <div className="text-4xl md:text-5xl font-black text-white mb-2">
                 {stat.value}
               </div>
-              <div className="text-lg font-bold text-[#fbbf24] mb-1">
+              <div className="text-lg font-bold text-[#dc2626] mb-1">
                 {stat.label}
               </div>
               <div className="text-sm text-blue-100">
