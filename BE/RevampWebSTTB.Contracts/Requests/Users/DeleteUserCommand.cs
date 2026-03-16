@@ -3,7 +3,8 @@ using RevampWebSTTB.Contracts.Responses;
 
 namespace RevampWebSTTB.Contracts.Requests.Users
 {
-    public record LogoutUserCommand : IRequest<StandardResponse>
+    public record DeleteUserCommand : IRequest<StandardResponse>
     {
+        public int Id { get; init; }
     }
 }
