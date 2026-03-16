@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using RevampWebSTTB.Contracts.Dto.Contacts;
 using RevampWebSTTB.Contracts.Requests.Contacts;
 using RevampWebSTTB.Contracts.Responses.Contacts;
 using RevampWebSTTB.Entities.Data;
@@ -22,8 +20,20 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Contacts
 
         public async Task<GetContactMessagesResponse> Handle(GetContactMessagesQuery request, CancellationToken cancellationToken)
         {
-            var messages = await _context.ContactMessages
+            var query = _context.ContactMessages.AsQueryable();
+
+            // Optional filter by read status
+            if (request.IsRead.HasValue)
+            {
+                query = query.Where(c => c.IsRead == request.IsRead.Value);
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var messages = await query
                 .OrderByDescending(c => c.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
                 .Select(c => new ContactMessageDto
                 {
                     Id = c.Id,
@@ -39,7 +49,9 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Contacts
 
             return new GetContactMessagesResponse
             {
-                Messages = messages
+                Success = true,
+                Data = messages,
+                TotalCount = totalCount
             };
         }
     }
