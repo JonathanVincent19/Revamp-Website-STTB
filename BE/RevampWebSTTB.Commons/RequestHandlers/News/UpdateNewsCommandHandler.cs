@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.News;
-using RevampWebSTTB.Contracts.Responses.News;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.News
 {
-    public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand, UpdateNewsResponse>
+    public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -18,13 +18,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
             _context = context;
         }
 
-        public async Task<UpdateNewsResponse> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var news = await _context.News.FirstOrDefaultAsync(n => n.Id == request.Id, cancellationToken);
 
             if (news == null)
             {
-                return new UpdateNewsResponse
+                return new StandardResponse
                 {
                     Success = false,
                     Message = "News not found."
@@ -46,7 +46,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new UpdateNewsResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "News updated successfully."

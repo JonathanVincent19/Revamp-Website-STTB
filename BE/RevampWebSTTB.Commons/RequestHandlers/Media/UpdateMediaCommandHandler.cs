@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.Media;
-using RevampWebSTTB.Contracts.Responses.Media;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.Media
 {
-    public class UpdateMediaCommandHandler : IRequestHandler<UpdateMediaCommand, UpdateMediaResponse>
+    public class UpdateMediaCommandHandler : IRequestHandler<UpdateMediaCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -18,13 +18,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Media
             _context = context;
         }
 
-        public async Task<UpdateMediaResponse> Handle(UpdateMediaCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(UpdateMediaCommand request, CancellationToken cancellationToken)
         {
             var mediaEntity = await _context.GalleryMedia.FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
 
             if (mediaEntity == null)
             {
-                return new UpdateMediaResponse
+                return new StandardResponse
                 {
                     Success = false,
                     Message = "Media not found."
@@ -41,7 +41,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Media
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new UpdateMediaResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "Media updated successfully."

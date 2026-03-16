@@ -1,9 +1,9 @@
 using MediatR;
-using RevampWebSTTB.Contracts.Responses.News;
+using RevampWebSTTB.Contracts.Responses;
 
 namespace RevampWebSTTB.Contracts.Requests.News
 {
-    public record UpdateNewsCommand : IRequest<UpdateNewsResponse>
+    public record UpdateNewsCommand : IRequest<StandardResponse>
     {
         public int Id { get; init; }
         public int? CategoryId { get; init; }

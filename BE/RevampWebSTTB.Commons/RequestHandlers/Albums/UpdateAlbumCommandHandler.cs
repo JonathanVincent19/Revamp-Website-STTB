@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.Albums;
-using RevampWebSTTB.Contracts.Responses.Albums;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.Albums
 {
-    public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, UpdateAlbumResponse>
+    public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -18,13 +18,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
             _context = context;
         }
 
-        public async Task<UpdateAlbumResponse> Handle(UpdateAlbumCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(UpdateAlbumCommand request, CancellationToken cancellationToken)
         {
             var albumEntity = await _context.GalleryAlbums.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
             if (albumEntity == null)
             {
-                return new UpdateAlbumResponse
+                return new StandardResponse
                 {
                     Success = false,
                     Message = "Album not found."
@@ -38,7 +38,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new UpdateAlbumResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "Album updated successfully."
