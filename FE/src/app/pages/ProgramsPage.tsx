@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "motion/react";
-import { GraduationCap, BookOpen, Clock, Award, CheckCircle2 } from "lucide-react";
+import { GraduationCap, Award, ChevronRight, Clock, BookOpen, CheckCircle2 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export function ProgramsPage() {
@@ -16,7 +17,7 @@ export function ProgramsPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block bg-[#f59e0b] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
               PROGRAM STUDI
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -44,10 +45,10 @@ export function ProgramsPage() {
                 <span className="font-bold">PROGRAM SARJANA</span>
               </div>
               <h2 className="text-4xl font-black text-[#1e3a8a] mb-6">
-                Sarjana Teologi (S.Th.)
+                Program Sarjana (S1)
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Program Sarjana Teologi dirancang untuk mempersiapkan mahasiswa menjadi hamba Tuhan yang memiliki pemahaman teologi yang mendalam, karakter Kristiani yang kuat, dan keterampilan pelayanan yang efektif.
+                Program Sarjana dirancang untuk mempersiapkan mahasiswa menjadi hamba Tuhan, pendidik, dan pemimpin Kristen yang memiliki pemahaman teologi yang mendalam, berkarakter Kristiani yang kuat, dan dibekali keterampilan pelayanan yang efektif.
               </p>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
@@ -56,11 +57,43 @@ export function ProgramsPage() {
                   <div className="text-2xl font-bold mb-1">8 Semester</div>
                   <div className="text-sm text-blue-100">Durasi Program</div>
                 </div>
-                <div className="bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] rounded-xl p-5 text-white">
+                <div className="bg-gradient-to-br from-[#dc2626] to-[#f87171] rounded-xl p-5 text-white">
                   <BookOpen className="mb-2" size={24} />
-                  <div className="text-2xl font-bold mb-1">144 SKS</div>
-                  <div className="text-sm text-amber-100">Total SKS</div>
+                  <div className="text-2xl font-bold mb-1">148 SKS</div>
+                  <div className="text-sm ">Total SKS</div>
                 </div>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    title: "Sarjana Teologi (S.Th.)",
+                    desc: "Transformative Pastor-Scholar",
+                    href: "/programs/sarjana-teologi",
+                  },
+                  {
+                    title: "Sarjana Pendidikan Kristen (S.Pd.K.)",
+                    desc: "Transformative Educator",
+                    href: "/programs/sarjana-pendidikan-kristen",
+                  },
+                ].map((prog, idx) => (
+                  <Link href={prog.href} key={idx} className="block group">
+                    <div className="relative bg-white border border-gray-100 shadow-sm hover:shadow-xl rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a8a]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="flex justify-between items-center relative z-10">
+                        <div>
+                          <h3 className="font-bold text-[#1e3a8a] text-lg mb-1 group-hover:text-[#dc2626] transition-colors">
+                            {prog.title}
+                          </h3>
+                          <p className="text-sm text-gray-500">{prog.desc}</p>
+                        </div>
+                        <div className="bg-gray-50 p-2 rounded-full group-hover:bg-[#dc2626] group-hover:text-white text-gray-400 transition-all flex-shrink-0 ml-4">
+                          <ChevronRight size={20} />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
 
               <div className="bg-gray-50 rounded-xl p-6">
@@ -75,12 +108,13 @@ export function ProgramsPage() {
                     "Apologetika & Etika Kristen",
                   ].map((item, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <CheckCircle2 size={20} className="text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 size={20} className="text-[#dc2626] flex-shrink-0 mt-0.5" />
                       <span className="text-gray-700">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
+
             </motion.div>
 
             <motion.div
@@ -92,7 +126,7 @@ export function ProgramsPage() {
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1595315342809-fa10945ed07c"
                 alt="Program S1"
-                className="rounded-2xl shadow-2xl"
+                className="rounded-2xl shadow-2xl "
               />
             </motion.div>
           </div>
@@ -127,8 +161,8 @@ export function ProgramsPage() {
                   ].map((row, index) => (
                     <tr key={index} className="hover:bg-gray-50">
                       <td className="px-6 py-4 font-bold text-gray-900">{row.category}</td>
-                      <td className="px-6 py-4 text-[#f59e0b] font-bold">{row.sks}</td>
-                      <td className="px-6 py-4 text-gray-600">{row.desc}</td>
+                      <td className="px-6 py-4 text-[#dc2626] font-bold">{row.sks}</td>
+                      <td className="px-6 py-4 text-gray-600 font-semibold">{row.desc}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -168,42 +202,62 @@ export function ProgramsPage() {
                 <span className="font-bold">PROGRAM MAGISTER</span>
               </div>
               <h2 className="text-4xl font-black text-[#1e3a8a] mb-6">
-                Magister Teologi Transformasi Budaya & Masyarakat (M.Th.)
+                Program Magister (S2)
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Program Magister yang fokus pada transformasi budaya dan masyarakat melalui perspektif teologi Kristen, mempersiapkan pemimpin untuk pelayanan urban yang kontekstual dan transformatif.
+                Program Magister mempersiapkan pemimpin untuk pelayanan kontekstual dan transformatif, baik di gereja, dunia pendidikan, maupun di tengah kompleksitas masyarakat dan dunia kerja (marketplace).
               </p>
 
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] rounded-xl p-5 text-white">
-                  <Clock className="mb-2" size={24} />
-                  <div className="text-2xl font-bold mb-1">4 Semester</div>
-                  <div className="text-sm text-blue-100">Durasi Program</div>
-                </div>
-                <div className="bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] rounded-xl p-5 text-white">
-                  <BookOpen className="mb-2" size={24} />
-                  <div className="text-2xl font-bold mb-1">48 SKS</div>
-                  <div className="text-sm text-amber-100">Total SKS</div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-md">
-                <h3 className="font-bold text-[#1e3a8a] mb-4">Fokus Studi:</h3>
-                <ul className="space-y-2">
-                  {[
-                    "Teologi Kontekstual & Urban",
-                    "Transformasi Sosial & Budaya",
-                    "Metodologi Penelitian Teologi",
-                    "Kepemimpinan Transformatif",
-                    "Etika Sosial & Ekonomi",
-                    "Tesis Penelitian",
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <CheckCircle2 size={20} className="text-[#f59e0b] flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                {[
+                  {
+                    title: "Magister Pelayanan Pastoral Gereja Urban",
+                    desc: "M.Th.",
+                    href: "/programs/magister-teologi-pelayanan-pastoral",
+                  },
+                  {
+                    title: "Magister Transformasi Budaya & Masyarakat",
+                    desc: "M.Th.",
+                    href: "/programs/magister-teologi-transformasi-budaya",
+                  },
+                  {
+                    title: "Magister Pendidikan Kristen",
+                    desc: "M.Pd.K.",
+                    href: "/programs/magister-pendidikan-kristen",
+                  },
+                  {
+                    title: "Magister Ministri Marketplace",
+                    desc: "M.Min.",
+                    href: "/programs/magister-ministri-marketplace",
+                  },
+                  {
+                    title: "Magister Kepemimpinan Pastoral",
+                    desc: "M.Min.",
+                    href: "/programs/magister-ministri-kepemimpinan-pastoral",
+                  },
+                  {
+                    title: "Magister Pelayanan Gerejawi",
+                    desc: "M.Min.",
+                    href: "/programs/magister-ministri-gerejawi",
+                  },
+                ].map((prog, idx) => (
+                  <Link href={prog.href} key={idx} className="block group h-full">
+                    <div className="h-full flex flex-col justify-center relative bg-white border border-gray-100 shadow-sm hover:shadow-xl rounded-xl p-4 transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a8a]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="flex justify-between items-center relative z-10 w-full gap-2">
+                        <div className="flex-1">
+                          <h3 className="font-bold text-[#1e3a8a] text-[15px] leading-tight mb-1 group-hover:text-[#dc2626] transition-colors">
+                            {prog.title}
+                          </h3>
+                          <p className="text-sm text-gray-500 line-clamp-1 font-bold">{prog.desc}</p>
+                        </div>
+                        <div className="bg-gray-50 p-1.5 rounded-full group-hover:bg-[#dc2626] group-hover:text-white text-gray-400 transition-all flex-shrink-0 ml-2">
+                          <ChevronRight size={16} />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </motion.div>
           </div>

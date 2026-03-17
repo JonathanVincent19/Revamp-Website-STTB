@@ -24,7 +24,7 @@ export function CTASection() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
               Siap Memulai Perjalanan
               <br />
-              <span className="text-[#fbbf24]">Teologi Anda?</span>
+              <span className="text-[#dc2626]">Teologi Anda?</span>
             </h2>
             <p className="text-xl text-blue-50 mb-10 leading-relaxed max-w-2xl mx-auto">
               Bergabunglah dengan komunitas mahasiswa yang passionate untuk belajar, tumbuh, dan melayani. Pendaftaran untuk tahun akademik 2026/2027 sudah dibuka!
@@ -33,7 +33,7 @@ export function CTASection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/admissions"
-                className="inline-flex items-center justify-center gap-2 bg-[#f59e0b] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#fbbf24] transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-2 bg-[#dc2626] text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#FF4D4D] transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
               >
                 <BookOpen size={22} />
                 Daftar Sekarang
@@ -57,7 +57,7 @@ export function CTASection() {
                 { value: "Online", label: "Proses Pendaftaran" },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-2xl md:text-3xl font-black text-[#fbbf24] mb-1">
+                  <div className="text-2xl md:text-3xl font-black text-[#dc2626] mb-1">
                     {stat.value}
                   </div>
                   <div className="text-sm text-blue-100">{stat.label}</div>

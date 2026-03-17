@@ -19,36 +19,44 @@ const navItems: NavItem[] = [
     subItems: [
       { label: "Visi & Misi", href: "/about#vision" },
       { label: "Sejarah", href: "/about#history" },
-      { label: "Kepemimpinan", href: "/about#leadership" },
+      { label: "Dewan Dosen", href: "/about#leadership" },
+      { label: "Mars STTB", href: "/about#mars" },
+      { label: "Pengakuan Iman", href: "/about#pengakuan" },
+      { label: "Yayasan", href: "/about#yayasan" },
     ],
   },
   {
-    label: "Program Studi",
+    label: "Akademik",
     href: "/programs",
     subItems: [
-      { label: "Sarjana (S1)", href: "/programs#s1" },
-      { label: "Magister (S2)", href: "/programs#s2" },
-      { label: "Matrikulasi", href: "/programs#matriculation" },
+      { label: "Sarjana Teologi", href: "/programs/sarjana-teologi" },
+      { label: "Sarjana Pendidikan Kristen", href: "/programs/sarjana-pendidikan-kristen" },
+      { label: "Magister Teologi Pelayanan Pastoral Gereja Urban", href: "/programs/magister-teologi-pelayanan-pastoral" },
+      { label: "Magister Teologi Transformasi Budaya & Masyarakat", href: "/programs/magister-teologi-transformasi-budaya" },
+      { label: "Magister Pendidikan Kristen", href: "/programs/magister-pendidikan-kristen" },
+      { label: "Magister Ministri Marketplace", href: "/programs/magister-ministri-marketplace" },
+      { label: "Magister Ministri Kepemimpinan Pastoral", href: "/programs/magister-ministri-kepemimpinan-pastoral" },
+      { label: "Magister Ministri Teologi Pelayanan Gerejawi", href: "/programs/magister-ministri-gerejawi" },
     ],
   },
   {
     label: "Admisi",
     href: "/admissions",
     subItems: [
-      { label: "Pendaftaran", href: "/admissions#registration" },
-      { label: "Jadwal", href: "" },
-      { label: "Prosedur", href: "" },
-      { label: "Persyaratan", href: "/admissions#requirements" },
-      { label: "FAQ", href: "" },
+      { label: "Pendaftaran Online", href: "/admissions/pendaftaran-online" },
+      { label: "Jadwal", href: "/admissions/jadwal" },
+      { label: "Prosedur", href: "/admissions/prosedur" },
+      { label: "Persyaratan", href: "/admissions/info-persyaratan" },
+      { label: "FAQ", href: "/admissions/faq" },
     ],
   },
   {
     label: "Keuangan",
     href: "/finances",
     subItems: [
-      { label: "Biaya Studi", href: "/admissions#fees" },
-      { label: "Beasiswa", href: "" },
-      { label: "Dukung STTB", href: "" },
+      { label: "Biaya Studi", href: "/biaya-studi" },
+      { label: "Beasiswa", href: "/beasiswa" },
+      { label: "Dukung STTB", href: "/dukung-sttb" },
     ],
   },
   {
@@ -56,13 +64,9 @@ const navItems: NavItem[] = [
     href: "/campuslife",
     subItems: [
       { label: "Fasilitas", href: "/facilities" },
-      { label: "Pembinaan", href: "" },
-      { label: "Senat", href: "" },
+      { label: "Pembinaan", href: "/pembinaan" },
+      { label: "Senat", href: "/senat" },
     ],
-  },
-  {
-    label: "Fasilitas",
-    href: "/facilities",
   },
   {
     label: "Media",
@@ -91,9 +95,9 @@ const navItems: NavItem[] = [
   },
 ];
 
-const mainNavLabels = [ "Tentang", "Program Studi", "Admisi", "Keuangan", "Kehidupan Kampus" ];
-const mainNavItems = navItems.filter( (item) => mainNavLabels.includes(item.label) );
-const sideNavItems = navItems.filter( (item) => !mainNavLabels.includes(item.label) );
+const mainNavLabels = ["Tentang", "Akademik", "Admisi", "Keuangan", "Kehidupan Kampus"];
+const mainNavItems = navItems.filter((item) => mainNavLabels.includes(item.label));
+const sideNavItems = navItems.filter((item) => !mainNavLabels.includes(item.label));
 
 export function STTBNavbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -115,22 +119,20 @@ export function STTBNavbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/98 backdrop-blur-sm shadow-md py-3"
-          : "bg-[#1e3a8a] py-4"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+        ? "bg-white/98 backdrop-blur-sm shadow-md py-3"
+        : "bg-[#1e3a8a] py-4"
+        }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div
-              className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all ${
-                scrolled
-                  ? "bg-[#1e3a8a] group-hover:bg-[#f59e0b]"
-                  : "bg-white/10 group-hover:bg-[#f59e0b]"
-              }`}
+              className={`w-12 h-12 flex items-center justify-center rounded-lg transition-all ${scrolled
+                ? "bg-[#1e3a8a] group-hover:bg-[#dc2626]"
+                : "bg-white/10 group-hover:bg-[#dc2626]"
+                }`}
             >
               <BookOpen
                 className={`${scrolled ? "text-white" : "text-white"}`}
@@ -139,16 +141,14 @@ export function STTBNavbar() {
             </div>
             <div className="flex flex-col">
               <span
-                className={`font-bold text-lg leading-tight tracking-tight ${
-                  scrolled ? "text-[#1e3a8a]" : "text-white"
-                }`}
+                className={`font-bold text-lg leading-tight tracking-tight ${scrolled ? "text-[#1e3a8a]" : "text-white"
+                  }`}
               >
                 STTB
               </span>
               <span
-                className={`text-xs tracking-wider ${
-                  scrolled ? "text-[#f59e0b]" : "text-[#fbbf24]"
-                }`}
+                className={`text-xs font-bold tracking-wider ${scrolled ? "text-[#dc2626]" : "text-[#dc2626]"
+                  }`}
               >
                 BANDUNG
               </span>
@@ -170,15 +170,17 @@ export function STTBNavbar() {
                 >
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-1 transition-colors ${
-                      isActive
-                        ? scrolled
-                          ? "text-[#1e3a8a] font-bold"
-                          : "text-[#fbbf24] font-bold"
-                        : scrolled
-                          ? "text-gray-700 hover:text-[#1e3a8a]"
-                          : "text-white hover:text-[#fbbf24]"
-                    }`}
+                    className={`relative flex items-center gap-1 transition-colors ${scrolled
+                      ? isActive
+                        ? "text-[#1e3a8a] font-bold"
+                        : "text-gray-700 hover:text-[#1e3a8a]"
+                      : isActive
+                        ? "text-white font-bold"
+                        : "text-white/90 hover:text-white"
+                      } ${!scrolled && isActive
+                        ? "after:content-[''] after:absolute after:-bottom-2 after:left-0 after:right-0 after:mx-auto after:h-[3px] after:w-8 after:rounded-full after:bg-[#dc2626]"
+                        : ""
+                      }`}
                   >
                     {item.label}
                     {item.subItems && (
@@ -186,7 +188,7 @@ export function STTBNavbar() {
                     )}
                   </Link>
 
-                  {/* Dropdown for Main Items */}
+                  {/* Dropdown for Main Items — wider to fit long program names */}
                   {item.subItems && (
                     <AnimatePresence>
                       {activeDropdown === item.label && (
@@ -194,25 +196,24 @@ export function STTBNavbar() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute top-full left-0 mt-2 w-52 bg-white rounded-lg shadow-xl overflow-hidden py-2 border border-gray-100"
+                          className="absolute top-full left-0 mt-2 min-w-52 w-max max-w-[360px] bg-white rounded-lg shadow-xl overflow-hidden py-2 border border-gray-100"
                         >
                           {item.subItems.map((sub) => {
                             const isSubActive =
                               pathname +
-                                (typeof window !== "undefined"
-                                  ? window.location.hash
-                                  : "") ===
+                              (typeof window !== "undefined"
+                                ? window.location.hash
+                                : "") ===
                               sub.href;
 
                             return (
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                className={`block px-4 py-2.5 text-sm transition-colors ${
-                                  isSubActive
-                                    ? "text-[#1e3a8a] font-semibold bg-blue-50"
-                                    : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
-                                }`}
+                                className={`block px-4 py-2.5 text-sm transition-colors ${isSubActive
+                                  ? "text-[#1e3a8a] font-semibold bg-blue-50"
+                                  : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
+                                  }`}
                               >
                                 {sub.label}
                               </Link>
@@ -233,17 +234,15 @@ export function STTBNavbar() {
               onMouseLeave={() => setActiveDropdown(null)}
             >
               <button
-                className={`flex items-center gap-1 transition-colors ${
-                  scrolled
-                    ? "text-gray-700 hover:text-[#1e3a8a]"
-                    : "text-white hover:text-[#fbbf24]"
-                } ${
-                  activeDropdown === "side-menu"
+                className={`flex items-center gap-1 transition-colors ${scrolled
+                  ? "text-gray-700 hover:text-[#1e3a8a]"
+                  : "text-white hover:text-[#dc2626]"
+                  } ${activeDropdown === "side-menu"
                     ? scrolled
                       ? "text-[#1e3a8a]"
-                      : "text-[#fbbf24]"
+                      : "text-[#dc2626]"
                     : ""
-                }`}
+                  }`}
               >
                 Lainnya
                 <ChevronDown size={14} className="mt-0.5" />
@@ -268,21 +267,19 @@ export function STTBNavbar() {
                         <div key={item.label} className="group/sub">
                           <Link
                             href={item.href}
-                            className={`flex justify-between items-center px-4 py-2.5 text-sm transition-colors ${
-                              isActive || isChildActive
-                                ? "text-[#1e3a8a] font-semibold bg-blue-50"
-                                : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
-                            }`}
+                            className={`flex justify-between items-center px-4 py-2.5 text-sm transition-colors ${isActive || isChildActive
+                              ? "text-[#1e3a8a] font-semibold bg-blue-50"
+                              : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
+                              }`}
                           >
                             <span>{item.label}</span>
                             {item.subItems && (
                               <ChevronDown
                                 size={14}
-                                className={`transition-transform duration-200 ${
-                                  shouldShowSubItems
-                                    ? "rotate-0"
-                                    : "-rotate-90 group-hover/sub:rotate-0"
-                                }`}
+                                className={`transition-transform duration-200 ${shouldShowSubItems
+                                  ? "rotate-0"
+                                  : "-rotate-90 group-hover/sub:rotate-0"
+                                  }`}
                               />
                             )}
                           </Link>
@@ -290,11 +287,10 @@ export function STTBNavbar() {
                           {/* Sub-items */}
                           {item.subItems && (
                             <div
-                              className={`bg-gray-50 border-t border-gray-100 py-1 transition-all ${
-                                shouldShowSubItems
-                                  ? "block"
-                                  : "hidden group-hover/sub:block"
-                              }`}
+                              className={`bg-gray-50 border-t border-gray-100 py-1 transition-all ${shouldShowSubItems
+                                ? "block"
+                                : "hidden group-hover/sub:block"
+                                }`}
                             >
                               {item.subItems.map((sub) => {
                                 const isSubActive = pathname === sub.href;
@@ -302,11 +298,10 @@ export function STTBNavbar() {
                                   <Link
                                     key={sub.label}
                                     href={sub.href}
-                                    className={`block px-8 py-2 text-xs transition-colors ${
-                                      isSubActive
-                                        ? "text-[#1e3a8a] font-bold bg-blue-100/50"
-                                        : "text-gray-600 hover:text-[#1e3a8a] hover:bg-gray-100"
-                                    }`}
+                                    className={`block px-8 py-2 text-xs transition-colors ${isSubActive
+                                      ? "text-[#1e3a8a] font-bold bg-blue-100/50"
+                                      : "text-gray-600 hover:text-[#1e3a8a] hover:bg-gray-100"
+                                      }`}
                                   >
                                     {sub.label}
                                   </Link>
@@ -327,11 +322,10 @@ export function STTBNavbar() {
               href="https://siakad.sttb.ac.id"
               target="_blank"
               rel="noopener noreferrer"
-              className={`px-4 py-2 rounded-lg transition-all ${
-                scrolled
-                  ? "bg-[#1e3a8a] text-white hover:bg-[#f59e0b]"
-                  : "bg-[#f59e0b] text-white hover:bg-[#fbbf24]"
-              }`}
+              className={`px-4 py-2 rounded-lg transition-all ${scrolled
+                ? "bg-[#1e3a8a] text-white hover:bg-[#dc2626]"
+                : "bg-[#dc2626] text-white hover:bg-[#FF4D4D]"
+                }`}
             >
               Login
             </a>
@@ -370,11 +364,10 @@ export function STTBNavbar() {
                     <div key={item.label} className="px-4">
                       <Link
                         href={item.href}
-                        className={`flex justify-between items-center py-2 ${
-                          isActive
-                            ? "text-[#1e3a8a] font-bold border-l-4 border-[#1e3a8a] pl-3 -ml-4"
-                            : "text-gray-700 hover:text-[#1e3a8a] pl-3"
-                        }`}
+                        className={`flex justify-between items-center py-2 ${isActive
+                          ? "text-[#1e3a8a] font-bold border-l-4 border-[#1e3a8a] pl-3 -ml-4"
+                          : "text-gray-700 hover:text-[#1e3a8a] pl-3"
+                          }`}
                       >
                         <span>{item.label}</span>
                         {item.subItems && <ChevronDown size={16} />}
@@ -387,11 +380,10 @@ export function STTBNavbar() {
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                className={`py-1.5 text-sm ${
-                                  isSubActive
-                                    ? "text-[#1e3a8a] font-semibold"
-                                    : "text-gray-600 hover:text-[#1e3a8a]"
-                                }`}
+                                className={`py-1.5 text-sm ${isSubActive
+                                  ? "text-[#1e3a8a] font-semibold"
+                                  : "text-gray-600 hover:text-[#1e3a8a]"
+                                  }`}
                               >
                                 {sub.label}
                               </Link>
@@ -407,7 +399,7 @@ export function STTBNavbar() {
                     href="https://siakad.sttb.ac.id"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full text-center px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#f59e0b] transition-colors"
+                    className="block w-full text-center px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#FF4D4D] transition-colors"
                   >
                     Login
                   </a>
