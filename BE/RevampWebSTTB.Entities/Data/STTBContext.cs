@@ -22,6 +22,10 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<Testimonial> Testimonials { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<ContactMessage> ContactMessages { get; set; } = null!;
+        public DbSet<StudyProgram> StudyPrograms { get; set; } = null!;
+        public DbSet<Scholarship> Scholarships { get; set; } = null!;
+        public DbSet<TuitionFee> TuitionFees { get; set; } = null!;
+        public DbSet<FAQ> FAQs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
