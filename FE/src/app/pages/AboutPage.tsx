@@ -1,10 +1,21 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Target, History, Users, Award } from "lucide-react";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { Target, History, Users, Award, BookOpen, Shield, Star, Flame, Cross, Wand2 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
+import { DosenCarousel, DosenCard } from "../components/sttb/DosenCarousel";
 
 export function AboutPage() {
+  const historyRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: historyRef,
+    offset: ["start center", "end center"],
+  });
+
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -16,7 +27,7 @@ export function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block bg-[#f59e0b] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4 font-bold">
               TENTANG KAMI
             </span>
             <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -47,18 +58,17 @@ export function AboutPage() {
                 Visi Kami
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Menjadi lembaga pendidikan teologi terkemuka yang menghasilkan pemimpin rohani yang transformatif, berkomitmen pada kebenaran Alkitab, dan berdampak bagi transformasi gereja dan masyarakat.
+                Menjadi institusi pendidikan teologi yang mempersiapkan yang transformatif dan memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban.
               </p>
               <h3 className="text-2xl font-bold text-[#1e3a8a] mb-4">Misi Kami</h3>
               <ul className="space-y-3">
                 {[
-                  "Memberikan pendidikan teologi yang berkualitas tinggi dan berlandaskan Alkitab",
-                  "Mengembangkan karakter Kristiani dan keterampilan pelayanan mahasiswa",
-                  "Melakukan penelitian teologi yang relevan dengan konteks Indonesia",
-                  "Membangun kemitraan dengan gereja dan lembaga pelayanan",
+                  "Mempersiapkan pastor-scholar yang transformatif untuk melayanan dalam konteks urban.",
+                  "Memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban melalui penelitian dan pendidikan non-formal.",
+                  "Mengembangkan tim dosen, struktur organisasi dan keuangan, serta kemitraan untuk mendukung pencapaian visi STTB.",
                 ].map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#f59e0b] mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-[#dc2626] mt-2 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
@@ -82,6 +92,80 @@ export function AboutPage() {
         </div>
       </section>
 
+      {/* Core Values */}
+      <section className="py-20 bg-gray-50" id="core-values">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <Star size={20} />
+              <span className="font-bold">NILAI-NILAI INTI</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4 uppercase tracking-tight">
+              CORE VALUES
+            </h2>
+            <p className="text-lg text-gray-600">
+              Nilai-nilai utama yang menjadi landasan dan identitas Sekolah Tinggi Teologi Bandung
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+            {[
+              {
+                title: "CHRIST CENTERED",
+                points: [
+                  "Rencana keselamatan Allah atas seisi dunia yg berpusat di dalam karya penebusan Kristus.",
+                  "Mandat budaya dan mandat Injil dalam kerangka metanarasi Alkitab: Penciptaan-Kejatuhan-Penebusan-Penggenapan."
+                ]
+              },
+              {
+                title: "TEKS - KONTEKS",
+                points: [
+                  "Setia kepada teks: Firman Tuhan dan warisan iman Bapa-Bapa Gereja",
+                  "Responsif terhadap konteks: sosial dan generasional"
+                ]
+              },
+              {
+                title: "PENATALAYANAN",
+                points: [
+                  "Integritas (kejujuran, transparansi, akuntabilitas - waktu, uang, relasi)",
+                  "Dedikasi (melayani dan mengupayakan yang terbaik bagi sesama)",
+                  "Kompetensi (kecakapan akademik, pelayanan, dan penelitian)"
+                ]
+              },
+              {
+                title: "TRANSFORMATIF",
+                points: [
+                  "Karya penebusan Kristus yg transformatif dialami oleh semua stakeholder STTB (mahasiswa, dosen, staf, karyawan, yayasan, mitra pelayanan, gereja, dan masyarakat)"
+                ]
+              }
+            ].map((value, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+              >
+                <div className="mb-8">
+                  <h3 className="text-lg font-black text-gray-900 uppercase tracking-wider relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-0 after:w-full after:h-1.5 after:bg-[#dc2626]">
+                    {value.title}
+                  </h3>
+                </div>
+                <ul className="space-y-4 text-sm text-gray-600 flex-1 flex flex-col">
+                  {value.points.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 flex-shrink-0" />
+                      <span className="leading-relaxed">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* History */}
       <section className="py-20 bg-gray-50" id="history">
         <div className="container mx-auto px-4 lg:px-8">
@@ -98,52 +182,91 @@ export function AboutPage() {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
+          <div className="max-w-5xl mx-auto px-4 relative mt-8 pb-16" ref={historyRef}>
+            {/* Background Line */}
+            <div className="absolute left-[29px] md:left-[45px] top-4 bottom-12 w-1.5 bg-gray-200 rounded-full" />
+            <motion.div
+              className="absolute left-[29px] md:left-[45px] top-4 bottom-12 w-1.5 bg-gradient-to-b from-[#1e3a8a] via-red-500 to-[#1e3a8a] origin-top rounded-full z-10"
+              style={{ scaleY: lineHeight }}
+            />
+
+            <div className="space-y-12 py-8 relative">
               {[
                 {
-                  year: "1959",
-                  title: "Pendirian STTB",
-                  description:
-                    "STTB didirikan dengan visi untuk menghasilkan hamba Tuhan yang berkualitas untuk melayani gereja di Indonesia.",
+                  year: "1992 - 1998",
+                  title: "Pendirian & Pembukaan STTB",
+                  descriptions: [
+                    "Pdt. Caleb Tong, Pdt. Joseph Tong, dan Pdt. Dorothy I. Marx mendirikan STTB pada tahun 1992 dengan tujuan menghasilkan Pastor-Scholar yg memiliki kerangka teologi Reformed Injili dalam konteks pekerjaan Tuhan di Indonesia. Pdt. Daniel Lucas Lukito sebagai Dekan Akademik pertama banyak berperan dalam meletakkan kerangka dasar pembangunan STTB.",
+                    "Pembukaan STTB disiapkan sangat baik dengan jajaran dosen yang berkualitas. Komitmen untuk mengejar kualitas akademis yg tinggi didukung juga oleh perpustakaan yang memiliki koleksi buku dan jurnal yang sangat memadai, serta penerbitan Jurnal Teologi STULOS dalam versi Bahasa Indonesia dan Inggris.",
+                    "Pada tahun-tahun pertama diselenggarakan acara dengan lingkup nasional yaitu Ferakristal (Festival Remaja Kristen Pencinta Alkitab). Wisuda pertama diadakan pada tahun 1996."
+                  ],
                 },
                 {
-                  year: "1985",
-                  title: "Pengembangan Kurikulum",
-                  description:
-                    "Pembaruan kurikulum dengan fokus pada teologi kontekstual dan pelayanan urban.",
+                  year: "1999 - 2005",
+                  title: "Kepemimpinan Baru & Program Lanjutan",
+                  descriptions: [
+                    "STTB mengalami pergantian pemimpin dan jajaran dosen. Ibu Dorothy I. Marx menjabat sebagai Rektor dan STTB terus melanjutkan kiprahnya atas anugerah Tuhan dengan membuka program-program studi baru: M.A. (Master of Arts/Magister Artium) untuk memperlengkapi kaum awam dan M.Th. (Master of Theology/Magister Teologi) untuk memperlengkapi para hamba Tuhan yang rindu berkiprah di dunia akademis.",
+                    "Asrama dosen dibangun bersebelahan dengan asrama mahasiswa. STTB berkomitmen menerbitkan seri buku “Sola…” dan menyelenggarakan acara nasional bagi pemuda dengan nama CYLF (Christian Youth Leadership Forum)."
+                  ],
                 },
                 {
-                  year: "2005",
-                  title: "Program Magister",
-                  description:
-                    "Pembukaan program Magister Teologi untuk memenuhi kebutuhan pendidikan lanjutan.",
+                  year: "2006 - 2010",
+                  title: "Peningkatan Akademik & Program Mandarin",
+                  descriptions: [
+                    "Perkembangan STTB berlanjut dalam kepemimpinan Pdt. Joseph Tong yang berkomitmen meningkatkan kualifikasi tenaga pengajar dengan mengutus beberapa dosen untuk studi lanjut di USA. Pada periode ini terbit dua buku Seri Sola, yaitu Sola Scriptura dan Sola Fide.",
+                    "Dalam periode ini STTB membuka program studi berbahasa Mandarin (S.Th., M.Div., dan M.A.) sebagai kontribusinya dalam pelayanan misi di Tiongkok. Untuk itu 2 dosen yaitu Pdt. Lee Ching Yen dan Pdt. Joseph Lin dari Taiwan diundang mengajar para mahasiswa yang datang dari Tiongkok."
+                  ],
                 },
                 {
-                  year: "2026",
-                  title: "Akreditasi BAN-PT",
-                  description:
-                    "Meraih akreditasi dari BAN-PT sebagai bukti komitmen terhadap kualitas pendidikan.",
+                  year: "2011 - 2016",
+                  title: "Ekspansi Fasilitas & Jejaring Global",
+                  descriptions: [
+                    "Periode ini ditandai dengan beberapa perkembangan yang signifikan. Pdt. Agus Gunawan melanjutkan kepemimpinan sebagai Rektor. Pada tahun 2011, STTB hadir dengan wajah baru dengan dibangunnya gedung baru berlantai tujuh yang saat ini difungsikan untuk ruang-ruang kelas, kantor dosen dan staf, asrama mahasiswa, aula, dan perpustakaan. Buku ketiga dan keempat dari Seri Sola (Sola Gratia dan Solus Christos) diterbitkan.",
+                    "Pada periode ini juga beberapa orang di jajaran pimpinan melanjutkan studi doktoral di Asia dan Amerika. Tahun 2012 dibuka prodi baru S.Pd.K. (Sarjana Pendidikan Kristen) bersama dengan prodi M.Min. (Magister Ministri). Selanjutnya, pada tahun 2015, STTB juga menambah program studi M.Pd.K. (Magister Pendidikan Kristen), yang dirancang untuk memperlengkapi para pemimpin pendidikan Kristen.",
+                    "Dalam periode ini beberapa program studi sudah mulai terakreditasi oleh BAN-PT (Badan Akreditasi Nasional Perguruan Tinggi) dan ATA (Asian Theological Association). Selain itu juga STTB memperluas jejaring global yang ditandai dengan kehadiran beberapa orang dosen dari Inggris, India, dan Filipina, yang sangat mendukung program M.Th. yang diselenggarakan dalam Bahasa Inggris."
+                  ],
                 },
+                {
+                  year: "2017 - 2022",
+                  title: "Pembenahan Kualitas & Pendidikan Non-Formal",
+                  descriptions: [
+                    "Periode ini diwarnai oleh pembenahan kualitas dan penajaman arah pengembangan program-program studi formal dan non-formal sesuai visi dan keunikan panggilan STTB. Formasi spiritualitas yg berkualitas dan terintegrasi antara kelas, kapel, kelompok pastoral, asrama, pemuridan, hingga mentoring dalam praktek pelayanan mengokohkan proses pembentukan untuk mahasiswa STh dan SPd untuk kesiapan mereka melayani.",
+                    "Komitmen STTB kepada dunia pendidikan kristen makin mendapat apresiasi luas melalui perkembangan program studi Magister Pendidikan, inisiasi tumbuhnya komunitas Indonesian Forum for Christian Educators (IFCE), dan kontribusi para dosen STTB dalam berbagai forum nasional. Demikian juga komitmen STTB untuk mengembangkan pendidikan teologi yang aplikatif dan transformatif mendapatkan sambutan yg positif melalui perkembangan program studi MTh yang berfokus pada Transformasi Budaya dan Masyarakat dan program studi MMin Marketplace untuk memperlengkapi profesional Kristen bermisi di dunia kerja. Sementara itu dua program MMin juga berlangsung dalam periode ini, yaitu MMin Music Leadership (bekerja sama dengan Singapore Bible College) dan MMin Pastoral Leadership.",
+                    "Pendidikan nonformal makin berkembang dengan budaya digital yg tumbuh pesat selama masa pandemi. Melalui pengembangan pusat studi non-formal (LEAD Center) dikembangkan modul-modul pembinaan Vocatio (marketplace), Perspectives (misi), dan materi-materi pembinaan digital yg dapat diakses melalui media sosial. Pengembangan penelitian ditandai dengan publikasi ilmiah berupa seri webinar berkala Conversation That Matters (CTM) dan penerbitan monograf untuk tesis-tesis master yg terpilih karena kualitas dan relevansinya bagi pelayanan di lapangan.",
+                    "Mengingat besarnya dan luasnya pekerjaan yg harus dilakukan, maka kolaborasi dan sinergi dengan berbagai gereja dan lembaga secara nasional dan global yg sejalan dengan visi STTB makin dikembangkan dalam periode ini. Dalam periode ini kepemimpinan STTB mengalami beberapa kali peralihan, yaitu Pdt Chandra Koewoso sebagai Ketua sejak Agustus 2017, dan selanjutnya Sutrisna Harjanto PhD sebagai Ketua sejak Agustus 2019 hingga saat ini."
+                  ]
+                }
               ].map((milestone, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex gap-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.5 }}
+                  className="flex gap-6 md:gap-10 items-start relative group"
                 >
-                  <div className="flex-shrink-0 w-24 text-right">
-                    <span className="text-3xl font-black text-[#f59e0b]">
+                  <div className="flex-shrink-0 w-16 md:w-24 flex justify-center relative pt-4 z-20">
+                    {/* Circle marker on the line */}
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white border-4 border-gray-300 group-hover:border-[#1e3a8a] shadow-md transition-colors duration-300 relative z-20" />
+                  </div>
+
+                  <div className="flex-1 bg-white rounded-xl p-5 md:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                    {/* Card decorative line on left edge */}
+                    <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1e3a8a] group-hover:bg-red-500 transition-colors duration-300" />
+
+                    <span className="inline-block text-xl md:text-2xl font-black text-[#1e3a8a] mb-1.5 tracking-tight">
                       {milestone.year}
                     </span>
-                  </div>
-                  <div className="flex-1 bg-white rounded-xl p-6 shadow-md border-l-4 border-[#1e3a8a]">
-                    <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">
+                    <h3 className="text-lg md:text-xl font-bold text-[#dc2626] mb-3">
                       {milestone.title}
                     </h3>
-                    <p className="text-gray-600">{milestone.description}</p>
+                    <div className="space-y-2.5">
+                      {milestone.descriptions.map((desc, i) => (
+                        <p key={i} className="text-gray-600 text-xs md:text-sm leading-relaxed text-justify">
+                          {desc}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -152,57 +275,694 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Leadership */}
+      {/* Arti Logo Section */}
+      <section className="py-20 bg-white" id="arti-logo">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-sm font-black text-red-500 mb-2 tracking-widest uppercase">
+              ARTI LOGO
+            </h2>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+              STTB
+            </h2>
+          </div>
+
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* 2x2 Grid for Elements */}
+            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 shadow-sm border border-gray-100 rounded-sm overflow-hidden">
+              {[
+                {
+                  title: "API",
+                  icon: <Flame className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  description: "di atas logo menggambarkan penyertaan dan pemenuhan dari Allah Roh Kudus yang menjadi sumber hikmat, kuasa, dan kasih serta merupakan syarat mutlak bagi pelayan Tuhan.",
+                },
+                {
+                  title: "ALKITAB",
+                  icon: <BookOpen className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  description: "adalah satu-satunya sumber pengetahuan yang benar tentang Allah dan dasar bagi panggilan serta pelayanan (Sola Scriptura).",
+                },
+                {
+                  title: "SALIB & MAHKOTA",
+                  icon: <div className="text-gray-700 mx-auto flex justify-center text-6xl font-serif">✝</div>,
+                  description: "melambangkan panggilan untuk berpegang kepada kebenaran dan merajakan Kristus.",
+                },
+                {
+                  title: "TONGKAT GEMBALA",
+                  icon: <Wand2 className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  description: "melambangkan panggilan Tuhan untuk menggembalakan umat-Nya.",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className={`p-10 bg-white flex flex-col items-center text-center
+                    ${index === 0 || index === 2 ? 'border-r border-gray-100' : ''}
+                    ${index === 0 || index === 1 ? 'border-b border-gray-100' : ''}
+                  `}
+                >
+                  <div className="h-24 flex items-end justify-center mb-8">
+                    {item.icon}
+                  </div>
+                  <h3 className="text-xl font-black text-red-600 mb-4">{item.title}</h3>
+                  <p className="text-gray-500 text-xs leading-relaxed max-w-[280px]">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Right Side: Main Logo */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center px-4">
+              <div className="w-full max-w-[280px] mb-8">
+                {/* Fallback to BookOpen if no logo image */}
+                <ImageWithFallback
+                  src="/images/logo-sttb.png"
+                  alt="Logo STTB"
+                  className="w-full h-auto object-contain drop-shadow-md"
+                />
+              </div>
+              <h3 className="text-2xl font-black text-red-600 mb-4">LOGO STTB</h3>
+              <p className="text-gray-500 text-xs leading-relaxed max-w-sm">
+                Logo STTB menggambarkan pola pendidikan teologi yang akan memperlengkapi para mahasiswa untuk menjadi hamba Allah yang baik, setia, dan penuh hikmat, serta siap dipakai dalam pelayanan di ladangNya.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pendiri Section */}
+      <section className="py-20 bg-gray-50" id="pendiri">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12">
+              <h2 className="text-sm font-black text-red-500 mb-2 tracking-widest uppercase">
+                PENDIRI
+              </h2>
+              <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+                STTB
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+              {[
+                {
+                  name: "Rev. DR. Caleb Tong (Alm.)",
+                  image: "https://images.unsplash.com/photo-1758270704524-596810e891b5"
+                },
+                {
+                  name: "Rev. DR. Joseph Tong, Ph.D.",
+                  image: "https://images.unsplash.com/photo-1758270704524-596810e891b5"
+                },
+                {
+                  name: "Rev. Dorothy I. Marx (Alm.)",
+                  image: "https://images.unsplash.com/photo-1758270704524-596810e891b5"
+                }
+              ].map((pendiri, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="bg-white shadow-md p-4 pb-6 flex flex-col items-center border border-gray-100 h-full"
+                >
+                  <div className="w-full aspect-[3/4] overflow-hidden mb-6 bg-gray-100 flex items-center justify-center">
+                    <ImageWithFallback
+                      src={pendiri.image}
+                      alt={pendiri.name}
+                      className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                    />
+                  </div>
+                  <h3 className="text-[13px] font-bold text-[#1e3a8a] text-center w-full px-2">
+                    {pendiri.name}
+                  </h3>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dewan Dosen */}
       <section className="py-20 bg-white" id="leadership">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
+          {/* Section Header */}
+          <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
               <Users size={20} />
               <span className="font-bold">KEPEMIMPINAN</span>
             </div>
-            <h2 className="text-4xl font-black text-[#1e3a8a] mb-4">
-              Tim Kepemimpinan
+            <h2 className="text-sm font-black text-red-500 mb-2 tracking-widest">
+              DEWAN PENGAJAR
+            </h2>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+              DOSEN STTB
             </h2>
             <p className="text-lg text-gray-600">
               Dipimpin oleh para akademisi dan pelayan yang berpengalaman
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: "Dr. John Doe, M.Th.",
-                position: "Ketua STTB",
-                image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-              },
-              {
-                name: "Dr. Jane Smith, M.Div.",
-                position: "Wakil Ketua Akademik",
-                image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-              },
-              {
-                name: "Dr. Michael Brown, Th.D.",
-                position: "Dekan Fakultas Teologi",
-                image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-              },
-            ].map((leader, index) => (
+          <div className="max-w-7xl mx-auto flex flex-col gap-8">
+            {/* Tier 1: Ketua — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6 md:pr-24">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Ketua
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end md:pr-24">
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="w-52"
+                >
+                  <DosenCard
+                    dosen={{
+                      name: "Dr. John Doe, M.Th.",
+                      position: "Ketua STTB",
+                      teaching: "Dosen Teologi Sistematika",
+                      education: [
+                        "Ph.D. University of Southern California USA",
+                        "M.BA. Graduate Theological Foundation Indiana",
+                        "M.Th. Calvin Theological Seminary USA",
+                      ],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    }}
+                  />
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Tier 2: Wakil Ketua — offset LEFT */}
+            <div className="relative">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Wakil Ketua
+                </span>
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
+              </div>
+              <div className="flex justify-center md:justify-start">
+                <div className="flex flex-wrap md:flex-nowrap gap-5">
+                  {[
+                    {
+                      name: "Tan Giok Lie",
+                      position: "Wakil Ketua I Akademik",
+                      teaching: "Dosen Pendidikan",
+                      education: [
+                        "Ed.D. Biola University Talbot School Theology USA",
+                        "M.A. Institut Alkitab Tiranus Bandung",
+                        "S.S. Universitas Kristen Maranatha Bandung",
+                      ],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dr. Jane Smith, M.Div.",
+                      position: "Wakil Ketua II Keuangan",
+                      teaching: "Dosen Perjanjian Baru",
+                      education: [
+                        "Ph.D. Trinity Evangelical Divinity School USA",
+                        "M.Div. Fuller Theological Seminary USA",
+                      ],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dr. Michael Brown, Th.D.",
+                      position: "Wakil Ketua III Kemahasiswaan",
+                      teaching: "Dosen Teologi Praktika",
+                      education: [
+                        "Th.D. South East Asia Graduate School of Theology",
+                        "M.Th. Calvin Theological Seminary USA",
+                      ],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                  ].map((dosen, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-44 md:w-52 flex-shrink-0"
+                    >
+                      <DosenCard dosen={dosen} />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 3: Kaprodi — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Ketua Program Studi
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="flex flex-wrap md:flex-nowrap gap-5">
+                  {[
+                    {
+                      name: "Dosen A",
+                      position: "Kaprodi S1 Teologi",
+                      teaching: "Dosen Perjanjian Lama",
+                      education: ["Ph.D. Universitas A", "M.Th. Universitas B"],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dosen B",
+                      position: "Kaprodi S1 PAK",
+                      teaching: "Dosen Pendidikan Agama Kristen",
+                      education: ["Ed.D. Universitas C", "M.A. Universitas D"],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dosen C",
+                      position: "Kaprodi S2 Teologi",
+                      teaching: "Dosen Sejarah Gereja",
+                      education: ["Ph.D. Universitas E", "M.Div. Universitas F"],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dosen D",
+                      position: "Kaprodi S2 PAK",
+                      teaching: "Dosen Filsafat",
+                      education: ["Th.D. Universitas G", "M.Th. Universitas H"],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                    {
+                      name: "Dosen E",
+                      position: "Kaprodi S3 Teologi",
+                      teaching: "Dosen Misiologi",
+                      education: ["Ph.D. Universitas I", "M.A. Universitas J"],
+                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                    },
+                  ].map((dosen, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-44 md:w-52 flex-shrink-0"
+                    >
+                      <DosenCard dosen={dosen} />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 4: Jajaran Dosen — offset LEFT, carousel */}
+            <div className="relative">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Jajaran Dosen
+                </span>
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
+              </div>
+              <DosenCarousel
+                dosenList={Array.from({ length: 30 }, (_, i) => ({
+                  name: `Dosen ${i + 1}`,
+                  position: "Dosen Tetap",
+                  teaching: "Dosen Teologi",
+                  education: [
+                    "Ph.D. Universitas Contoh",
+                    "M.Th. Seminari Contoh",
+                    "S.Th. Sekolah Tinggi Contoh",
+                  ],
+                  image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                }))}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* MARS */}
+      <section className="py-20" id="mars">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <Users size={20} />
+              <span className="font-bold">MARS</span>
+            </div>
+            <h2 className="text-4xl font-black text-[#1e3a8a] mb-4">
+              MARS STTB
+            </h2>
+            <p className="text-lg text-gray-600">
+              Alunan nada dan lirik yang memanggil setiap sivitas akademika untuk berdedikasi dalam kebenaran Firman, keunggulan akademis, dan pelayanan yang transformatif.
+            </p>
+          </div>
+        </div>
+        <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 mt-12 pb-16">
+          {/* Foto Lirik */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="w-full rounded-2xl overflow-hidden shadow-xl bg-white p-4 border border-gray-100"
+          >
+            {/* The image placeholder for lyrics */}
+            <ImageWithFallback
+              src="/images/09-MARS-STTB.jpg"
+              alt="Lirik Mars STTB"
+              className="w-full h-auto rounded-xl"
+            />
+          </motion.div>
+
+          {/* Audio Player */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="w-full"
+          >
+            <MarsAudioPlayer />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pengakuan Iman */}
+      <section className="py-20 bg-gray-50" id="pengakuan">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <BookOpen size={20} />
+              <span className="font-bold">PENGAKUAN IMAN</span>
+            </div>
+            <h2 className="text-4xl font-black text-[#1e3a8a] mb-4">
+              Pengakuan Iman STTB
+            </h2>
+            <p className="text-lg text-gray-600">
+              Prinsip-prinsip teologis dan doktrin fundamental Sekolah Tinggi Teologi Bandung yang kami pegang teguh.
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto flex flex-col gap-6">
+            {/* Row 1: Full width - Allah Tritunggal */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-[#1e3a8a] rounded-2xl p-8 md:p-10 text-white relative overflow-hidden shadow-lg"
+            >
+              <span className="absolute top-4 right-6 text-[120px] font-black text-white/10 leading-none select-none">01</span>
+              <div className="relative z-10 max-w-3xl">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">KAMI PERCAYA</h3>
+                <p className="text-blue-100 text-base md:text-lg leading-relaxed">
+                  bahwa Alkitab secara keseluruhan, Perjanjian Lama dan Perjanjian Baru, adalah firman Allah yang diwahyukan dan diilhamkan tanpa kesalahan. Oleh karena itu, Alkitab adalah sumber otoritas tertinggi bagi iman dan kehidupan orang percaya di segala abad dan tempat.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Row 2: 2 columns - Alkitab & Yesus Kristus */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
-                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
               >
-                <div className="h-64 bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6]" />
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-[#1e3a8a] mb-2">
-                    {leader.name}
-                  </h3>
-                  <p className="text-gray-600">{leader.position}</p>
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">02</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">02</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    bahwa Allah adalah Esa dan kekal, Mahakudus, dan penuh rahmat. Ia adalah pencipta, penguasa, dan pemelihara alam semesta beserta segala isinya, Tritunggal sebagai Bapa, Anak, dan Roh Kudus. Masing-masing adalah Pribadi yang tidak diciptakan, sehakekat, dan setara dalam kuasa dan kemuliaan. Ia berdaulat baik dalam keselamatan maupun dalam penghakiman umat manusia.
+                  </p>
                 </div>
               </motion.div>
-            ))}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">03</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">03</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    bahwa manusia, laki-laki dan perempuan, telah diciptakan oleh Allah menurut gambar-Nya, yang telah dimahkotai-Nya dengan kemuliaan serta mandat untuk memenuhi bumi, mengelola dan memelihara seluruh ciptaan-Nya. Tetapi manusia telah jatuh ke dalam dosa, terpisah dari Allah, dan kehilangan kemampuan untuk hidup sesuai dengan citranya sebagai ciptaan Allah, sehingga tidak mampu menyelamatkan dirinya sendiri.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Row 3: 3 columns - Roh Kudus, Manusia, Keselamatan */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">04</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">04</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed text-xs">
+                    bahwa Yesus Kristus adalah Anak Tunggal Allah, Allah sejati dan Manusia sejati, penebus dan satu-satunya jalan keselamatan bagi seluruh umat manusia. Ia dikandung dari Roh Kudus, lahir dari anak dara Maria, hidup tanpa dosa, sempurna dalam pengorbanan dan kasih. Ia mati di atas kayu salib, bangkit kembali dari antara orang mati dalam tubuh kebangkitan yang nyata, naik ke sorga, duduk di sebelah kanan Allah Bapa, menjadi Imam Besar Agung bagi orang percaya, dan pengantara tunggal antara Allah dan manusia, serta Raja di atas segala raja.
+                  </p>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">05</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">05</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed text-xs">
+                    bahwa Roh Kudus adalah Allah yang hidup, yang menginsafkan manusia akan dosa, kebenaran, dan penghakiman. Ia melahirbarukan orang berdosa yang percaya, mendiami, menguduskan, dan memberi kuasa serta karunia-karunia kepada setiap orang percaya menurut kehendak-Nya demi kesaksian, persekutuan, dan pelayanan untuk pembangunan tubuh Kristus.
+                  </p>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">06</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">06</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed text-xs">
+                    bahwa manusia hanya dapat diselamatkan oleh kasih karunia melalui penebusan oleh Tuhan Yesus Kristus dan dibenarkan melalui iman, tanpa jasa, usaha, ataupun kesalehan dari pihak manusia. Melalui penyelamatan Allah dalam Kristus, gambar Allah pada manusia dipulihkan. Dengan demikian, manusia dimampukan untuk menjalani kehidupan yang penuh tanggung jawab dalam pengabdian dan kasih di hadapan Allah dan manusia.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Row 4: 2 columns - Gereja & Baptisan */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="bg-[#dc2626] rounded-2xl p-8 text-white relative overflow-hidden shadow-lg"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-white/15 leading-none select-none">07</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-white/80">07</span>
+                  <h3 className="text-xl font-bold mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-white/90 leading-relaxed">
+                    bahwa Gereja selaku garam dan terang dunia adalah himpunan semua orang percaya dari segala abad dan bangsa. Ia adalah tubuh Kristus yang kudus dan Am, dengan Kristus sebagai Kepalanya. Gereja memberitakan Kerajaan Allah melalui kebaktian, pengajaran, sakramen baptisan dan perjamuan kudus, serta pemberitaan Injil dan misi umat Allah seutuhnya di tengah dunia.
+                  </p>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-white rounded-2xl p-8 shadow-md border-l-4 border-[#1e3a8a] relative overflow-hidden"
+              >
+                <span className="absolute bottom-4 right-6 text-[80px] font-black text-[#dc2626]/15 leading-none select-none">08</span>
+                <div className="relative z-10">
+                  <span className="text-3xl font-black text-[#dc2626]">08</span>
+                  <h3 className="text-xl font-bold text-[#1e3a8a] mt-2 mb-3">KAMI PERCAYA</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    bahwa kepastian kedatangan kembali Yesus Kristus secara nyata dan pribadi akan terjadi pada akhir zaman untuk menjemput umat-Nya untuk menghakimi seluruh umat manusia, baik yang hidup maupun yang mati. Pada kedatangan-Nya kedua kali itulah setiap orang mati akan dibangkitkan, orang percaya masuk ke dalam kehidupan yang kekal, orang yang tidak percaya masuk ke dalam kebinasaan yang kekal.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Row 5: Full width - Kedatangan Kristus */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-[#1e3a8a] rounded-2xl p-8 md:p-10 text-white relative overflow-hidden shadow-lg"
+            >
+              <span className="absolute top-4 right-6 text-[120px] font-black text-white/10 leading-none select-none">09</span>
+              <div className="relative z-10 max-w-3xl">
+                <h3 className="text-1xl md:text-2xl font-semibold mb-4">DOMINO OPTIMO MAXIMO</h3>
+                <p className="text-2xl md:text-2xl font-bold mb-4 leading-relaxed">
+                  TO THE LORD THE BEST THE GREATEST
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Yayasan */}
+      <section className="py-20 bg-white" id="yayasan">
+        <div className="container mx-auto px-4 lg:px-8">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
+              <Shield size={20} />
+              <span className="font-bold">YAYASAN</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+              Yayasan STTB
+            </h2>
+            <p className="text-lg text-gray-600">
+              Struktur organisasi yayasan yang menaungi Sekolah Tinggi Teologi Bandung
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto flex flex-col gap-14">
+            {/* Tier 1: Dewan Pembina — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Dewan Pembina
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full sm:w-auto">
+                  {[
+                    { name: "Nama Pembina 1", role: "Ketua Dewan Pembina" },
+                    { name: "Nama Pembina 2", role: "Anggota Dewan Pembina" },
+                    { name: "Nama Pembina 3", role: "Anggota Dewan Pembina" },
+                  ].map((person, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-full sm:w-48"
+                    >
+                      <div className="bg-white rounded-xl p-5 shadow-md border-l-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
+                        <div className="">
+                        </div>
+                        <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
+                          {person.name}
+                        </h4>
+                        <p className="text-[11px] font-semibold text-[#dc2626] mt-1">
+                          {person.role}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 2: Dewan Pengurus — offset LEFT */}
+            <div className="relative">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Dewan Pengurus
+                </span>
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
+              </div>
+              <div className="flex justify-center md:justify-start">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 w-full md:w-auto">
+                  {[
+                    { name: "Nama Pengurus 1", role: "Ketua" },
+                    { name: "Nama Pengurus 2", role: "Wakil Ketua" },
+                    { name: "Nama Pengurus 3", role: "Sekretaris" },
+                    { name: "Nama Pengurus 4", role: "Bendahara" },
+                  ].map((person, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="w-full md:w-48"
+                    >
+                      <div className="bg-white rounded-xl p-5 shadow-md border-t-4 border-[#1e3a8a] hover:shadow-lg transition-shadow h-full">
+                        <span className="inline-block bg-[#dc2626] text-white text-[10px] font-bold px-2.5 py-1 rounded-full mb-3">
+                          {person.role}
+                        </span>
+                        <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
+                          {person.name}
+                        </h4>
+                        <p className="text-[11px] text-gray-500 mt-1">
+                          Dewan Pengurus Yayasan
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tier 3: Anggota — offset RIGHT */}
+            <div className="relative">
+              <div className="flex justify-end items-center gap-4 mb-6">
+                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
+                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
+                  Anggota
+                </span>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex gap-4 w-full lg:w-auto">
+                  {[
+                    "Nama Anggota 1",
+                    "Nama Anggota 2",
+                    "Nama Anggota 3",
+                    "Nama Anggota 4",
+                    "Nama Anggota 5",
+                    "Nama Anggota 6",
+                    "Nama Anggota 7",
+                  ].map((name, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="w-full lg:w-36"
+                    >
+                      <div className="bg-white rounded-xl p-4 shadow-md border-l-3 border-[#1e3a8a] hover:shadow-lg transition-shadow">
+                        <h4 className="text-xs font-bold text-[#1e3a8a] leading-tight">
+                          {name}
+                        </h4>
+                        <p className="text-[10px] text-gray-500 mt-1">
+                          Anggota Yayasan
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -23,7 +23,7 @@ const programs = [
   },
   {
     level: "S2",
-    title: "Magister Teologi Transformasi Budaya & Masyarakat",
+    title: "Magister Teologi",
     description:
       "Program Magister yang fokus pada transformasi budaya dan masyarakat melalui perspektif teologi Kristen, mempersiapkan pemimpin untuk pelayanan urban yang kontekstual.",
     duration: "4 Semester",
@@ -81,7 +81,7 @@ export function ProgramsPreview() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="bg-[#f59e0b] text-white px-4 py-1.5 rounded-full font-bold text-sm">
+                  <span className="bg-[#dc2626] text-white px-4 py-1.5 rounded-full font-bold text-sm">
                     {program.level}
                   </span>
                 </div>
@@ -89,7 +89,7 @@ export function ProgramsPreview() {
 
               {/* Content */}
               <div className="p-8">
-                <h3 className="text-2xl font-black text-[#1e3a8a] mb-3 group-hover:text-[#f59e0b] transition-colors">
+                <h3 className="text-2xl font-black text-[#1e3a8a] mb-3 group-hover:text-[#dc2626] transition-colors">
                   {program.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed mb-6">
@@ -115,7 +115,7 @@ export function ProgramsPreview() {
                       key={idx}
                       className="flex items-center gap-2 text-sm text-gray-700"
                     >
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#dc2626]" />
                       <span>{highlight}</span>
                     </div>
                   ))}
@@ -124,7 +124,7 @@ export function ProgramsPreview() {
                 {/* CTA */}
                 <Link
                   href="/programs"
-                  className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#f59e0b] transition-colors"
+                  className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#dc2626] transition-colors"
                 >
                   Pelajari Lebih Lanjut
                   <ArrowRight size={18} />
@@ -138,7 +138,7 @@ export function ProgramsPreview() {
         <div className="text-center">
           <Link
             href="/programs"
-            className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#f59e0b] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#dc2626] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <GraduationCap size={22} />
             Lihat Semua Program

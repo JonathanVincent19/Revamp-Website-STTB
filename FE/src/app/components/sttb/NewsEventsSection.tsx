@@ -77,7 +77,7 @@ export function NewsEventsSection() {
               </div>
               <Link
                 href="/news"
-                className="hidden md:inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#f59e0b] transition-colors"
+                className="hidden md:inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#dc2626] transition-colors"
               >
                 Lihat Semua
                 <ArrowRight size={18} />
@@ -104,7 +104,7 @@ export function NewsEventsSection() {
                       />
                       {item.badge && (
                         <div className="absolute top-3 right-3">
-                          <span className="bg-[#f59e0b] text-white px-3 py-1 rounded-full text-xs font-bold">
+                          <span className="bg-[#dc2626] text-white px-3 py-1 rounded-full text-xs font-bold">
                             {item.badge}
                           </span>
                         </div>
@@ -123,7 +123,7 @@ export function NewsEventsSection() {
                           {item.date}
                         </span>
                       </div>
-                      <h3 className="text-xl font-bold text-[#1e3a8a] mb-2 group-hover:text-[#f59e0b] transition-colors">
+                      <h3 className="text-xl font-bold text-[#1e3a8a] mb-2 group-hover:text-[#dc2626] transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-gray-600 leading-relaxed mb-4">
@@ -131,7 +131,7 @@ export function NewsEventsSection() {
                       </p>
                       <Link
                         href="/news"
-                        className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold text-sm hover:text-[#f59e0b] transition-colors"
+                        className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold text-sm hover:text-[#dc2626] transition-colors"
                       >
                         Baca Selengkapnya
                         <ArrowRight size={16} />
@@ -145,7 +145,7 @@ export function NewsEventsSection() {
             <div className="mt-6 md:hidden">
               <Link
                 href="/news"
-                className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#f59e0b] transition-colors"
+                className="inline-flex items-center gap-2 text-[#1e3a8a] font-bold hover:text-[#dc2626] transition-colors"
               >
                 Lihat Semua Berita
                 <ArrowRight size={18} />
@@ -177,7 +177,7 @@ export function NewsEventsSection() {
                   <div className="flex gap-4">
                     {/* Date Badge */}
                     <div className="flex-shrink-0 bg-white/10 rounded-lg p-3 text-center">
-                      <div className="text-2xl font-black text-[#fbbf24]">
+                      <div className="text-2xl font-black text-[#FF4D4D]">
                         {event.date}
                       </div>
                       <div className="text-xs text-blue-100 uppercase">
