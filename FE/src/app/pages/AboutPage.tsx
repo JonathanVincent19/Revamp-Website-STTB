@@ -2,12 +2,14 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { Target, History, Users, Award, BookOpen, Shield, Star, Flame, Cross, Wand2 } from "lucide-react";
+import { Target, History, Users, Award, BookOpen, Shield, Star, Flame, Cross, Wand2, Loader2, AlertCircle, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
 import { DosenCarousel, DosenCard } from "../components/sttb/DosenCarousel";
+import { useLecturers } from "@/lib/hooks";
 
 export function AboutPage() {
+  const { data: lecturers, loading: lecturersLoading, error: lecturersError } = useLecturers();
   const historyRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: historyRef,
@@ -19,7 +21,10 @@ export function AboutPage() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af]">
+      <section className="relative py-16 bg-gradient-to-br from-[#0f1b3d] via-[#1e3a8a] to-[#1e40af] overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -41,7 +46,10 @@ export function AboutPage() {
       </section>
 
       {/* Vision & Mission */}
-      <section className="py-20 bg-white" id="vision">
+      <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="vision">
+
+        <div className="container relative mx-auto px-4 lg:px-8">
+        </div>
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -93,7 +101,10 @@ export function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-20 bg-gray-50" id="core-values">
+      <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="core-values">
+        <div className="container relative mx-auto px-4 lg:px-8">
+          {/* Konten Core Values */}
+        </div>
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
@@ -166,164 +177,274 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* History */}
-      <section className="py-20 bg-gray-50" id="history">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
-              <History size={20} />
-              <span className="font-bold">SEJARAH</span>
-            </div>
-            <h2 className="text-4xl font-black text-[#1e3a8a] mb-4">
-              Perjalanan Kami
-            </h2>
-            <p className="text-lg text-gray-600">
-              Lebih dari 65 tahun pengalaman dalam pendidikan teologi
-            </p>
+      {/* --- HISTORY TIMELINE SECTION --- */}
+      <section className="relative overflow-hidden py-24 bg-white" id="history">
+
+        {/* --- BACKGROUND SHAPES: EVOLVING SPIRAL & NETWORK --- */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {/* Swirling Spiral Patterns (Representing Organic Growth) */}
+          <div className="absolute inset-0 opacity-[0.03] text-[#1e3a8a]">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="spiralpattern" width="200" height="200" patternUnits="userSpaceOnUse">
+                  <path d="M 0,200 A 200,200 0 0,1 200,0 M -10,190 A 200,200 0 0,1 190,-10" stroke="currentColor" strokeWidth="1" fill="none" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#spiralpattern)" />
+            </svg>
           </div>
 
-          <div className="max-w-5xl mx-auto px-4 relative mt-8 pb-16" ref={historyRef}>
-            {/* Background Line */}
-            <div className="absolute left-[29px] md:left-[45px] top-4 bottom-12 w-1.5 bg-gray-200 rounded-full" />
+          {/* Faint Network (Titik dan Garis) */}
+          <div className="absolute inset-0 opacity-[0.04] text-[#dc2626]">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="networkpattern" width="100" height="100" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="2" fill="currentColor" />
+                  <line x1="2" y1="2" x2="100" y2="100" stroke="currentColor" strokeWidth="0.5" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#networkpattern)" />
+            </svg>
+          </div>
+
+          {/* Glow pudar di pojok */}
+          <div className="absolute top-1/4 left-[-10%] w-[500px] h-[500px] bg-[#1e3a8a] opacity-[0.05] rounded-full blur-[100px]" />
+          <div className="absolute bottom-1/4 right-[-10%] w-[400px] h-[400px] bg-[#dc2626] opacity-[0.03] rounded-full blur-[100px]" />
+        </div>
+        {/* -------------------------------------------------------------------------------- */}
+
+        <div className="container relative z-10 mx-auto px-4 lg:px-8 max-w-7xl">
+          {/* Section Header (Editorial Alignment - Rata Kiri) */}
+          <div className="max-w-3xl mb-16 md:mb-20 text-center md:text-left mx-auto md:mx-0">
             <motion.div
-              className="absolute left-[29px] md:left-[45px] top-4 bottom-12 w-1.5 bg-gradient-to-b from-[#1e3a8a] via-red-500 to-[#1e3a8a] origin-top rounded-full z-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="h-1 w-12 bg-[#dc2626] mb-6 mx-auto md:mx-0" />
+              <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-6 tracking-tight">
+                Evolusi Perjalanan Kami.
+              </h2>
+              <p className="text-lg md:text-xl text-gray-500 font-light leading-relaxed max-w-2xl mx-auto md:mx-0">
+                Lebih dari 65 tahun pengalaman dalam pendidikan teologi transformatif, membentuk identitas dan misi STTB seiring waktu.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Timeline Structure */}
+          <div className="relative max-w-5xl mx-auto pl-10 md:pl-0" ref={historyRef}>
+
+            {/* Garis Vertikal Statis (Abu-abu) */}
+            <div className="absolute left-[20px] md:left-1/2 top-4 bottom-12 w-[2px] bg-gray-200 -translate-x-1/2" />
+
+            {/* Garis Progress Animasi (Biru/Merah) */}
+            <motion.div
+              className="absolute left-[20px] md:left-1/2 top-4 bottom-12 w-[2px] bg-gradient-to-b from-[#1e3a8a] via-[#dc2626] to-[#1e3a8a] origin-top -translate-x-1/2 z-10"
               style={{ scaleY: lineHeight }}
             />
 
-            <div className="space-y-12 py-8 relative">
+            <div className="space-y-16">
               {[
                 {
                   year: "1992 - 1998",
-                  title: "Pendirian & Pembukaan STTB",
+                  title: "Pendirian Reformed Injili",
                   descriptions: [
-                    "Pdt. Caleb Tong, Pdt. Joseph Tong, dan Pdt. Dorothy I. Marx mendirikan STTB pada tahun 1992 dengan tujuan menghasilkan Pastor-Scholar yg memiliki kerangka teologi Reformed Injili dalam konteks pekerjaan Tuhan di Indonesia. Pdt. Daniel Lucas Lukito sebagai Dekan Akademik pertama banyak berperan dalam meletakkan kerangka dasar pembangunan STTB.",
-                    "Pembukaan STTB disiapkan sangat baik dengan jajaran dosen yang berkualitas. Komitmen untuk mengejar kualitas akademis yg tinggi didukung juga oleh perpustakaan yang memiliki koleksi buku dan jurnal yang sangat memadai, serta penerbitan Jurnal Teologi STULOS dalam versi Bahasa Indonesia dan Inggris.",
-                    "Pada tahun-tahun pertama diselenggarakan acara dengan lingkup nasional yaitu Ferakristal (Festival Remaja Kristen Pencinta Alkitab). Wisuda pertama diadakan pada tahun 1996."
+                    "Pdt. Caleb Tong, Pdt. Joseph Tong, dan Pdt. Dorothy I. Marx mendirikan STTB pada tahun 1992 dengan tujuan menghasilkan Pastor-Scholar yg memiliki kerangka teologi Reformed Injili dalam konteks pekerjaan Tuhan di Indonesia. Pdt. Daniel Lucas Lukito sebagai Dekan Akademik pertama meletakkan kerangka dasar pembangunan STTB.",
+                    "Pembukaan STTB disiapkan sangat baik dengan dosen berkualitas, perpustakaan koleksi lengkap, serta penerbitan Jurnal Teologi STULOS.",
+                    "Tahun-tahun pertama diselenggarakan Ferakristal (Festival Remaja Kristen Pencinta Alkitab). Wisuda pertama diadakan pada tahun 1996."
                   ],
+                  icon: Target,
                 },
                 {
                   year: "1999 - 2005",
-                  title: "Kepemimpinan Baru & Program Lanjutan",
+                  title: "Gedung & Program Baru",
                   descriptions: [
-                    "STTB mengalami pergantian pemimpin dan jajaran dosen. Ibu Dorothy I. Marx menjabat sebagai Rektor dan STTB terus melanjutkan kiprahnya atas anugerah Tuhan dengan membuka program-program studi baru: M.A. (Master of Arts/Magister Artium) untuk memperlengkapi kaum awam dan M.Th. (Master of Theology/Magister Teologi) untuk memperlengkapi para hamba Tuhan yang rindu berkiprah di dunia akademis.",
-                    "Asrama dosen dibangun bersebelahan dengan asrama mahasiswa. STTB berkomitmen menerbitkan seri buku “Sola…” dan menyelenggarakan acara nasional bagi pemuda dengan nama CYLF (Christian Youth Leadership Forum)."
+                    "Ibu Dorothy I. Marx menjabat sebagai Rektor. STTB membuka program-program studi baru: M.A. (Magister Artium) untuk kaum awam dan M.Th. (Magister Teologi) untuk akademisi.",
+                    "Asrama dosen dibangun bersebelahan dengan asrama mahasiswa. STTB berkomitmen menerbitkan seri buku “Sola…” dan menyelenggarakan acara nasional bagi pemuda CYLF (Christian Youth Leadership Forum)."
                   ],
+                  icon: ArrowRight,
                 },
                 {
                   year: "2006 - 2010",
-                  title: "Peningkatan Akademik & Program Mandarin",
+                  title: "Peningkatan Akademik Global",
                   descriptions: [
-                    "Perkembangan STTB berlanjut dalam kepemimpinan Pdt. Joseph Tong yang berkomitmen meningkatkan kualifikasi tenaga pengajar dengan mengutus beberapa dosen untuk studi lanjut di USA. Pada periode ini terbit dua buku Seri Sola, yaitu Sola Scriptura dan Sola Fide.",
-                    "Dalam periode ini STTB membuka program studi berbahasa Mandarin (S.Th., M.Div., dan M.A.) sebagai kontribusinya dalam pelayanan misi di Tiongkok. Untuk itu 2 dosen yaitu Pdt. Lee Ching Yen dan Pdt. Joseph Lin dari Taiwan diundang mengajar para mahasiswa yang datang dari Tiongkok."
+                    "Di bawah kepemimpinan Pdt. Joseph Tong, STTB mengutus beberapa dosen untuk studi lanjut di USA. Terbit dua buku Seri Sola: Sola Scriptura dan Sola Fide.",
+                    "Membuka program studi berbahasa Mandarin (S.Th., M.Div., dan M.A.) untuk misi di Tiongkok dengan mengundang 2 dosen dari Taiwan mengajar para mahasiswa yang datang dari Tiongkok."
                   ],
+                  icon: History,
                 },
                 {
                   year: "2011 - 2016",
-                  title: "Ekspansi Fasilitas & Jejaring Global",
+                  title: "Gedung 7 Lantai & Akreditasi",
                   descriptions: [
-                    "Periode ini ditandai dengan beberapa perkembangan yang signifikan. Pdt. Agus Gunawan melanjutkan kepemimpinan sebagai Rektor. Pada tahun 2011, STTB hadir dengan wajah baru dengan dibangunnya gedung baru berlantai tujuh yang saat ini difungsikan untuk ruang-ruang kelas, kantor dosen dan staf, asrama mahasiswa, aula, dan perpustakaan. Buku ketiga dan keempat dari Seri Sola (Sola Gratia dan Solus Christos) diterbitkan.",
-                    "Pada periode ini juga beberapa orang di jajaran pimpinan melanjutkan studi doktoral di Asia dan Amerika. Tahun 2012 dibuka prodi baru S.Pd.K. (Sarjana Pendidikan Kristen) bersama dengan prodi M.Min. (Magister Ministri). Selanjutnya, pada tahun 2015, STTB juga menambah program studi M.Pd.K. (Magister Pendidikan Kristen), yang dirancang untuk memperlengkapi para pemimpin pendidikan Kristen.",
-                    "Dalam periode ini beberapa program studi sudah mulai terakreditasi oleh BAN-PT (Badan Akreditasi Nasional Perguruan Tinggi) dan ATA (Asian Theological Association). Selain itu juga STTB memperluas jejaring global yang ditandai dengan kehadiran beberapa orang dosen dari Inggris, India, dan Filipina, yang sangat mendukung program M.Th. yang diselenggarakan dalam Bahasa Inggris."
+                    "Pdt. Agus Gunawan melanjutkan kepemimpinan sebagai Rektor. Pada tahun 2011, dibangun gedung baru berlantai tujuh untuk ruang kelas, asrama, dan perpustakaan.",
+                    "Tahun 2012 dibuka prodi S.Pd.K. (Sarjana Pendidikan Kristen) dan M.Min. (Magister Ministri). Selanjutnya, pada tahun 2015, ditambah program studi M.Pd.K.",
+                    "Beberapa program studi sudah terakreditasi oleh BAN-PT dan ATA (Asian Theological Association). Jejaring global diperluas dengan dosen dari Inggris, India, dan Filipina, yang sangat mendukung program M.Th. Bahasa Inggris."
                   ],
+                  icon: Target,
                 },
                 {
                   year: "2017 - 2022",
-                  title: "Pembenahan Kualitas & Pendidikan Non-Formal",
+                  title: "Inovasi LEAD Center & Era Digital",
                   descriptions: [
-                    "Periode ini diwarnai oleh pembenahan kualitas dan penajaman arah pengembangan program-program studi formal dan non-formal sesuai visi dan keunikan panggilan STTB. Formasi spiritualitas yg berkualitas dan terintegrasi antara kelas, kapel, kelompok pastoral, asrama, pemuridan, hingga mentoring dalam praktek pelayanan mengokohkan proses pembentukan untuk mahasiswa STh dan SPd untuk kesiapan mereka melayani.",
-                    "Komitmen STTB kepada dunia pendidikan kristen makin mendapat apresiasi luas melalui perkembangan program studi Magister Pendidikan, inisiasi tumbuhnya komunitas Indonesian Forum for Christian Educators (IFCE), dan kontribusi para dosen STTB dalam berbagai forum nasional. Demikian juga komitmen STTB untuk mengembangkan pendidikan teologi yang aplikatif dan transformatif mendapatkan sambutan yg positif melalui perkembangan program studi MTh yang berfokus pada Transformasi Budaya dan Masyarakat dan program studi MMin Marketplace untuk memperlengkapi profesional Kristen bermisi di dunia kerja. Sementara itu dua program MMin juga berlangsung dalam periode ini, yaitu MMin Music Leadership (bekerja sama dengan Singapore Bible College) dan MMin Pastoral Leadership.",
-                    "Pendidikan nonformal makin berkembang dengan budaya digital yg tumbuh pesat selama masa pandemi. Melalui pengembangan pusat studi non-formal (LEAD Center) dikembangkan modul-modul pembinaan Vocatio (marketplace), Perspectives (misi), dan materi-materi pembinaan digital yg dapat diakses melalui media sosial. Pengembangan penelitian ditandai dengan publikasi ilmiah berupa seri webinar berkala Conversation That Matters (CTM) dan penerbitan monograf untuk tesis-tesis master yg terpilih karena kualitas dan relevansinya bagi pelayanan di lapangan.",
-                    "Mengingat besarnya dan luasnya pekerjaan yg harus dilakukan, maka kolaborasi dan sinergi dengan berbagai gereja dan lembaga secara nasional dan global yg sejalan dengan visi STTB makin dikembangkan dalam periode ini. Dalam periode ini kepemimpinan STTB mengalami beberapa kali peralihan, yaitu Pdt Chandra Koewoso sebagai Ketua sejak Agustus 2017, dan selanjutnya Sutrisna Harjanto PhD sebagai Ketua sejak Agustus 2019 hingga saat ini."
-                  ]
+                    "Pembenahan kualitas dan penajaman arah pengembangan program studi formal dan non-formal. Formasi spiritualitas yg berkualitas dan terintegrasi.",
+                    "Inisiasi komunitas IFCE, perkembangan prodi M.Th. berfokus pada Transformasi Budaya dan program studi MMin Marketplace.",
+                    "Pendidikan nonformal makin berkembang dengan budaya digital di LEAD Center (pusat studi non-formal) dikembangkan Vocatio, Perspectives, dan materi-materi pembinaan digital.",
+                    "Pdt Chandra Koewoso menjabat Ketua sejak Agustus 2017, dan Sutrisna Harjanto PhD sejak Agustus 2019."
+                  ],
+                  icon: History,
                 }
-              ].map((milestone, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5 }}
-                  className="flex gap-6 md:gap-10 items-start relative group"
-                >
-                  <div className="flex-shrink-0 w-16 md:w-24 flex justify-center relative pt-4 z-20">
-                    {/* Circle marker on the line */}
-                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white border-4 border-gray-300 group-hover:border-[#1e3a8a] shadow-md transition-colors duration-300 relative z-20" />
-                  </div>
+              ].map((milestone, index) => {
+                const isEven = index % 2 === 0;
 
-                  <div className="flex-1 bg-white rounded-xl p-5 md:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-                    {/* Card decorative line on left edge */}
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1e3a8a] group-hover:bg-red-500 transition-colors duration-300" />
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6 }}
+                    className="flex flex-col md:flex-row gap-6 md:gap-16 items-start relative group"
+                  >
 
-                    <span className="inline-block text-xl md:text-2xl font-black text-[#1e3a8a] mb-1.5 tracking-tight">
-                      {milestone.year}
-                    </span>
-                    <h3 className="text-lg md:text-xl font-bold text-[#dc2626] mb-3">
-                      {milestone.title}
-                    </h3>
-                    <div className="space-y-2.5">
-                      {milestone.descriptions.map((desc, i) => (
-                        <p key={i} className="text-gray-600 text-xs md:text-sm leading-relaxed text-justify">
-                          {desc}
-                        </p>
-                      ))}
+                    {/* --- MARKER (Pentagon Panah Kustom) --- */}
+                    <div className="absolute left-[20px] md:left-1/2 top-4 -translate-x-1/2 z-20">
+                      <div className="w-10 h-10 bg-white border border-gray-100 shadow-md group-hover:border-[#1e3a8a] flex items-center justify-center relative transition-colors duration-300" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}>
+                        <milestone.icon size={16} className="text-[#1e3a8a]" />
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                    {/* -------------------------------------- */}
+
+                    {/* Date Column (Editorial Alignment) */}
+                    <div className={`w-full md:w-[calc(50%-48px)] ${isEven ? 'md:text-right md:order-1' : 'md:text-left md:order-2'} pt-2.5`}>
+                      <span className="text-3xl md:text-4xl font-black text-[#1e3a8a] leading-none block tracking-tighter ml-10">
+                        {milestone.year}
+                      </span>
+                    </div>
+
+                    {/* Card Column (Borderless Style) */}
+                    <div className={`w-full md:w-[calc(50%-48px)] ${isEven ? 'md:order-2 md:pl-6' : 'md:order-1 md:pr-6'}`}>
+                      <div className="bg-white p-8 transition-all duration-300 relative overflow-hidden group border border-gray-100 hover:border-gray-200 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] rounded-2xl">
+
+                        {/* Garis Aksen Atas Animasi Hover */}
+                        <div className="absolute top-0 left-0 w-full h-[3px] bg-gray-100 group-hover:bg-[#1e3a8a] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+
+                        <h3 className="text-xl md:text-2xl font-bold text-[#1e3a8a] mb-5 leading-tight">
+                          {milestone.title}
+                        </h3>
+                        <div className="space-y-4">
+                          {milestone.descriptions.map((desc, i) => (
+                            <p key={i} className="text-gray-600 text-[15px] font-light leading-relaxed text-left">
+                              {desc}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Arti Logo Section */}
-      <section className="py-20 bg-white" id="arti-logo">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-sm font-black text-red-500 mb-2 tracking-widest uppercase">
+      {/* --- Arti Logo Section --- */}
+      <section className="relative py-24 bg-white overflow-hidden" id="arti-logo">
+
+        {/* --- BACKGROUND DESAIN SHAPE (DIPERJELAS) --- */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+
+          {/* Soft Pulse Gradient Lingkaran di Kiri Atas (Biru STTB) - Diperjelas */}
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(30,58,138,0.2) 0%, rgba(30,58,138,0) 70%)',
+              animation: 'pulseLogo 8s ease-in-out infinite'
+            }} />
+
+          {/* Pola Garis Cross-Hatch Geometris Tipis di Kanan Bawah (Merah) - Opacity naik ke 8% */}
+          <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] opacity-[0.08] text-red-600">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="crossHatch" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1="0" y1="0" x2="0" y2="20" stroke="currentColor" strokeWidth="2" />
+                  <line x1="0" y1="0" x2="20" y2="0" stroke="currentColor" strokeWidth="2" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#crossHatch)" />
+            </svg>
+          </div>
+
+          {/* Aksentuasi Shape Linear Abstrak di Tengah - Opacity naik ke 6% */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.06]">
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,500 C200,400 300,600 500,500 C700,400 800,600 1000,500 L1000,1000 L0,1000 Z" fill="#1e3a8a" opacity="0.4" />
+              <path d="M0,500 C150,550 250,450 400,500 C550,550 650,450 800,500 C950,550 1000,500 1000,500" stroke="#dc2626" strokeWidth="3" fill="none" />
+            </svg>
+          </div>
+        </div>
+
+        {/* --- Custom CSS untuk Animasi Pulse (Opacity batas atas dinaikkan) --- */}
+        <style>{`
+          @keyframes pulseLogo {
+            0%, 100% { transform: scale(1) translate(-10px, -10px); opacity: 0.4; }
+            50% { transform: scale(1.1) translate(10px, 10px); opacity: 0.8; }
+          }
+        `}</style>
+        {/* ---------------------------------------------------------------------------------- */}
+
+        {/* --- Konten Utama (relative z-10 agar di atas shape) --- */}
+        <div className="container relative z-10 mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16 relative">
+            {/* Garis aksen kecil di atas judul */}
+            <div className="w-12 h-1 bg-red-500 mx-auto mb-4 rounded-full"></div>
+            <h2 className="text-sm font-black text-red-500 mb-2 tracking-[0.2em] uppercase">
               ARTI LOGO
             </h2>
-            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4 tracking-tight">
               STTB
             </h2>
           </div>
 
-          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             {/* 2x2 Grid for Elements */}
-            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 shadow-sm border border-gray-100 rounded-sm overflow-hidden">
+            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 shadow-2xl shadow-blue-900/5 border border-gray-100 rounded-3xl overflow-hidden bg-white/80 backdrop-blur-sm">
               {[
                 {
                   title: "API",
-                  icon: <Flame className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  icon: <Flame className="w-16 h-16 text-red-600 mx-auto" strokeWidth={1} />,
                   description: "di atas logo menggambarkan penyertaan dan pemenuhan dari Allah Roh Kudus yang menjadi sumber hikmat, kuasa, dan kasih serta merupakan syarat mutlak bagi pelayan Tuhan.",
                 },
                 {
                   title: "ALKITAB",
-                  icon: <BookOpen className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  icon: <BookOpen className="w-16 h-16 text-[#1e3a8a] mx-auto" strokeWidth={1} />,
                   description: "adalah satu-satunya sumber pengetahuan yang benar tentang Allah dan dasar bagi panggilan serta pelayanan (Sola Scriptura).",
                 },
                 {
                   title: "SALIB & MAHKOTA",
-                  icon: <div className="text-gray-700 mx-auto flex justify-center text-6xl font-serif">✝</div>,
+                  icon: <div className="text-red-600 mx-auto flex justify-center text-7xl font-serif">✝</div>,
                   description: "melambangkan panggilan untuk berpegang kepada kebenaran dan merajakan Kristus.",
                 },
                 {
                   title: "TONGKAT GEMBALA",
-                  icon: <Wand2 className="w-16 h-16 text-gray-700 mx-auto" strokeWidth={1.5} />,
+                  icon: <Wand2 className="w-16 h-16 text-[#1e3a8a] mx-auto" strokeWidth={1} />,
                   description: "melambangkan panggilan Tuhan untuk menggembalakan umat-Nya.",
                 },
               ].map((item, index) => (
                 <div
                   key={index}
-                  className={`p-10 bg-white flex flex-col items-center text-center
-                    ${index === 0 || index === 2 ? 'border-r border-gray-100' : ''}
+                  className={`p-12 flex flex-col items-center text-center group hover:bg-gray-50/50 transition-colors duration-300
+                    ${index === 0 || index === 2 ? 'md:border-r border-gray-100' : ''}
                     ${index === 0 || index === 1 ? 'border-b border-gray-100' : ''}
                   `}
                 >
-                  <div className="h-24 flex items-end justify-center mb-8">
+                  <div className="h-28 flex items-end justify-center mb-10 group-hover:-translate-y-2 transition-transform duration-300 ease-out">
                     {item.icon}
                   </div>
-                  <h3 className="text-xl font-black text-red-600 mb-4">{item.title}</h3>
-                  <p className="text-gray-500 text-xs leading-relaxed max-w-[280px]">
+                  <h3 className="text-2xl font-black text-[#1e3a8a] mb-5 tracking-tight">{item.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed max-w-[300px] font-medium">
                     {item.description}
                   </p>
                 </div>
@@ -331,18 +452,19 @@ export function AboutPage() {
             </div>
 
             {/* Right Side: Main Logo */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center px-4">
-              <div className="w-full max-w-[280px] mb-8">
-                {/* Fallback to BookOpen if no logo image */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center px-6 py-10 rounded-3xl bg-gray-50/50 border border-gray-100 backdrop-blur-sm">
+              <div className="w-full max-w-[260px] mb-10 group">
                 <ImageWithFallback
                   src="/images/logo-sttb.png"
                   alt="Logo STTB"
-                  className="w-full h-auto object-contain drop-shadow-md"
+                  className="w-full h-auto object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
               </div>
-              <h3 className="text-2xl font-black text-red-600 mb-4">LOGO STTB</h3>
-              <p className="text-gray-500 text-xs leading-relaxed max-w-sm">
+              <div className="w-16 h-1 bg-[#1e3a8a] mb-6 rounded-fullOpacity-60"></div>
+              <h3 className="text-3xl font-black text-[#1e3a8a] mb-5 tracking-tight">LOGO STTB</h3>
+              <p className="text-gray-600 text-sm leading-relaxed max-w-sm font-medium">
                 Logo STTB menggambarkan pola pendidikan teologi yang akan memperlengkapi para mahasiswa untuk menjadi hamba Allah yang baik, setia, dan penuh hikmat, serta siap dipakai dalam pelayanan di ladangNya.
+                {/* description */}
               </p>
             </div>
           </div>
@@ -584,19 +706,42 @@ export function AboutPage() {
                 </span>
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
               </div>
-              <DosenCarousel
-                dosenList={Array.from({ length: 30 }, (_, i) => ({
-                  name: `Dosen ${i + 1}`,
-                  position: "Dosen Tetap",
-                  teaching: "Dosen Teologi",
-                  education: [
-                    "Ph.D. Universitas Contoh",
-                    "M.Th. Seminari Contoh",
-                    "S.Th. Sekolah Tinggi Contoh",
-                  ],
-                  image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                }))}
-              />
+
+              {/* Loading */}
+              {lecturersLoading && (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="animate-spin text-[#1e3a8a] mr-3" size={28} />
+                  <span className="text-gray-500">Memuat data dosen...</span>
+                </div>
+              )}
+
+              {/* Error */}
+              {lecturersError && !lecturersLoading && (
+                <div className="flex items-center justify-center py-8 bg-red-50 rounded-xl">
+                  <AlertCircle className="text-[#dc2626] mr-3" size={24} />
+                  <span className="text-[#dc2626]">Gagal memuat data dosen.</span>
+                </div>
+              )}
+
+              {/* Dosen Carousel from API */}
+              {!lecturersLoading && !lecturersError && lecturers && lecturers.length > 0 && (
+                <DosenCarousel
+                  dosenList={lecturers.map((d) => ({
+                    name: d.name,
+                    position: d.position || "Dosen Tetap",
+                    teaching: d.expertise || "Dosen Teologi",
+                    education: d.educationLevel ? [d.educationLevel] : [],
+                    image: d.photo || "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+                  }))}
+                />
+              )}
+
+              {/* Empty */}
+              {!lecturersLoading && !lecturersError && (!lecturers || lecturers.length === 0) && (
+                <div className="text-center py-8 bg-gray-50 rounded-xl">
+                  <p className="text-gray-500">Data dosen belum tersedia.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

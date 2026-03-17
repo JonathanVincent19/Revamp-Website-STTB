@@ -1,9 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, MessageCircle, Info } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, MessageCircle, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { useContactSubmit } from "@/lib/hooks";
 
 export function ContactPage() {
+  const { mutate: sendMessage, loading, success, error } = useContactSubmit();
+  const [formReset, setFormReset] = useState(0);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    try {
+      await sendMessage({
+        name: fd.get("name") as string,
+        email: fd.get("email") as string,
+        phoneNumber: fd.get("phoneNumber") as string,
+        subject: fd.get("subject") as string,
+        message: fd.get("message") as string,
+      });
+      setFormReset((prev) => prev + 1);
+    } catch {
+      // error sudah ditangani oleh hook
+    }
+  };
+
   return (
     <div className="pt-20">
       <section className="relative py-20 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af]">
@@ -121,13 +143,38 @@ export function ContactPage() {
               <h2 className="text-3xl font-bold text-[#1e3a8a] mb-6">
                 Kirim Pesan
               </h2>
-              <form className="space-y-4">
+
+              {/* Success Message */}
+              {success && (
+                <div className="flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                  <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
+                  <div>
+                    <p className="font-bold text-green-700">Pesan terkirim!</p>
+                    <p className="text-sm text-green-600">Terima kasih, kami akan segera menghubungi Anda.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error && (
+                <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <AlertCircle className="text-[#dc2626] flex-shrink-0" size={24} />
+                  <div>
+                    <p className="font-bold text-red-700">Gagal mengirim pesan</p>
+                    <p className="text-sm text-red-600">{error}</p>
+                  </div>
+                </div>
+              )}
+
+              <form key={formReset} onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">
                     Nama Lengkap
                   </label>
                   <input
+                    name="name"
                     type="text"
+                    required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="Masukkan nama Anda"
                   />
@@ -138,7 +185,9 @@ export function ContactPage() {
                     Email
                   </label>
                   <input
+                    name="email"
                     type="email"
+                    required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="email@example.com"
                   />
@@ -149,6 +198,7 @@ export function ContactPage() {
                     Nomor Telepon
                   </label>
                   <input
+                    name="phoneNumber"
                     type="tel"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="+62"
@@ -159,7 +209,10 @@ export function ContactPage() {
                   <label className="block text-sm font-bold text-gray-700 mb-2">
                     Subjek
                   </label>
-                  <select className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                  <select
+                    name="subject"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                  >
                     <option>Informasi Umum</option>
                     <option>Pendaftaran</option>
                     <option>Biaya Studi</option>
@@ -172,7 +225,9 @@ export function ContactPage() {
                     Pesan
                   </label>
                   <textarea
+                    name="message"
                     rows={5}
+                    required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="Tulis pesan Anda di sini..."
                   />
@@ -180,9 +235,17 @@ export function ContactPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#1e3a8a] text-white px-6 py-4 rounded-lg font-bold hover:bg-[#dc2626] transition-colors"
+                  disabled={loading}
+                  className="w-full bg-[#1e3a8a] text-white px-6 py-4 rounded-lg font-bold hover:bg-[#dc2626] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Kirim Pesan
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" size={20} />
+                      Mengirim...
+                    </>
+                  ) : (
+                    "Kirim Pesan"
+                  )}
                 </button>
               </form>
             </div>
