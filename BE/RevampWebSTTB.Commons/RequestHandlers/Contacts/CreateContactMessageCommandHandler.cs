@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using RevampWebSTTB.Contracts.Requests.Contacts;
-using RevampWebSTTB.Contracts.Responses.Contacts;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 using RevampWebSTTB.Entities.Models;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.Contacts
 {
-    public class CreateContactMessageCommandHandler : IRequestHandler<CreateContactMessageCommand, CreateContactMessageResponse>
+    public class CreateContactMessageCommandHandler : IRequestHandler<CreateContactMessageCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -18,7 +18,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Contacts
             _context = context;
         }
 
-        public async Task<CreateContactMessageResponse> Handle(CreateContactMessageCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(CreateContactMessageCommand request, CancellationToken cancellationToken)
         {
             var newContactMsg = new ContactMessage
             {
@@ -34,7 +34,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Contacts
             _context.ContactMessages.Add(newContactMsg);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CreateContactMessageResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "Terkirim! Terima kasih atas pesan Anda." // Returned in Indonesian per mockup context

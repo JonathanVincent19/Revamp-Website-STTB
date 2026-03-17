@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.Albums;
-using RevampWebSTTB.Contracts.Responses.Albums;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.Albums
 {
-    public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, DeleteAlbumResponse>
+    public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -17,13 +17,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
             _context = context;
         }
 
-        public async Task<DeleteAlbumResponse> Handle(DeleteAlbumCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(DeleteAlbumCommand request, CancellationToken cancellationToken)
         {
             var albumEntity = await _context.GalleryAlbums.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
             if (albumEntity == null)
             {
-                return new DeleteAlbumResponse
+                return new StandardResponse
                 {
                     Success = false,
                     Message = "Album not found."
@@ -33,7 +33,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
             _context.GalleryAlbums.Remove(albumEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new DeleteAlbumResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "Album deleted successfully."

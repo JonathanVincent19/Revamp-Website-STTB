@@ -1,9 +1,9 @@
 using MediatR;
-using RevampWebSTTB.Contracts.Responses.Users;
+using RevampWebSTTB.Contracts.Responses;
 
 namespace RevampWebSTTB.Contracts.Requests.Users
 {
-    public record LogoutUserCommand : IRequest<LogoutUserResponse>
+    public record LogoutUserCommand : IRequest<StandardResponse>
     {
     }
 }

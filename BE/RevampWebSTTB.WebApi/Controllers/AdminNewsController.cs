@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevampWebSTTB.Contracts.Requests.News;
+using System.Security.Claims;
 
 namespace RevampWebSTTB.WebApi.Controllers
 {
@@ -21,11 +22,15 @@ namespace RevampWebSTTB.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNews([FromBody] CreateNewsCommand command)
         {
-            var response = await _mediator.Send(command);
-            
+            var author = User.FindFirstValue(ClaimTypes.Name);
+
+            var commandWithAuthor = command with { Author = author };
+
+            var response = await _mediator.Send(commandWithAuthor);
+
             if (!response.Success)
             {
-                return BadRequest(response); 
+                return BadRequest(response);
             }
 
             return Ok(response);
@@ -40,7 +45,11 @@ namespace RevampWebSTTB.WebApi.Controllers
                 return BadRequest(new { Success = false, Message = "Route ID and payload ID mismatch." });
             }
 
-            var response = await _mediator.Send(command);
+            var author = User.FindFirstValue(ClaimTypes.Name);
+
+            var commandWithAuthor = command with { Author = author };
+
+            var response = await _mediator.Send(commandWithAuthor);
 
             if (!response.Success)
             {

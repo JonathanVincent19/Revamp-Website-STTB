@@ -1,9 +1,21 @@
 namespace RevampWebSTTB.Contracts.Responses.News
 {
+    /// <summary>
+    /// Full data response returned after creating a news article.
+    /// </summary>
     public record CreateNewsResponse
     {
         public bool Success { get; init; }
         public string Message { get; init; } = string.Empty;
-        public int NewsId { get; init; }
+
+        // Full data of the created news
+        public int Id { get; init; }
+        public string Title { get; init; } = string.Empty;
+        public string Slug { get; init; } = string.Empty;
+        public int? CategoryId { get; init; }
+        public string? FeaturedImage { get; init; }
+        public string? Author { get; init; }
+        public string Status { get; init; } = string.Empty;
+        public DateTime CreatedAt { get; init; }
     }
 }

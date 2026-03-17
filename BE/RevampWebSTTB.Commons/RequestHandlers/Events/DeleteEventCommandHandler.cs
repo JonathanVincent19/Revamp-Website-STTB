@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.Events;
-using RevampWebSTTB.Contracts.Responses.Events;
+using RevampWebSTTB.Contracts.Responses;
 using RevampWebSTTB.Entities.Data;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.Events
 {
-    public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand, DeleteEventResponse>
+    public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand, StandardResponse>
     {
         private readonly STTBContext _context;
 
@@ -17,13 +17,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Events
             _context = context;
         }
 
-        public async Task<DeleteEventResponse> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
+        public async Task<StandardResponse> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
             var eventEntity = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
 
             if (eventEntity == null)
             {
-                return new DeleteEventResponse
+                return new StandardResponse
                 {
                     Success = false,
                     Message = "Event not found."
@@ -33,7 +33,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Events
             _context.Events.Remove(eventEntity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new DeleteEventResponse
+            return new StandardResponse
             {
                 Success = true,
                 Message = "Event deleted successfully."

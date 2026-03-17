@@ -1,9 +1,9 @@
 using MediatR;
-using RevampWebSTTB.Contracts.Responses.Contacts;
+using RevampWebSTTB.Contracts.Responses;
 
 namespace RevampWebSTTB.Contracts.Requests.Contacts
 {
-    public record CreateContactMessageCommand : IRequest<CreateContactMessageResponse>
+    public record CreateContactMessageCommand : IRequest<StandardResponse>
     {
         public string Name { get; init; } = string.Empty;
         public string Email { get; init; } = string.Empty;

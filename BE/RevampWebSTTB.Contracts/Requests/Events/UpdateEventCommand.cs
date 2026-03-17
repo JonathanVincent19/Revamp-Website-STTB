@@ -1,10 +1,10 @@
 using System;
 using MediatR;
-using RevampWebSTTB.Contracts.Responses.Events;
+using RevampWebSTTB.Contracts.Responses;
 
 namespace RevampWebSTTB.Contracts.Requests.Events
 {
-    public record UpdateEventCommand : IRequest<UpdateEventResponse>
+    public record UpdateEventCommand : IRequest<StandardResponse>
     {
         public int Id { get; init; }
         public string Title { get; init; } = string.Empty;
