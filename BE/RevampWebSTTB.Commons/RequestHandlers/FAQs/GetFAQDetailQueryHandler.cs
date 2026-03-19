@@ -38,9 +38,11 @@ namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
                     Id = faq.Id,
                     Question = faq.Question,
                     Answer = faq.Answer,
-                    SortOrder = faq.SortOrder
+                    SortOrder = faq.SortOrder,
+                    Category = faq.Category.ToString()
                 }
             };
         }
     }
 }
+

@@ -1,5 +1,6 @@
 using FluentValidation;
 using RevampWebSTTB.Contracts.Requests.FAQs;
+using RevampWebSTTB.Entities.Models;
 
 namespace RevampWebSTTB.Commons.Validators.FAQs
 {
@@ -15,6 +16,12 @@ namespace RevampWebSTTB.Commons.Validators.FAQs
 
             RuleFor(x => x.SortOrder)
                 .GreaterThanOrEqualTo(0).WithMessage("SortOrder must be 0 or greater.");
+
+            RuleFor(x => x.Category)
+                .NotEmpty().WithMessage("Category is required.")
+                .Must(c => Enum.TryParse<FaqCategory>(c, ignoreCase: true, out _))
+                .WithMessage("Invalid category. Valid values: General, Admission, Scholarship, Financial, SupportStudy, StudyProgramConsultation, BachelorConsultation, MasterConsultation.");
         }
     }
 }
+

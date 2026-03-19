@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.FAQs;
 using RevampWebSTTB.Contracts.Responses.FAQs;
 using RevampWebSTTB.Entities.Data;
+using RevampWebSTTB.Entities.Models;
 
 namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
 {
@@ -28,9 +29,14 @@ namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
                 };
             }
 
+            var category = Enum.TryParse<FaqCategory>(request.Category, ignoreCase: true, out var parsedCategory)
+                ? parsedCategory
+                : FaqCategory.General;
+
             faq.Question = request.Question;
             faq.Answer = request.Answer;
             faq.SortOrder = request.SortOrder;
+            faq.Category = category;
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -43,9 +49,11 @@ namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
                     Id = faq.Id,
                     Question = faq.Question,
                     Answer = faq.Answer,
-                    SortOrder = faq.SortOrder
+                    SortOrder = faq.SortOrder,
+                    Category = faq.Category.ToString()
                 }
             };
         }
     }
 }
+

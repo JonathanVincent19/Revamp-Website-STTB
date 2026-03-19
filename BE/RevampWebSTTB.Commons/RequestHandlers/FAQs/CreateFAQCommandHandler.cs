@@ -17,11 +17,16 @@ namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
 
         public async Task<CreateFAQResponse> Handle(CreateFAQCommand request, CancellationToken cancellationToken)
         {
+            var category = Enum.TryParse<FaqCategory>(request.Category, ignoreCase: true, out var parsedCategory)
+                ? parsedCategory
+                : FaqCategory.General;
+
             var faq = new FAQ
             {
                 Question = request.Question,
                 Answer = request.Answer,
-                SortOrder = request.SortOrder
+                SortOrder = request.SortOrder,
+                Category = category
             };
 
             _context.FAQs.Add(faq);
@@ -36,9 +41,11 @@ namespace RevampWebSTTB.Commons.RequestHandlers.FAQs
                     Id = faq.Id,
                     Question = faq.Question,
                     Answer = faq.Answer,
-                    SortOrder = faq.SortOrder
+                    SortOrder = faq.SortOrder,
+                    Category = faq.Category.ToString()
                 }
             };
         }
     }
 }
+
