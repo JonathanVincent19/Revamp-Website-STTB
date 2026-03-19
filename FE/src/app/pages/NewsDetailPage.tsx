@@ -4,19 +4,18 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowLeft,
+  ArrowRight,
   Calendar,
   Clock,
   Tag,
-  User,
-  Eye,
-  Share2,
-  ChevronLeft,
-  ChevronRight,
   X,
   Loader2,
   AlertCircle,
   Newspaper,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
   Camera,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
@@ -55,14 +54,14 @@ function PhotoLightbox({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center"
+        className="fixed inset-0 z-[9999] bg-[#0a1930]/95 backdrop-blur-md flex items-center justify-center"
         onClick={onClose}
       >
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10"
+          className="absolute top-6 right-6 bg-white/10 text-white/70 hover:bg-[#dc2626] hover:text-white p-3 rounded-full transition-all z-10"
         >
-          <X size={28} />
+          <X size={24} strokeWidth={2.5} />
         </button>
 
         {images.length > 1 && (
@@ -72,38 +71,41 @@ function PhotoLightbox({
                 e.stopPropagation();
                 onPrev();
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-all z-10"
+              className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm border border-white/20 text-white p-4 rounded-full hover:bg-[#dc2626] hover:border-transparent transition-all shadow-xl z-10"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={28} strokeWidth={2.5} />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onNext();
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/20 transition-all z-10"
+              className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm border border-white/20 text-white p-4 rounded-full hover:bg-[#dc2626] hover:border-transparent transition-all shadow-xl z-10"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={28} strokeWidth={2.5} />
             </button>
           </>
         )}
 
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-5xl max-h-[85vh] w-full px-4"
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="max-w-6xl max-h-[85vh] w-full px-4 flex flex-col items-center"
           onClick={(e) => e.stopPropagation()}
         >
-          <img
-            src={images[currentIndex]}
-            alt={`Foto ${currentIndex + 1}`}
-            className="w-full h-full object-contain rounded-lg"
-          />
-          <p className="text-center text-white/60 text-sm mt-3">
-            Foto {currentIndex + 1} dari {images.length}
-          </p>
+          <div className="relative w-full h-[75vh] rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/10">
+            <img
+              src={images[currentIndex]}
+              alt={`Dokumentasi ${currentIndex + 1}`}
+              className="w-full h-full object-contain bg-black/50"
+            />
+          </div>
+          <div className="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2 rounded-full border border-white/20 text-white font-bold text-sm tracking-widest uppercase">
+            <Camera size={16} />
+            Media {currentIndex + 1} / {images.length}
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -118,7 +120,6 @@ export function NewsDetailPage({ slug }: { slug: string }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // Extract images from content (looking for img tags in content HTML)
   const extractImages = (content: string): string[] => {
     const matches = content.match(/<img[^>]+src=["']([^"']+)["']/gi) || [];
     return matches.map((m) => {
@@ -137,9 +138,8 @@ export function NewsDetailPage({ slug }: { slug: string }) {
   const allImages = [
     ...(news?.featuredImage ? [getFullImageUrl(news.featuredImage)] : []),
     ...contentImages.map(url => getFullImageUrl(url)),
-  ].filter((v, i, a) => a.indexOf(v) === i); // dedupe
+  ].filter((v, i, a) => a.indexOf(v) === i);
 
-  // Clean content (remove img tags for the text version)
   const cleanContent = (html: string) => {
     return html
       .replace(/<img[^>]*>/gi, "")
@@ -160,10 +160,8 @@ export function NewsDetailPage({ slug }: { slug: string }) {
   const nextImage = () => setLightboxIndex((i) => (i + 1) % allImages.length);
   const prevImage = () => setLightboxIndex((i) => (i - 1 + allImages.length) % allImages.length);
 
-  // Filter related (exclude current)
   const filteredRelated = (relatedNews || []).filter((n) => n.slug !== slug).slice(0, 3);
 
-  // Share handler
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
@@ -172,16 +170,17 @@ export function NewsDetailPage({ slug }: { slug: string }) {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
+      alert("Link artikel disalin ke clipboard!");
     }
   };
 
   // ─── Loading State ────────────────────────────────
   if (loading) {
     return (
-      <div className="pt-20 min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="pt-20 min-h-screen bg-[#f8fafc] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="animate-spin text-[#1e3a8a] mx-auto mb-4" size={48} />
-          <p className="text-gray-500">Memuat berita...</p>
+          <p className="text-gray-500 font-bold tracking-widest uppercase text-sm">Memuat Artikel...</p>
         </div>
       </div>
     );
@@ -190,16 +189,18 @@ export function NewsDetailPage({ slug }: { slug: string }) {
   // ─── Error State ──────────────────────────────────
   if (error || !news) {
     return (
-      <div className="pt-20 min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md">
-          <AlertCircle className="text-[#dc2626] mx-auto mb-4" size={56} />
-          <h2 className="text-2xl font-black text-gray-800 mb-2">Berita Tidak Ditemukan</h2>
-          <p className="text-gray-500 mb-6">{error || "Berita yang Anda cari tidak tersedia atau telah dihapus."}</p>
+      <div className="pt-20 min-h-screen bg-[#f8fafc] flex items-center justify-center">
+        <div className="text-center max-w-md bg-white p-10 rounded-[2rem] shadow-xl border border-gray-100">
+          <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="text-[#dc2626]" size={40} />
+          </div>
+          <h2 className="text-3xl font-black text-[#0a1930] mb-3 tracking-tight">Artikel Tidak Ditemukan</h2>
+          <p className="text-gray-500 mb-8 font-medium">{error || "Berita yang Anda cari tidak tersedia atau mungkin telah dihapus."}</p>
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#dc2626] transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-[#1e3a8a] text-white px-8 py-4 rounded-xl font-black hover:bg-[#dc2626] hover:-translate-y-1 transition-all shadow-lg w-full"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={20} strokeWidth={2.5} />
             Kembali ke Berita
           </Link>
         </div>
@@ -224,95 +225,117 @@ export function NewsDetailPage({ slug }: { slug: string }) {
         />
       )}
 
-      <div className="pt-20 bg-gray-50 min-h-screen">
-        {/* ─── Hero Banner ──────────────────────────────── */}
-        <section className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-          <ImageWithFallback
-            src={news.featuredImage || "https://images.unsplash.com/photo-1738949538943-e54722a44ffc"}
-            alt={news.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1b3d] via-[#0f1b3d]/60 to-transparent" />
+      <div className="pt-20 bg-[#f8fafc] min-h-screen pb-32">
 
-          {/* Back Button */}
-          <Link
-            href="/news"
-            className="absolute top-6 left-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-white/20 transition-all"
-          >
-            <ArrowLeft size={16} />
-            Kembali
-          </Link>
+        {/* ─── Hero Banner ──────────────────────────────── */}
+        <section className="relative h-[65vh] min-h-[500px] overflow-hidden flex flex-col justify-end pb-12">
+          <div className="absolute inset-0 z-0">
+            <ImageWithFallback
+              src={news.featuredImage || "https://images.unsplash.com/photo-1738949538943-e54722a44ffc"}
+              alt={news.title}
+              className="w-full h-full object-cover"
+            />
+            {/* Gradient Overlay yang rapi */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1930] via-[#0a1930]/70 to-[#0a1930]/10" />
+          </div>
+
+          {/* Top Bar Actions */}
+          <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-20">
+            <Link
+              href="/news"
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-5 py-2.5 rounded-full text-xs font-black tracking-widest uppercase hover:bg-[#dc2626] hover:border-transparent transition-all shadow-lg"
+            >
+              <ArrowLeft size={16} strokeWidth={3} />
+              Kembali
+            </Link>
+
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center justify-center w-10 h-10 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full hover:bg-[#1e3a8a] hover:border-transparent transition-all shadow-lg"
+              title="Bagikan Artikel"
+            >
+              <Share2 size={18} strokeWidth={2.5} />
+            </button>
+          </div>
 
           {/* Banner Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-            <div className="max-w-4xl">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <span className="inline-flex items-center gap-1.5 bg-[#dc2626] text-white px-3 py-1 rounded-full text-xs font-bold">
-                    <Tag size={10} />
-                    {news.category?.name || "Umum"}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-blue-200 text-sm">
-                    <Calendar size={13} />
-                    {publishDate.toLocaleDateString("id-ID", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </span>
-                </div>
-                <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-3">
-                  {news.title}
-                </h1>
-              </motion.div>
-            </div>
+          <div className="relative z-20 container mx-auto px-4 lg:px-8 pt-20">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-4xl"
+            >
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <span className="inline-flex items-center gap-1.5 bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase shadow-md border border-red-500/50">
+                  <Tag size={12} strokeWidth={3} />
+                  {news.category?.name || "Berita Umum"}
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.15] tracking-tight drop-shadow-lg">
+                {news.title}
+              </h1>
+            </motion.div>
           </div>
         </section>
 
         {/* ─── Content Area ─────────────────────────────── */}
         <section className="relative">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 py-12">
-              {/* ─── Main Content (Left/Center) ───── */}
-              <div className="lg:col-span-8">
 
+          {/* Latar Belakang Halus tanpa garis memotong */}
+          <div className="absolute inset-0 z-0 pointer-events-none text-[#1e3a8a]">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 opacity-[0.03]">
+              <defs>
+                <pattern id="halftoneGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="1.5" fill="currentColor" />
+                  <circle cx="17" cy="17" r="1.5" fill="currentColor" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#halftoneGrid)" />
+            </svg>
+            <div className="absolute top-20 left-1/4 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-[150px] -z-10" />
+          </div>
 
-                {/* ─── Premium Documentation Gallery ───── */}
+          {/* Container Konten Utama (Overlap tipis & aman) */}
+          <div className="container mx-auto px-4 lg:px-8 relative z-10 -mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+              {/* ─── Main Content (Kiri) ───── */}
+              <div className="lg:col-span-8 space-y-10">
+
+                {/* ─── Gallery Container ───── */}
                 {allImages.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="mb-12"
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_15px_40_rgba(0,0,0,0.06)] border border-gray-100"
                   >
-                    <div className="flex items-baseline justify-between mb-6">
-                      <h3 className="text-2xl font-black text-[#1e3a8a] flex items-center gap-2">
-                        <Sparkles className="text-[#dc2626]" size={24} />
-                        Highlight Berita
+                    <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+                      <h3 className="text-2xl font-black text-[#0a1930] flex items-center gap-3 tracking-tight">
+                        <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-[#dc2626]">
+                          <Camera size={20} strokeWidth={2.5} />
+                        </div>
+                        Galeri Dokumentasi
                       </h3>
-                      <button 
+                      <button
                         onClick={() => openLightbox(lightboxIndex)}
-                        className="text-sm font-bold text-[#dc2626] hover:underline"
+                        className="inline-flex items-center gap-2 text-sm font-black text-[#1e3a8a] hover:text-[#dc2626] bg-blue-50 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors"
                       >
-                        Lihat Fullscreen
+                        <Sparkles size={16} /> Mode Fullscreen
                       </button>
                     </div>
 
                     {/* Main Preview */}
-                    <div 
-                      className="relative rounded-3xl overflow-hidden aspect-[16/9] mb-4 shadow-xl cursor-zoom-in group"
+                    <div
+                      className="relative rounded-3xl overflow-hidden aspect-[16/9] mb-6 shadow-md cursor-zoom-in group border-2 border-gray-100"
                       onClick={() => openLightbox(lightboxIndex)}
                     >
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={lightboxIndex}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
+                          initial={{ opacity: 0, scale: 1.05 }}
+                          animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.4 }}
                           className="absolute inset-0"
@@ -324,7 +347,11 @@ export function NewsDetailPage({ slug }: { slug: string }) {
                           />
                         </motion.div>
                       </AnimatePresence>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-[#1e3a8a]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                        <span className="bg-white text-[#1e3a8a] px-6 py-3 rounded-full font-black text-sm tracking-widest uppercase shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                          Perbesar Gambar
+                        </span>
+                      </div>
                     </div>
 
                     {/* Thumbnails Row */}
@@ -334,11 +361,10 @@ export function NewsDetailPage({ slug }: { slug: string }) {
                           <button
                             key={i}
                             onClick={() => setLightboxIndex(i)}
-                            className={`flex-shrink-0 w-24 md:w-32 aspect-video rounded-xl overflow-hidden border-2 transition-all snap-start ${
-                              i === lightboxIndex 
-                                ? "border-[#dc2626] ring-4 ring-[#dc2626]/10 scale-95" 
-                                : "border-transparent opacity-60 hover:opacity-100"
-                            }`}
+                            className={`flex-shrink-0 w-28 md:w-36 aspect-video rounded-2xl overflow-hidden border-4 transition-all snap-start shadow-sm ${i === lightboxIndex
+                                ? "border-[#dc2626] scale-100"
+                                : "border-transparent opacity-50 hover:opacity-100 scale-95 hover:scale-100"
+                              }`}
                           >
                             <ImageWithFallback
                               src={img}
@@ -349,19 +375,20 @@ export function NewsDetailPage({ slug }: { slug: string }) {
                         ))}
                       </div>
 
-                      {allImages.length > 4 && (
+                      {/* Nav Thumbnails */}
+                      {allImages.length > 3 && (
                         <>
-                          <button 
+                          <button
                             onClick={prevImage}
-                            className="absolute -left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur shadow-lg text-gray-800 p-2 rounded-full hover:bg-white transition-all opacity-0 group-hover/thumbs:opacity-100"
+                            className="absolute -left-4 top-1/2 -translate-y-1/2 bg-[#0a1930] text-white p-2.5 rounded-full shadow-lg hover:bg-[#dc2626] transition-all opacity-0 group-hover/thumbs:opacity-100"
                           >
-                            <ChevronLeft size={20} />
+                            <ChevronLeft size={20} strokeWidth={3} />
                           </button>
-                          <button 
+                          <button
                             onClick={nextImage}
-                            className="absolute -right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur shadow-lg text-gray-800 p-2 rounded-full hover:bg-white transition-all opacity-0 group-hover/thumbs:opacity-100"
+                            className="absolute -right-4 top-1/2 -translate-y-1/2 bg-[#0a1930] text-white p-2.5 rounded-full shadow-lg hover:bg-[#dc2626] transition-all opacity-0 group-hover/thumbs:opacity-100"
                           >
-                            <ChevronRight size={20} />
+                            <ChevronRight size={20} strokeWidth={3} />
                           </button>
                         </>
                       )}
@@ -369,107 +396,135 @@ export function NewsDetailPage({ slug }: { slug: string }) {
                   </motion.div>
                 )}
 
-                {/* ─── Article Content ───── */}
+                {/* Article Text Container */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="bg-white rounded-2xl p-6 md:p-10 shadow-sm border border-gray-100"
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_15px_40_rgba(0,0,0,0.06)] border border-gray-100"
                 >
                   <div
-                    className="prose prose-lg max-w-none
-                      prose-headings:text-[#1e3a8a] prose-headings:font-black
-                      prose-p:text-gray-600 prose-p:leading-relaxed
-                      prose-a:text-[#1e3a8a] prose-a:font-bold hover:prose-a:text-[#dc2626]
-                      prose-strong:text-gray-800
-                      prose-img:rounded-xl prose-img:shadow-md
-                      prose-blockquote:border-l-[#1e3a8a] prose-blockquote:bg-blue-50/50 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-blockquote:px-4
-                      prose-ul:text-gray-600 prose-ol:text-gray-600"
+                    className="prose prose-lg md:prose-xl max-w-none
+                      prose-headings:text-[#0a1930] prose-headings:font-black prose-headings:tracking-tight
+                      prose-p:text-gray-600 prose-p:leading-relaxed prose-p:font-medium
+                      prose-a:text-[#dc2626] prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+                      prose-strong:text-[#0a1930] prose-strong:font-black
+                      prose-img:rounded-3xl prose-img:shadow-xl prose-img:my-10
+                      prose-blockquote:border-l-8 prose-blockquote:border-[#1e3a8a] prose-blockquote:bg-blue-50/50 prose-blockquote:rounded-r-2xl prose-blockquote:py-4 prose-blockquote:px-8 prose-blockquote:text-[#1e3a8a] prose-blockquote:font-bold prose-blockquote:italic
+                      prose-ul:text-gray-600 prose-ul:font-medium
+                      prose-ol:text-gray-600 prose-ol:font-medium"
                     dangerouslySetInnerHTML={{ __html: cleanContent(news.content || "") }}
                   />
 
-                  {/* If content is plain text (not HTML) render it */}
+                  {/* Fallback for Plain Text */}
                   {news.content && !news.content.includes("<") && (
-                    <div className="text-gray-600 leading-relaxed whitespace-pre-wrap text-base">
+                    <div className="text-gray-600 leading-relaxed font-medium whitespace-pre-wrap text-lg">
                       {news.content}
                     </div>
                   )}
                 </motion.div>
               </div>
 
-              {/* ─── Sidebar (Right) ──────────────── */}
+              {/* ─── Sidebar (Kanan) ──────────────── */}
               <aside className="lg:col-span-4">
-                <div className="sticky top-28 space-y-6">
-                  {/* Article Info Card */}
+                <div className="sticky top-28 space-y-8">
+
+                  {/* Article Ticket Card */}
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="bg-gradient-to-br from-[#1e3a8a] to-[#1e40af] text-white rounded-2xl p-6 shadow-lg"
+                    className="bg-[#0a1930] text-white rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(10,25,48,0.15)] relative overflow-hidden"
                   >
-                    <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                      <Newspaper size={18} />
-                      Info Artikel
-                    </h4>
-                    <div className="space-y-3">
+                    {/* Ticket Dash Pattern */}
+                    <div className="absolute left-0 top-1/2 w-4 h-8 bg-[#f8fafc] rounded-r-full -translate-y-1/2" />
+                    <div className="absolute right-0 top-1/2 w-4 h-8 bg-[#f8fafc] rounded-l-full -translate-y-1/2" />
+                    <div className="absolute top-1/2 left-8 right-8 h-[2px] border-t-2 border-dashed border-white/20 -translate-y-1/2" />
 
-                      <div className="flex items-center gap-3 text-sm">
-                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                          <Calendar size={14} />
+                    {/* Top Section */}
+                    <div className="pb-8">
+                      <h4 className="font-black text-xs tracking-[0.2em] text-blue-200 uppercase mb-6 flex items-center gap-3">
+                        <Newspaper size={18} className="text-[#dc2626]" />
+                        Metrik Artikel
+                      </h4>
+
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0 border border-white/20">
+                          <Calendar size={20} strokeWidth={2.5} />
                         </div>
                         <div>
-                          <p className="text-blue-200 text-xs">Tanggal Publikasi</p>
-                          <p className="font-bold">
-                            {publishDate.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+                          <p className="text-blue-300/80 text-xs font-bold uppercase tracking-widest mb-1">Publikasi</p>
+                          <p className="font-black text-lg tracking-tight">
+                            {publishDate.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 text-sm">
-                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                          <Tag size={14} />
+                    </div>
+
+                    {/* Bottom Section */}
+                    <div className="pt-8 space-y-6">
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0 border border-white/20">
+                          <Tag size={20} strokeWidth={2.5} />
                         </div>
                         <div>
-                          <p className="text-blue-200 text-xs">Kategori</p>
-                          <p className="font-bold">{news.category?.name || "Umum"}</p>
+                          <p className="text-blue-300/80 text-xs font-bold uppercase tracking-widest mb-1">Kategori</p>
+                          <p className="font-black text-lg tracking-tight text-[#dc2626]">{news.category?.name || "Umum"}</p>
                         </div>
                       </div>
 
+                      <button
+                        onClick={handleShare}
+                        className="w-full bg-white text-[#0a1930] font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-[#dc2626] hover:text-white transition-all shadow-lg hover:-translate-y-1"
+                      >
+                        <Share2 size={18} strokeWidth={3} />
+                        BAGIKAN TAUTAN
+                      </button>
                     </div>
                   </motion.div>
 
-                  {/* Related News */}
+                  {/* Related News Bento Box */}
                   {filteredRelated.length > 0 && (
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
-                      className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                      className="bg-white rounded-[2rem] p-8 shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-gray-100"
                     >
-                      <h4 className="font-black text-[#1e3a8a] mb-4 text-lg">
-                        Berita Lainnya
-                      </h4>
-                      <div className="space-y-4">
+                      <div className="flex items-center justify-between mb-8">
+                        <h4 className="font-black text-[#0a1930] text-2xl tracking-tight">
+                          Baca Juga
+                        </h4>
+                        <div className="w-8 h-1.5 bg-[#dc2626] rounded-full" />
+                      </div>
+
+                      <div className="space-y-5">
                         {filteredRelated.map((item) => (
                           <Link
                             key={item.id}
                             href={`/news/${item.slug}`}
-                            className="group flex gap-3"
+                            className="group flex flex-col gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-100 hover:bg-blue-50/50 hover:border-blue-100 transition-all duration-300"
                           >
-                            <div className="flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden">
+                            <div className="w-full h-36 rounded-xl overflow-hidden relative shadow-sm">
                               <ImageWithFallback
                                 src={item.featuredImage || "https://images.unsplash.com/photo-1738949538943-e54722a44ffc"}
                                 alt={item.title}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                               />
+                              <div className="absolute top-2 left-2">
+                                <span className="bg-[#1e3a8a]/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider">
+                                  {item.category?.name || "Umum"}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <h5 className="text-sm font-bold text-gray-800 line-clamp-2 group-hover:text-[#dc2626] transition-colors leading-snug">
+                            <div className="flex-1 px-1">
+                              <h5 className="text-[15px] font-black text-[#0a1930] line-clamp-2 group-hover:text-[#dc2626] transition-colors leading-snug mb-2">
                                 {item.title}
                               </h5>
-                              <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                                <Clock size={10} />
+                              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                                <Clock size={12} className="text-[#1e3a8a]" />
                                 {new Date(item.publishedAt || item.createdAt).toLocaleDateString("id-ID", {
-                                  day: "numeric",
+                                  day: "2-digit",
                                   month: "short",
                                   year: "numeric",
                                 })}
@@ -481,14 +536,16 @@ export function NewsDetailPage({ slug }: { slug: string }) {
 
                       <Link
                         href="/news"
-                        className="mt-5 block text-center text-sm font-bold text-[#1e3a8a] hover:text-[#dc2626] transition-colors"
+                        className="mt-8 flex items-center justify-center gap-2 w-full py-4 bg-gray-50 text-[#1e3a8a] font-black rounded-xl hover:bg-[#1e3a8a] hover:text-white transition-all group border border-gray-200"
                       >
-                        Lihat Semua Berita →
+                        Indeks Berita
+                        <ArrowRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </motion.div>
                   )}
                 </div>
               </aside>
+
             </div>
           </div>
         </section>
