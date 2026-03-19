@@ -17,9 +17,9 @@ namespace RevampWebSTTB.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFAQs()
+        public async Task<IActionResult> GetFAQs([FromQuery] string? category = null)
         {
-            var query = new GetFAQsQuery();
+            var query = new GetFAQsQuery { Category = category };
             var response = await _mediator.Send(query);
             return Ok(response);
         }
@@ -39,3 +39,4 @@ namespace RevampWebSTTB.WebApi.Controllers
         }
     }
 }
+
