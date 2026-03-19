@@ -14,5 +14,8 @@ namespace RevampWebSTTB.Entities.Models
         public string Answer { get; set; } = string.Empty;
 
         public int SortOrder { get; set; } = 0;
+
+        [Required]
+        public FaqCategory Category { get; set; } = FaqCategory.General;
     }
 }

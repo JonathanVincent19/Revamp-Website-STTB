@@ -8,5 +8,7 @@ namespace RevampWebSTTB.Contracts.Responses.FAQs
         public string Question { get; init; } = string.Empty;
         public string Answer { get; init; } = string.Empty;
         public int SortOrder { get; set; }
+        public string Category { get; init; } = string.Empty;
     }
 }
+
