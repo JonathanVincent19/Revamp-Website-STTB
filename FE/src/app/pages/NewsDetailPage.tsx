@@ -17,10 +17,13 @@ import {
   AlertCircle,
   Newspaper,
   Sparkles,
+  Camera,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useNewsDetail, useNewsList } from "@/lib/hooks";
 import Link from "next/link";
+
+const API_IMAGE_BASE = "http://localhost:5067";
 
 // ─── Photo Lightbox ─────────────────────────────────────────────────────────
 function PhotoLightbox({
@@ -124,10 +127,16 @@ export function NewsDetailPage({ slug }: { slug: string }) {
     }).filter(Boolean);
   };
 
+  const getFullImageUrl = (url?: string) => {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    return `${API_IMAGE_BASE}${url.startsWith("/") ? "" : "/"}${url}`;
+  };
+
   const contentImages = news?.content ? extractImages(news.content) : [];
   const allImages = [
-    ...(news?.featuredImage ? [news.featuredImage] : []),
-    ...contentImages,
+    ...(news?.featuredImage ? [getFullImageUrl(news.featuredImage)] : []),
+    ...contentImages.map(url => getFullImageUrl(url)),
   ].filter((v, i, a) => a.indexOf(v) === i); // dedupe
 
   // Clean content (remove img tags for the text version)

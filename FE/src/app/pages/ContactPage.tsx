@@ -166,7 +166,7 @@ export function ContactPage() {
                 </div>
               )}
 
-              <form key={formReset} onSubmit={handleSubmit} className="space-y-4">
+              <form key={formReset} onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">
                     Nama Lengkap
@@ -175,6 +175,7 @@ export function ContactPage() {
                     name="name"
                     type="text"
                     required
+                    suppressHydrationWarning
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="Masukkan nama Anda"
                   />
@@ -188,6 +189,7 @@ export function ContactPage() {
                     name="email"
                     type="email"
                     required
+                    suppressHydrationWarning
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="email@example.com"
                   />
@@ -200,6 +202,7 @@ export function ContactPage() {
                   <input
                     name="phoneNumber"
                     type="tel"
+                    suppressHydrationWarning
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="+62"
                   />
@@ -211,6 +214,7 @@ export function ContactPage() {
                   </label>
                   <select
                     name="subject"
+                    suppressHydrationWarning
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                   >
                     <option>Informasi Umum</option>
@@ -228,6 +232,7 @@ export function ContactPage() {
                     name="message"
                     rows={5}
                     required
+                    suppressHydrationWarning
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     placeholder="Tulis pesan Anda di sini..."
                   />

@@ -9,15 +9,90 @@ import { Badge } from "@/app/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { Label } from "@/app/components/ui/label";
 
-const dosenData = [
-  { id: 1, name: "Dr. Theol. Johannes Rahardjo", jabatan: "Ketua STTB", bidang: "Teologi Sistematika" },
-  { id: 2, name: "Dr. Maria Susanti, M.Th.", jabatan: "Wakil Ketua I", bidang: "Pendidikan Kristen" },
-  { id: 3, name: "Pdt. Dr. Samuel Tanujaya", jabatan: "Wakil Ketua II", bidang: "Teologi Pastoral" },
-  { id: 4, name: "Dr. Ruth Magdalena, M.A.", jabatan: "Dosen Tetap", bidang: "Perjanjian Baru" },
-  { id: 5, name: "Dr. David Kurniawan, M.Div.", jabatan: "Dosen Tetap", bidang: "Perjanjian Lama" },
-];
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/app/components/ui/dialog";
+import { Loader2 } from "lucide-react";
+import { type Lecturer, type Staff } from "@/lib/api";
+import { useLecturers, useCreateLecturer, useUpdateLecturer, useDeleteLecturer, useStaff, useCreateStaff, useUpdateStaff, useDeleteStaff } from "@/lib/hooks";
 
 export default function AboutPage() {
+  const { data: lecturers, loading: loadingLecturers, refetch: refetchLecturers } = useLecturers();
+  const { mutate: createLecturer, loading: isCreatingLecturer } = useCreateLecturer();
+  const { mutate: updateLecturer, loading: isUpdatingLecturer } = useUpdateLecturer();
+  const { mutate: deleteLecturer } = useDeleteLecturer();
+
+  const { data: staff, loading: loadingStaff, refetch: refetchStaff } = useStaff();
+  const { mutate: createStaff, loading: isCreatingStaff } = useCreateStaff();
+  const { mutate: updateStaff, loading: isUpdatingStaff } = useUpdateStaff();
+  const { mutate: deleteStaff } = useDeleteStaff();
+
+  const [isLecturerDialogOpen, setIsLecturerDialogOpen] = useState(false);
+  const [editingLecturer, setEditingLecturer] = useState<Lecturer | null>(null);
+  const [lecturerFormData, setLecturerFormData] = useState({ name: "", nidn: "", position: "", educationLevel: "", expertise: "", email: "", photo: "" });
+
+  const [isStaffDialogOpen, setIsStaffDialogOpen] = useState(false);
+  const [editingStaff, setEditingStaff] = useState<Staff | null>(null);
+  const [staffFormData, setStaffFormData] = useState({ name: "", position: "", email: "", photo: "" });
+
+  const handleOpenAddLecturer = () => {
+    setEditingLecturer(null);
+    setLecturerFormData({ name: "", nidn: "", position: "", educationLevel: "", expertise: "", email: "", photo: "" });
+    setIsLecturerDialogOpen(true);
+  };
+
+  const handleOpenEditLecturer = (dosen: Lecturer) => {
+    setEditingLecturer(dosen);
+    setLecturerFormData({ name: dosen.name, nidn: dosen.nidn || "", position: dosen.position || "", educationLevel: dosen.educationLevel || "", expertise: dosen.expertise || "", email: dosen.email || "", photo: dosen.photo || "" });
+    setIsLecturerDialogOpen(true);
+  };
+
+  const handleLecturerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingLecturer) {
+      await updateLecturer({ ...lecturerFormData, id: editingLecturer.id });
+    } else {
+      await createLecturer(lecturerFormData);
+    }
+    setIsLecturerDialogOpen(false);
+    refetchLecturers();
+  };
+
+  const handleDeleteLecturer = async (id: number) => {
+    if (window.confirm("Yakin ingin menghapus dosen ini?")) {
+      await deleteLecturer(id);
+      refetchLecturers();
+    }
+  };
+
+  const handleOpenAddStaff = () => {
+    setEditingStaff(null);
+    setStaffFormData({ name: "", position: "", email: "", photo: "" });
+    setIsStaffDialogOpen(true);
+  };
+
+  const handleOpenEditStaff = (s: Staff) => {
+    setEditingStaff(s);
+    setStaffFormData({ name: s.name, position: s.position || "", email: s.email || "", photo: s.photo || "" });
+    setIsStaffDialogOpen(true);
+  };
+
+  const handleStaffSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingStaff) {
+      await updateStaff({ ...staffFormData, id: editingStaff.id });
+    } else {
+      await createStaff(staffFormData);
+    }
+    setIsStaffDialogOpen(false);
+    refetchStaff();
+  };
+
+  const handleDeleteStaff = async (id: number) => {
+    if (window.confirm("Yakin ingin menghapus staff ini?")) {
+      await deleteStaff(id);
+      refetchStaff();
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Tabs defaultValue="visi-misi" className="w-full">
@@ -33,6 +108,9 @@ export default function AboutPage() {
           </TabsTrigger>
           <TabsTrigger value="yayasan" className="data-[state=active]:bg-[#1e3a8a] data-[state=active]:text-white text-sm">
             Yayasan
+          </TabsTrigger>
+          <TabsTrigger value="staff" className="data-[state=active]:bg-[#1e3a8a] data-[state=active]:text-white text-sm">
+            Tenaga Kependidikan
           </TabsTrigger>
         </TabsList>
 
@@ -107,78 +185,192 @@ export default function AboutPage() {
         {/* Dewan Dosen */}
         <TabsContent value="dosen" className="mt-6 space-y-4">
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-500">{dosenData.length} dosen terdaftar</p>
-            <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90" size="sm">
+            <p className="text-sm text-gray-500">{lecturers?.length || 0} dosen terdaftar</p>
+            <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90" size="sm" onClick={handleOpenAddLecturer}>
               <Plus size={16} />
               Tambah Dosen
             </Button>
           </div>
-          {dosenData.map((dosen) => (
-            <Card key={dosen.id} className="border border-gray-100 shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-400 text-lg font-bold">
-                      {dosen.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm">{dosen.name}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <Badge variant="secondary" className="bg-blue-50 text-[#1e3a8a] text-xs">
-                          {dosen.jabatan}
-                        </Badge>
-                        <span className="text-xs text-gray-400">{dosen.bidang}</span>
+          {loadingLecturers ? (
+            <div className="flex items-center justify-center p-8 text-gray-500">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Memuat data...
+            </div>
+          ) : lecturers?.length === 0 ? (
+            <div className="text-center p-8 text-gray-400 border rounded bg-white">Belum ada data dosen.</div>
+          ) : (
+            lecturers?.map((dosen) => (
+              <Card key={dosen.id} className="border border-gray-100 shadow-sm">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-400 text-lg font-bold">
+                        {dosen.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 text-sm">{dosen.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {dosen.position && (
+                            <Badge variant="secondary" className="bg-blue-50 text-[#1e3a8a] text-xs">
+                              {dosen.position}
+                            </Badge>
+                          )}
+                          <span className="text-xs text-gray-400">{dosen.expertise || dosen.educationLevel}</span>
+                        </div>
                       </div>
                     </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#1e3a8a]" onClick={() => handleOpenEditLecturer(dosen)}>
+                        <Pencil size={14} />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#dc2626]" onClick={() => handleDeleteLecturer(dosen.id)}>
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#1e3a8a]">
-                      <Pencil size={14} />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#dc2626]">
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))
+          )}
         </TabsContent>
 
         {/* Yayasan */}
-        <TabsContent value="yayasan" className="mt-6">
+        <TabsContent value="yayasan" className="mt-6 space-y-4">
           <Card className="border border-gray-100 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-base">Informasi Yayasan</CardTitle>
+              <CardTitle className="text-base">Pengurus Yayasan</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm">Nama Yayasan</Label>
-                  <Input defaultValue="Yayasan Pendidikan Teologi Bandung" className="bg-gray-50 focus:bg-white" />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm">Tahun Didirikan</Label>
-                  <Input defaultValue="1953" className="bg-gray-50 focus:bg-white" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm">Deskripsi</Label>
-                <textarea
-                  className="w-full min-h-[150px] p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:border-[#1e3a8a] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/10 transition-all resize-y"
-                  defaultValue="Yayasan Pendidikan Teologi Bandung adalah lembaga yang menaungi Sekolah Tinggi Teologi Bandung..."
-                />
-              </div>
-              <div className="flex justify-end">
+            <CardContent>
+              <textarea
+                className="w-full min-h-[150px] p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:border-[#1e3a8a] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/10 transition-all resize-y"
+                defaultValue="Susunan pengurus yayasan..."
+              />
+              <div className="flex justify-end mt-4">
                 <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90">
                   <Save size={16} />
-                  Simpan
+                  Simpan Perubahan
                 </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Tenaga Kependidikan / Staff */}
+        <TabsContent value="staff" className="mt-6 space-y-4">
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-gray-500">{staff?.length || 0} staff terdaftar</p>
+            <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90" size="sm" onClick={handleOpenAddStaff}>
+              <Plus size={16} />
+              Tambah Staff
+            </Button>
+          </div>
+          {loadingStaff ? (
+            <div className="flex items-center justify-center p-8 text-gray-500">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Memuat data...
+            </div>
+          ) : staff?.length === 0 ? (
+            <div className="text-center p-8 text-gray-400 border rounded bg-white">Belum ada data staff.</div>
+          ) : (
+            staff?.map((s) => (
+              <Card key={s.id} className="border border-gray-100 shadow-sm">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-400 text-lg font-bold">
+                        {s.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 text-sm">{s.name}</p>
+                        {s.position && (
+                          <Badge variant="secondary" className="bg-blue-50 text-[#1e3a8a] text-xs mt-0.5">
+                            {s.position}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#1e3a8a]" onClick={() => handleOpenEditStaff(s)}>
+                        <Pencil size={14} />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#dc2626]" onClick={() => handleDeleteStaff(s.id)}>
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </TabsContent>
       </Tabs>
+
+      {/* Dialog Lecturer */}
+      <Dialog open={isLecturerDialogOpen} onOpenChange={setIsLecturerDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{editingLecturer ? "Edit Dosen" : "Tambah Dosen Baru"}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleLecturerSubmit} className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nama Lengkap <span className="text-red-500">*</span></Label>
+              <Input id="name" value={lecturerFormData.name} onChange={(e) => setLecturerFormData({...lecturerFormData, name: e.target.value})} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nidn">NIDN</Label>
+              <Input id="nidn" value={lecturerFormData.nidn} onChange={(e) => setLecturerFormData({...lecturerFormData, nidn: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="position">Jabatan</Label>
+              <Input id="position" value={lecturerFormData.position} onChange={(e) => setLecturerFormData({...lecturerFormData, position: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="education">Tingkat Pendidikan</Label>
+              <Input id="education" value={lecturerFormData.educationLevel} onChange={(e) => setLecturerFormData({...lecturerFormData, educationLevel: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="expertise">Bidang Keahlian</Label>
+              <Input id="expertise" value={lecturerFormData.expertise} onChange={(e) => setLecturerFormData({...lecturerFormData, expertise: e.target.value})} />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsLecturerDialogOpen(false)}>Batal</Button>
+              <Button type="submit" disabled={isCreatingLecturer || isUpdatingLecturer} className="bg-[#1e3a8a] text-white">
+                {(isCreatingLecturer || isUpdatingLecturer) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Simpan
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Staff */}
+      <Dialog open={isStaffDialogOpen} onOpenChange={setIsStaffDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{editingStaff ? "Edit Staff" : "Tambah Staff Baru"}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleStaffSubmit} className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="staff_name">Nama Lengkap <span className="text-red-500">*</span></Label>
+              <Input id="staff_name" value={staffFormData.name} onChange={(e) => setStaffFormData({...staffFormData, name: e.target.value})} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="staff_position">Jabatan/Posisi</Label>
+              <Input id="staff_position" value={staffFormData.position} onChange={(e) => setStaffFormData({...staffFormData, position: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="staff_email">Email</Label>
+              <Input id="staff_email" type="email" value={staffFormData.email} onChange={(e) => setStaffFormData({...staffFormData, email: e.target.value})} />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsStaffDialogOpen(false)}>Batal</Button>
+              <Button type="submit" disabled={isCreatingStaff || isUpdatingStaff} className="bg-[#1e3a8a] text-white">
+                {(isCreatingStaff || isUpdatingStaff) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Simpan
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+

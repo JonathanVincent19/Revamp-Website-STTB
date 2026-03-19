@@ -13,8 +13,10 @@ import {
   AlertCircle,
   X,
   CheckCircle2,
+  Image as ImageIcon,
+  Upload,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
@@ -33,7 +35,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import { useNewsList, useDeleteNews, useCreateNews, useUpdateNews } from "@/lib/hooks";
+import {
+  useNewsList,
+  useDeleteNews,
+  useCreateNews,
+  useUpdateNews,
+  useUploadFile
+} from "@/lib/hooks";
 
 const statusStyles: Record<string, string> = {
   published: "bg-emerald-500 text-white border-transparent",
@@ -50,6 +58,10 @@ export default function BeritaPage() {
   const { mutate: deleteNews, loading: isDeleting } = useDeleteNews();
   const { mutate: createNews, loading: isSaving } = useCreateNews();
   const { mutate: updateNews, loading: isUpdating } = useUpdateNews();
+  const { mutate: uploadFile, loading: isUploading } = useUploadFile();
+
+  const [featuredImageUrl, setFeaturedImageUrl] = useState("");
+  const [galleryImageUrls, setGalleryImageUrls] = useState<string[]>([]);
 
   const handleDelete = async (id: number) => {
     if (confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
@@ -67,23 +79,72 @@ export default function BeritaPage() {
       .trim();
   };
 
+  const extractImages = (content: string): string[] => {
+    const matches = content.match(/<img[^>]+src=["']([^"']+)["']/gi) || [];
+    return matches.map((m) => {
+      const srcMatch = m.match(/src=["']([^"']+)["']/);
+      return srcMatch ? srcMatch[1] : "";
+    }).filter(Boolean);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, isGallery = false) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    try {
+      if (isGallery) {
+        const newUrls = [...galleryImageUrls];
+        for (let i = 0; i < files.length; i++) {
+          const res = await uploadFile(files[i]) as any;
+          if (res.success && res.url) {
+            newUrls.push(res.url);
+          }
+        }
+        setGalleryImageUrls(newUrls);
+      } else {
+        const res = await uploadFile(files[0]) as any;
+        if (res.success && res.url) {
+          setFeaturedImageUrl(res.url);
+        }
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Gagal mengunggah file.");
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setGalleryImageUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const title = fd.get("title") as string;
-    
+
     // Gunakan slug lama jika sedang edit dan judul tidak berubah, atau generate baru
-    const slug = editingNews && editingNews.title === title 
-      ? editingNews.slug 
+    const slug = editingNews && editingNews.title === title
+      ? editingNews.slug
       : generateSlug(title);
+
+    // Bersihkan konten dari tag img lama yang mungkin ada di gallery
+    let content = fd.get("content") as string;
+
+    // Tambahkan foto gallery sebagai tag img di akhir konten
+    const galleryHtml = galleryImageUrls
+      .map(url => `<img src="${url}" alt="Dokumentasi Berita" class="rounded-xl shadow-md my-4" />`)
+      .join("\n");
+
+    const finalContent = `${content}\n${galleryHtml}`;
 
     const payload = {
       title,
       slug,
-      content: fd.get("content") as string,
+      content: finalContent,
       status: "published", // Default to published when status management is disabled
       author: "Admin",
-      categoryId: 1, // Default category for now
+      publishedAt: fd.get("publishedAt") ? new Date(fd.get("publishedAt") as string).toISOString() : new Date().toISOString(),
+      featuredImage: featuredImageUrl || undefined,
     };
 
     try {
@@ -94,6 +155,8 @@ export default function BeritaPage() {
       }
       setIsModalOpen(false);
       setEditingNews(null);
+      setFeaturedImageUrl("");
+      setGalleryImageUrls([]);
       refetch();
     } catch (err) {
       console.error(err);
@@ -102,10 +165,25 @@ export default function BeritaPage() {
 
   const openEdit = (news: any) => {
     setEditingNews(news);
+    setFeaturedImageUrl(news.featuredImage || "");
+
+    // Extract gallery images from content
+    const images = extractImages(news.content || "");
+    // Filter out the featured image if it's already in the content to avoid duplicates in gallery state
+    const galleryOnly = images.filter(img => img !== news.featuredImage);
+    setGalleryImageUrls(galleryOnly);
+
     setIsModalOpen(true);
   };
 
-  const filteredNews = newsData?.filter(n => 
+  const closeResetModal = () => {
+    setIsModalOpen(false);
+    setEditingNews(null);
+    setFeaturedImageUrl("");
+    setGalleryImageUrls([]);
+  };
+
+  const filteredNews = newsData?.filter(n =>
     n.title.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
@@ -125,8 +203,13 @@ export default function BeritaPage() {
               className="h-9 w-48 lg:w-64 pl-8 bg-white border-gray-200 text-sm"
             />
           </div>
-          <Button 
-            onClick={() => { setEditingNews(null); setIsModalOpen(true); }}
+          <Button
+            onClick={() => {
+              setEditingNews(null);
+              setFeaturedImageUrl("");
+              setGalleryImageUrls([]);
+              setIsModalOpen(true);
+            }}
             className="bg-[#1e3a8a] text-white hover:bg-[#dc2626] transition-colors h-9"
           >
             <Plus size={16} />
@@ -197,8 +280,8 @@ export default function BeritaPage() {
                               <DropdownMenuItem className="gap-2" onClick={() => openEdit(news)}>
                                 <Pencil size={14} /> Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem 
-                                className="gap-2 text-[#dc2626] focus:text-[#dc2626]" 
+                              <DropdownMenuItem
+                                className="gap-2 text-[#dc2626] focus:text-[#dc2626]"
                                 onClick={() => handleDelete(news.id)}
                                 disabled={isDeleting}
                               >
@@ -220,7 +303,7 @@ export default function BeritaPage() {
       {/* Modal Tambah/Edit */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
@@ -229,33 +312,109 @@ export default function BeritaPage() {
               <h3 className="text-xl font-bold text-[#1e3a8a]">
                 {editingNews ? "Edit Berita" : "Tambah Berita Baru"}
               </h3>
-              <Button variant="ghost" size="icon" onClick={() => setIsModalOpen(false)}>
+              <Button variant="ghost" size="icon" onClick={closeResetModal}>
                 <X size={20} />
               </Button>
             </div>
-            
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+
+            <form
+              key={editingNews?.id || "new-news"}
+              onSubmit={handleSubmit}
+              className="p-6 space-y-4"
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-bold text-gray-700 mb-1">Judul Berita</label>
-                  <Input 
-                    name="title" 
-                    defaultValue={editingNews?.title} 
-                    required 
+                  <Input
+                    name="title"
+                    defaultValue={editingNews?.title}
+                    required
                     placeholder="Masukkan judul berita..."
                   />
                 </div>
+                <div className="md:col-span-1">
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Tanggal Publikasi</label>
+                  <Input
+                    name="publishedAt"
+                    type="date"
+                    defaultValue={editingNews?.publishedAt ? new Date(editingNews.publishedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div className="md:col-span-1">
+                  <label className="block text-sm font-bold text-gray-700 mb-1">Foto Utama</label>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Input
+                        placeholder="Pilih file atau tempel URL..."
+                        value={featuredImageUrl}
+                        onChange={(e) => setFeaturedImageUrl(e.target.value)}
+                        className="pr-10"
+                      />
+                      <label className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-gray-100 p-1 rounded transition-colors">
+                        <Upload size={16} className="text-gray-400" />
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, false)}
+                        />
+                      </label>
+                    </div>
+                    {featuredImageUrl && (
+                      <div className="h-10 w-10 rounded border overflow-hidden shrink-0">
+                        <img src={featuredImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-1">Galeri Dokumentasi (Bisa banyak foto)</label>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-4 border-2 border-dashed rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer relative group">
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={(e) => handleFileUpload(e, true)}
+                    />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+                      {isUploading ? <Loader2 className="animate-spin text-[#1e3a8a]" size={20} /> : <Plus className="text-[#1e3a8a]" size={20} />}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-gray-700">Klik untuk upload banyak foto</p>
+                      <p className="text-xs text-gray-400">Foto akan otomatis muncul sebagai galeri slider di web</p>
+                    </div>
+                  </div>
 
+                  {galleryImageUrls.length > 0 && (
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                      {galleryImageUrls.map((url, idx) => (
+                        <div key={idx} className="relative aspect-video group rounded-lg overflow-hidden border">
+                          <img src={url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(idx)}
+                            className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X size={10} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">Konten Berita</label>
-                <textarea 
+                <textarea
                   name="content"
                   required
-                  rows={8}
-                  defaultValue={editingNews?.content}
+                  rows={6}
+                  defaultValue={editingNews?.content ? editingNews.content.replace(/<img[^>]*>/gi, "").trim() : ""}
                   className="w-full p-3 rounded-md border border-gray-200 text-sm focus:ring-2 focus:ring-[#1e3a8a] outline-none"
                   placeholder="Tulis isi berita di sini..."
                 ></textarea>
@@ -265,8 +424,8 @@ export default function BeritaPage() {
                 <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
                   Batal
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isSaving || isUpdating}
                   className="bg-[#1e3a8a] text-white hover:bg-[#dc2626]"
                 >

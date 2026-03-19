@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
   },
   {
     label: "Admisi",
-    href: "/admissions",
+    href: "#",
     subItems: [
       { label: "Pendaftaran Online", href: "/admissions/pendaftaran-online" },
       { label: "Jadwal", href: "/admissions/jadwal" },
@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
   },
   {
     label: "Keuangan",
-    href: "/finances",
+    href: "#",
     subItems: [
       { label: "Biaya Studi", href: "/biaya-studi" },
       { label: "Beasiswa", href: "/beasiswa" },
@@ -170,6 +170,9 @@ export function STTBNavbar() {
                 >
                   <Link
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.href === "#") e.preventDefault();
+                    }}
                     className={`relative flex items-center gap-1 transition-colors ${scrolled
                       ? isActive
                         ? "text-[#1e3a8a] font-bold"
@@ -267,6 +270,9 @@ export function STTBNavbar() {
                         <div key={item.label} className="group/sub">
                           <Link
                             href={item.href}
+                            onClick={(e) => {
+                              if (item.href === "#") e.preventDefault();
+                            }}
                             className={`flex justify-between items-center px-4 py-2.5 text-sm transition-colors ${isActive || isChildActive
                               ? "text-[#1e3a8a] font-semibold bg-blue-50"
                               : "text-gray-700 hover:bg-[#dbeafe] hover:text-[#1e3a8a]"
@@ -364,6 +370,9 @@ export function STTBNavbar() {
                     <div key={item.label} className="px-4">
                       <Link
                         href={item.href}
+                        onClick={(e) => {
+                          if (item.href === "#") e.preventDefault();
+                        }}
                         className={`flex justify-between items-center py-2 ${isActive
                           ? "text-[#1e3a8a] font-bold border-l-4 border-[#1e3a8a] pl-3 -ml-4"
                           : "text-gray-700 hover:text-[#1e3a8a] pl-3"

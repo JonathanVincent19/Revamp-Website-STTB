@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { adminContactsApi, authApi } from "@/lib/api";
+
 import {
   LayoutDashboard,
   Newspaper,
@@ -20,6 +23,7 @@ import {
   Mail,
   UserCog,
   Settings,
+  LogOut,
 } from "lucide-react";
 
 import {
@@ -92,7 +96,7 @@ const navGroups: NavGroup[] = [
   {
     label: "Komunikasi",
     items: [
-      { label: "Pesan Masuk", href: "/admin/pesan", icon: Mail, badge: 5 },
+      { label: "Pesan Masuk", href: "/admin/pesan", icon: Mail },
     ],
   },
   {
@@ -106,6 +110,46 @@ const navGroups: NavGroup[] = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error("Logout error", error);
+    } finally {
+      localStorage.removeItem("sttb_token");
+      router.push("/admin/login");
+    }
+  };
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const res = await adminContactsApi.getList({ page: 1, pageSize: 1, isRead: false });
+        if (res.success && res.totalCount !== undefined) {
+          setUnreadCount(res.totalCount);
+        }
+      } catch (error) {
+        console.error("Failed to fetch unread messages count:", error);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Listen for manual trigger (e.g. from PesanPage)
+    const handleRefresh = () => fetchUnreadCount();
+    window.addEventListener("refresh-unread-count", handleRefresh);
+
+    // Refresh count every 1 minute (more responsive for "+1" detection)
+    const intervalId = setInterval(fetchUnreadCount, 60 * 1000);
+
+    return () => {
+      window.removeEventListener("refresh-unread-count", handleRefresh);
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <Sidebar collapsible="icon" className="border-r border-gray-200">
@@ -154,7 +198,12 @@ export function AdminSidebar() {
                         <Link href={item.href}>
                           <item.icon size={18} />
                           <span>{item.label}</span>
-                          {item.badge && (
+                          {item.label === "Pesan Masuk" && unreadCount > 0 && (
+                            <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#dc2626] px-1.5 text-[10px] font-bold text-white">
+                              {unreadCount}
+                            </span>
+                          )}
+                          {item.label !== "Pesan Masuk" && item.badge && (
                             <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[#dc2626] px-1.5 text-[10px] font-bold text-white">
                               {item.badge}
                             </span>
@@ -184,6 +233,16 @@ export function AdminSidebar() {
                 <span className="text-sm font-semibold text-gray-900">Admin STTB</span>
                 <span className="text-xs text-gray-500">admin@sttb.ac.id</span>
               </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleLogout}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 mt-1 group-data-[collapsible=icon]:justify-center"
+              tooltip="Logout"
+            >
+              <LogOut size={18} />
+              <span className="group-data-[collapsible=icon]:hidden">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

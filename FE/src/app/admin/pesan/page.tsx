@@ -7,68 +7,40 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Badge } from "@/app/components/ui/badge";
 
-const messages = [
-  {
-    id: 1,
-    sender: "Maria Anggraeni",
-    email: "maria@gmail.com",
-    subject: "Pertanyaan tentang program S2 Pastoral",
-    preview: "Selamat pagi, saya ingin bertanya mengenai persyaratan pendaftaran program Magister Teologi Pelayanan Pastoral...",
-    date: "12 Mar 2026",
-    time: "10:30",
-    read: false,
-    starred: true,
-  },
-  {
-    id: 2,
-    sender: "David Kurniawan",
-    email: "david.kur@yahoo.com",
-    subject: "Informasi beasiswa tahun 2026",
-    preview: "Dengan hormat, saya ingin mengetahui lebih lanjut mengenai program beasiswa yang tersedia di STTB untuk tahun akademik 2026/2027...",
-    date: "11 Mar 2026",
-    time: "14:22",
-    read: false,
-    starred: false,
-  },
-  {
-    id: 3,
-    sender: "Pdt. Samuel Tan",
-    email: "samuel.tan@gbi.or.id",
-    subject: "Kerjasama pelayanan gereja dan kampus",
-    preview: "Shalom, kami dari GBI Bandung ingin mendiskusikan kemungkinan kerjasama dalam bidang pelayanan antara gereja kami dan STTB...",
-    date: "10 Mar 2026",
-    time: "09:15",
-    read: true,
-    starred: false,
-  },
-  {
-    id: 4,
-    sender: "Sarah Lim",
-    email: "sarah.lim@outlook.com",
-    subject: "Jadwal pendaftaran gelombang 2",
-    preview: "Halo admin STTB, kapan pembukaan pendaftaran gelombang 2 untuk program sarjana teologi? Apakah masih ada kuota tersisa...",
-    date: "9 Mar 2026",
-    time: "16:45",
-    read: true,
-    starred: true,
-  },
-  {
-    id: 5,
-    sender: "Alumni STTB 2020",
-    email: "alumni_sttb@googlegroups.com",
-    subject: "Reuni angkatan 2020",
-    preview: "Kepada pihak kampus, kami dari alumni angkatan 2020 ingin mengadakan acara reuni di kampus STTB pada bulan Mei...",
-    date: "8 Mar 2026",
-    time: "11:00",
-    read: true,
-    starred: false,
-  },
-];
+import { useAdminContacts, useMarkContactRead, useDeleteContactMessage } from "@/lib/hooks";
+import { type ContactMessageItem } from "@/lib/api";
+import { Loader2 } from "lucide-react";
 
 export default function PesanPage() {
-  const [selectedMessage, setSelectedMessage] = useState<number | null>(null);
-  const selected = messages.find((m) => m.id === selectedMessage);
-  const unreadCount = messages.filter((m) => !m.read).length;
+  const [selectedMessageId, setSelectedMessageId] = useState<number | null>(null);
+  
+  const { data: messages, loading, refetch } = useAdminContacts();
+  const { mutate: markAsRead } = useMarkContactRead();
+  const { mutate: deleteMessage, loading: isDeleting } = useDeleteContactMessage();
+
+  const activeMessages = messages || [];
+  const selected = activeMessages.find((m) => m.id === selectedMessageId);
+  const unreadCount = activeMessages.filter((m) => !m.isRead).length;
+
+  const handleSelectMessage = async (msg: ContactMessageItem) => {
+    setSelectedMessageId(msg.id);
+    if (!msg.isRead) {
+      await markAsRead(msg.id);
+      refetch();
+      // Trigger sidebar refresh
+      window.dispatchEvent(new Event("refresh-unread-count"));
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Yakin ingin menghapus pesan ini?")) {
+      await deleteMessage(id);
+      setSelectedMessageId(null);
+      refetch();
+      // Trigger sidebar refresh
+      window.dispatchEvent(new Event("refresh-unread-count"));
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -80,7 +52,7 @@ export default function PesanPage() {
               <Mail size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{messages.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{activeMessages.length}</p>
               <p className="text-xs text-gray-500">Total Pesan</p>
             </div>
           </CardContent>
@@ -102,7 +74,7 @@ export default function PesanPage() {
               <Star size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{messages.filter((m) => m.starred).length}</p>
+              <p className="text-2xl font-bold text-gray-900">{activeMessages.length}</p>
               <p className="text-xs text-gray-500">Ditandai</p>
             </div>
           </CardContent>
@@ -117,89 +89,110 @@ export default function PesanPage() {
             <Input placeholder="Cari pesan..." className="h-9 pl-8 bg-white text-sm" />
           </div>
           <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
-            {messages.map((msg) => (
-              <Card
-                key={msg.id}
-                className={`border cursor-pointer transition-all hover:shadow-sm ${
-                  selectedMessage === msg.id
-                    ? "border-[#1e3a8a] bg-blue-50/30 shadow-sm"
-                    : msg.read
-                      ? "border-gray-100 bg-white"
-                      : "border-gray-200 bg-white"
-                }`}
-                onClick={() => setSelectedMessage(msg.id)}
-              >
-                <CardContent className="p-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        {!msg.read && (
-                          <div className="h-2 w-2 rounded-full bg-[#1e3a8a] shrink-0" />
-                        )}
-                        <p className={`text-sm truncate ${!msg.read ? "font-bold text-gray-900" : "font-medium text-gray-700"}`}>
-                          {msg.sender}
+            {loading ? (
+              <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+                <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                <span className="text-sm">Memuat pesan...</span>
+              </div>
+            ) : activeMessages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-8 text-gray-500 bg-white border border-gray-100 rounded-lg">
+                <Mail className="h-8 w-8 mb-2 text-gray-300" />
+                <span className="text-sm">Tidak ada pesan masuk.</span>
+              </div>
+            ) : (
+              activeMessages.map((msg) => (
+                <Card
+                  key={msg.id}
+                  className={`border cursor-pointer transition-all hover:shadow-sm ${
+                    selectedMessageId === msg.id
+                      ? "border-[#1e3a8a] bg-blue-50/30 shadow-sm"
+                      : msg.isRead
+                        ? "border-gray-100 bg-white"
+                        : "border-gray-200 bg-white"
+                  }`}
+                  onClick={() => handleSelectMessage(msg)}
+                >
+                  <CardContent className="p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          {!msg.isRead && (
+                            <div className="h-2 w-2 rounded-full bg-[#1e3a8a] shrink-0" />
+                          )}
+                          <p className={`text-sm truncate ${!msg.isRead ? "font-bold text-gray-900" : "font-medium text-gray-700"}`}>
+                            {msg.name}
+                          </p>
+                        </div>
+                        <p className={`text-xs truncate mt-0.5 ${!msg.isRead ? "font-semibold text-gray-800" : "text-gray-500"}`}>
+                          {msg.subject || "(Tanpa Subjek)"}
                         </p>
-                        {msg.starred && <Star size={12} className="text-yellow-500 fill-yellow-500 shrink-0" />}
+                        <p className="text-xs text-gray-400 mt-0.5 truncate">
+                          {msg.message?.substring(0, 50)}...
+                        </p>
                       </div>
-                      <p className={`text-sm truncate mt-0.5 ${!msg.read ? "font-semibold text-gray-800" : "text-gray-600"}`}>
-                        {msg.subject}
-                      </p>
-                      <p className="text-xs text-gray-400 truncate mt-0.5">{msg.preview}</p>
+                      <div className="flex flex-col items-end shrink-0">
+                        <span className="text-[10px] text-gray-400 font-medium">
+                          {new Date(msg.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[10px] text-gray-400 whitespace-nowrap">{msg.date}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </div>
 
         {/* Message Detail */}
         <div className="lg:col-span-3">
           {selected ? (
-            <Card className="border border-gray-100 shadow-sm">
-              <CardHeader className="border-b border-gray-100">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-base">{selected.subject}</CardTitle>
-                    <CardDescription className="mt-1">
-                      Dari: <span className="font-medium text-gray-700">{selected.sender}</span>{" "}
-                      &lt;{selected.email}&gt;
+            <Card className="border border-gray-100 shadow-sm h-full flex flex-col">
+              <CardHeader className="p-4 border-b bg-gray-50/50">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg leading-tight">{selected.subject || "(Tanpa Subjek)"}</CardTitle>
+                    <CardDescription className="flex items-center gap-2 mt-1">
+                      <Badge variant="outline" className="bg-white">
+                        {selected.name} &lt;{selected.email}&gt;
+                      </Badge>
+                      <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <Clock size={12} />
+                        {new Date(selected.createdAt).toLocaleString()}
+                      </span>
                     </CardDescription>
-                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
-                      <Clock size={12} />
-                      {selected.date} pukul {selected.time}
-                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-yellow-500">
-                      <Star size={16} className={selected.starred ? "fill-yellow-500 text-yellow-500" : ""} />
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Button variant="outline" size="icon" className="h-8 w-8 text-gray-500 hover:text-[#1e3a8a] bg-white">
+                      <Reply size={16} />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-600">
-                      <Archive size={16} />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-[#dc2626]">
-                      <Trash2 size={16} />
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => handleDelete(selected.id)}
+                      disabled={isDeleting}
+                      className="h-8 w-8 text-[#dc2626] hover:bg-red-50 hover:text-[#dc2626] bg-white"
+                    >
+                      {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                     </Button>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="p-6">
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                  {selected.preview}
-                  {"\n\n"}Mohon informasinya. Terima kasih.
-                  {"\n\n"}Salam,{"\n"}{selected.sender}
-                </p>
+              <CardContent className="p-6 flex-1 overflow-y-auto">
+                <div className="space-y-6 text-sm text-gray-700 leading-relaxed font-sans">
+                  <p className="whitespace-pre-line">{selected.message}</p>
+                </div>
               </CardContent>
-              <div className="border-t border-gray-100 p-4">
+              <div className="p-4 border-t bg-gray-50">
                 <div className="space-y-3">
+                  <div className="flex items-center justify-between mb-2 text-xs text-gray-500">
+                    <span>Balas ke {selected.email}</span>
+                  </div>
                   <textarea
-                    className="w-full min-h-[100px] p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:bg-white focus:border-[#1e3a8a] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/10 resize-y"
-                    placeholder="Tulis balasan..."
+                    placeholder="Tulis balasan pesan di sini..."
+                    className="w-full min-h-[100px] p-2 text-sm border-none focus:ring-0 resize-y rounded-md"
                   />
-                  <div className="flex justify-end">
-                    <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90">
-                      <Reply size={16} />
+                  <div className="flex justify-end mt-2">
+                    <Button className="bg-[#1e3a8a] text-white hover:bg-[#1e3a8a]/90 h-8 text-xs font-semibold px-4">
                       Kirim Balasan
                     </Button>
                   </div>
@@ -207,11 +200,11 @@ export default function PesanPage() {
               </div>
             </Card>
           ) : (
-            <Card className="border border-gray-100 shadow-sm">
-              <CardContent className="flex flex-col items-center justify-center py-20">
-                <Mail size={48} className="text-gray-200 mb-3" />
-                <p className="text-sm text-gray-400">Pilih pesan untuk membaca detail</p>
-              </CardContent>
+            <Card className="border border-gray-100 shadow-sm h-full min-h-[400px] flex items-center justify-center">
+              <div className="text-center text-gray-400">
+                <Mail size={48} className="mx-auto mb-4 text-gray-300 opacity-50" />
+                <p className="text-sm">Pilih pesan di sebelah kiri untuk membaca.</p>
+              </div>
             </Card>
           )}
         </div>

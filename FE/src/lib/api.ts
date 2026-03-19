@@ -624,3 +624,211 @@ export const uploadApi = {
     return handleResponse<UploadResponse>(res);
   },
 };
+
+// =============================================================================
+// ADMIN CONTACTS API (requires auth)
+// =============================================================================
+
+export interface AdminContactMessagesListResponse {
+  success: boolean;
+  data: ContactMessageItem[];
+  totalCount?: number;
+}
+
+export const adminContactsApi = {
+  /** GET /api/v1/admin/contacts */
+  async getList(params?: { page?: number; pageSize?: number; isRead?: boolean }): Promise<AdminContactMessagesListResponse> {
+    const query = new URLSearchParams();
+    if (params?.page) query.set("page", String(params.page));
+    if (params?.pageSize) query.set("pageSize", String(params.pageSize));
+    if (params?.isRead !== undefined) query.set("isRead", String(params.isRead));
+
+    const res = await fetch(`${API_BASE_URL}/admin/contacts?${query.toString()}`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<AdminContactMessagesListResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/contacts/{id} */
+  async update(id: number, payload: { isRead: boolean }): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/contacts/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/contacts/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/contacts/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN USERS API (requires auth)
+// =============================================================================
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  createdAt?: string;
+}
+
+export interface UsersListResponse {
+  success: boolean;
+  data: User[];
+}
+
+export interface CreateUserPayload {
+  name: string;
+  email: string;
+  password?: string;
+  isAdmin: boolean;
+}
+
+export interface UpdateUserPayload extends CreateUserPayload {
+  id: number;
+}
+
+export const adminUsersApi = {
+  /** GET /api/v1/admin/users */
+  async getList(): Promise<UsersListResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/users`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<UsersListResponse>(res);
+  },
+
+  /** POST /api/v1/admin/users */
+  async create(payload: CreateUserPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/users`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/users/{id} */
+  async update(id: number, payload: UpdateUserPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/users/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/users/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/users/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN LECTURERS API (requires auth)
+// =============================================================================
+
+export interface CreateLecturerPayload {
+  name: string;
+  photo?: string;
+  nidn?: string;
+  position?: string;
+  educationLevel?: string;
+  expertise?: string;
+  email?: string;
+  sortOrder?: number;
+}
+
+export interface UpdateLecturerPayload extends CreateLecturerPayload {
+  id: number;
+}
+
+export const adminLecturersApi = {
+  /** POST /api/v1/admin/lecturers */
+  async create(payload: CreateLecturerPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/lecturers`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/lecturers/{id} */
+  async update(id: number, payload: UpdateLecturerPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/lecturers/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/lecturers/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/lecturers/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN STAFF API (requires auth)
+// =============================================================================
+
+export interface CreateStaffPayload {
+  name: string;
+  photo?: string;
+  position?: string;
+  email?: string;
+  sortOrder?: number;
+}
+
+export interface UpdateStaffPayload extends CreateStaffPayload {
+  id: number;
+}
+
+export const adminStaffApi = {
+  /** POST /api/v1/admin/staff */
+  async create(payload: CreateStaffPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/staff`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/staff/{id} */
+  async update(id: number, payload: UpdateStaffPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/staff/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/staff/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/staff/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};

@@ -38,6 +38,19 @@ import {
   type UpdateAlbumPayload,
   type CreateMediaPayload,
   type UpdateMediaPayload,
+  adminContactsApi,
+  adminUsersApi,
+  adminLecturersApi,
+  adminStaffApi,
+  type User,
+  type CreateUserPayload,
+  type UpdateUserPayload,
+  type CreateLecturerPayload,
+  type UpdateLecturerPayload,
+  type CreateStaffPayload,
+  type UpdateStaffPayload,
+  type AdminContactMessagesListResponse,
+  type UsersListResponse,
 } from "./api";
 
 // =============================================================================
@@ -243,4 +256,68 @@ export function useDeleteMedia() {
 /** Upload file */
 export function useUploadFile() {
   return useMutation<File>((file) => uploadApi.uploadFile(file));
+}
+
+// =============================================================================
+// ADMIN CONTACTS HOOKS
+// =============================================================================
+
+export function useAdminContacts(params?: { page?: number; pageSize?: number; isRead?: boolean }) {
+  return useFetch<ContactMessageItem[]>(() => adminContactsApi.getList(params), [params?.page, params?.pageSize, params?.isRead]);
+}
+
+export function useMarkContactRead() {
+  return useMutation<number>((id) => adminContactsApi.update(id, { isRead: true }));
+}
+
+export function useDeleteContactMessage() {
+  return useMutation<number>((id) => adminContactsApi.delete(id));
+}
+
+// =============================================================================
+// ADMIN USERS HOOKS
+// =============================================================================
+
+export function useAdminUsers() {
+  return useFetch<User[]>(adminUsersApi.getList);
+}
+
+export function useCreateUser() {
+  return useMutation<CreateUserPayload>((payload) => adminUsersApi.create(payload));
+}
+
+export function useUpdateUser() {
+  return useMutation<UpdateUserPayload>((payload) => adminUsersApi.update(payload.id, payload));
+}
+
+export function useDeleteUser() {
+  return useMutation<number>((id) => adminUsersApi.delete(id));
+}
+
+// =============================================================================
+// ADMIN HR (LECTURERS & STAFF) HOOKS
+// =============================================================================
+
+export function useCreateLecturer() {
+  return useMutation<CreateLecturerPayload>((payload) => adminLecturersApi.create(payload));
+}
+
+export function useUpdateLecturer() {
+  return useMutation<UpdateLecturerPayload>((payload) => adminLecturersApi.update(payload.id, payload));
+}
+
+export function useDeleteLecturer() {
+  return useMutation<number>((id) => adminLecturersApi.delete(id));
+}
+
+export function useCreateStaff() {
+  return useMutation<CreateStaffPayload>((payload) => adminStaffApi.create(payload));
+}
+
+export function useUpdateStaff() {
+  return useMutation<UpdateStaffPayload>((payload) => adminStaffApi.update(payload.id, payload));
+}
+
+export function useDeleteStaff() {
+  return useMutation<number>((id) => adminStaffApi.delete(id));
 }

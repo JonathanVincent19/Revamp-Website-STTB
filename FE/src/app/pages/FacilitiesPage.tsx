@@ -13,63 +13,68 @@ import {
   GraduationCap,
   Users,
   Dumbbell,
+  ArrowRight,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+
+// ==========================================
+// 1. DATA
+// ==========================================
 
 const facilities = [
   {
     name: "Perpustakaan",
     description:
-      "Perpustakaan didesain agar nyaman dan instagramable, dengan koleksi lebih dari 10.000 buku teologi, jurnal internasional, dan sumber referensi digital.",
+      "Desain nyaman dan instagramable, koleksi >10.000 buku teologi, jurnal internasional, dan referensi digital.",
     icon: Library,
     image: "https://images.unsplash.com/photo-1763811938846-0de457436794",
   },
   {
     name: "Studio Didasko",
     description:
-      "Studio audio-visual Didasko menjadi tempat produksi media pengajaran STTB maupun tempat belajar pelayanan media bagi mahasiswa.",
+      "Studio audio-visual untuk produksi media pengajaran STTB dan tempat belajar pelayanan media bagi mahasiswa.",
     icon: Video,
     image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
   },
   {
     name: "Ruang Kelas",
     description:
-      "Format ruang kelas didesain untuk mengakomodasi berbagai format pembelajaran. Dilengkapi dengan teknologi untuk pembelajaran hybrid (onsite-online).",
+      "Didesain untuk berbagai format pembelajaran, dilengkapi teknologi untuk pembelajaran hybrid (onsite-online).",
     icon: BookOpen,
     image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
   },
   {
     name: "Ruang Teleconference",
     description:
-      "Ruangan yang siap pakai bagi pembelajaran hybrid, memungkinkan interaksi real-time antara mahasiswa onsite dan online.",
+      "Fasilitas siap pakai untuk pembelajaran hybrid, memungkinkan interaksi real-time mahasiswa onsite dan online.",
     icon: Computer,
     image: "https://images.unsplash.com/photo-1766297247924-6638d54e7c89",
   },
   {
     name: "Aula Pertemuan",
     description:
-      "Aula untuk pertemuan ibadah, seminar dengan audiens besar, serta berbagai acara kemahasiswaan dan konferensi.",
+      "Aula untuk ibadah, seminar besar, acara kemahasiswaan, dan konferensi.",
     icon: Building2,
     image: "https://images.unsplash.com/photo-1764471444363-e6dc0f9773bc",
   },
   {
     name: "Rumah Doa Bethel",
     description:
-      "Fasilitas di luar kampus berupa rumah retreat untuk kegiatan refleksi spiritual, doa, dan retret mahasiswa.",
+      "Rumah retreat di luar kampus untuk refleksi spiritual, doa, dan retret mahasiswa.",
     icon: Coffee,
     image: "https://images.unsplash.com/photo-1543702404-38c2035462ad",
   },
   {
     name: "Ruang Konseling",
     description:
-      "Ruang konseling pribadi dan konseling kelompok untuk mendukung pertumbuhan rohani dan psikologis mahasiswa.",
+      "Konseling pribadi dan kelompok untuk pertumbuhan rohani dan psikologis mahasiswa.",
     icon: Users,
     image: "https://images.unsplash.com/photo-1652086378906-4d648d832ed9",
   },
   {
     name: "Internet & Wi-Fi",
     description:
-      "Akses internet berkecepatan tinggi di seluruh area kampus untuk mendukung pembelajaran digital dan riset.",
+      "Akses internet cepat di seluruh area kampus mendukung pembelajaran digital dan riset.",
     icon: Wifi,
     image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
   },
@@ -114,25 +119,87 @@ const asramaFeatures = [
   "Kolam renang",
 ];
 
+// ==========================================
+// 2. HELPER COMPONENTS (SHAPES)
+// ==========================================
+
+// Pola Grid Garis Struktural untuk area terang
+const StructuralGridPattern = () => (
+  <svg
+    width="100%"
+    height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="absolute inset-0 opacity-[0.03]"
+  >
+    <defs>
+      <pattern
+        id="gridPattern"
+        width="40"
+        height="40"
+        patternUnits="userSpaceOnUse"
+      >
+        <path
+          d="M 40 0 L 0 0 0 40"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+        />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#gridPattern)" />
+  </svg>
+);
+
+// Bentuk Geometris Sudut Tajam untuk area gelap
+const GeometricDarkShapes = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 mt-[-100px]">
+    {/* Shape 1: Segitiga siku besar di kiri atas */}
+    <div
+      className="absolute top-0 left-0 w-[60%] h-[80%] bg-[#1e40af] opacity-50"
+      style={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
+    />
+    {/* Shape 2: Balok diagonal di kanan bawah */}
+    <div
+      className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[60%] bg-[#1e3a8a] opacity-60 rounded-tl-[100px]"
+      style={{ transform: "rotate(-15deg)" }}
+    />
+    {/* Shape 3: Aksen Merah kecil */}
+    <div
+      className="absolute top-[20%] right-[15%] w-24 h-24 bg-[#dc2626] opacity-30"
+      style={{ clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)" }}
+    />
+  </div>
+);
+
+// ==========================================
+// 3. MAIN COMPONENT
+// ==========================================
+
 export function FacilitiesPage() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af]">
-        <div className="container mx-auto px-4 lg:px-8">
+    <div className="pt-20 bg-white">
+      {/* --- HERO SECTION --- */}
+      <section className="relative py-28 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#1e3a8a] overflow-hidden">
+        {/* Background Shapes */}
+        <GeometricDarkShapes />
+        {/* Overlay gradien halus untuk menyatukan shape */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20 z-0" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block bg-[#dc2626] text-white px-4 py-1.5 rounded-full text-sm tracking-wider mb-4">
+            <span className="inline-block bg-[#dc2626] text-white px-5 py-2 rounded-full text-xs tracking-[0.2em] uppercase mb-6 font-bold shadow-lg ring-4 ring-red-500/30">
               FASILITAS KAMPUS
             </span>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
-              Fasilitas Kampus & Asrama untuk Pembentukan Pribadi dan Pemerlengkapan Pelayanan
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+              Fasilitas Kampus & Asrama untuk Pembentukan Pribadi dan
+              Pemerlengkapan Pelayanan
             </h1>
-            <p className="text-xl text-blue-50 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-blue-50 leading-relaxed max-w-3xl mx-auto font-light">
               Seluruh aspek kehidupan di dalam kampus dan asrama diarahkan untuk
               membentuk hati yang mengasihi Tuhan dan sesama bagi kemuliaan
               Tuhan.
@@ -141,40 +208,65 @@ export function FacilitiesPage() {
         </div>
       </section>
 
-      {/* Intro Quote */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 lg:px-8">
+      {/* --- INTRO QUOTE SECTION --- */}
+      <section className="relative py-20 bg-white overflow-hidden text-[#1e3a8a]">
+        <StructuralGridPattern />
+        {/* Aksen Geometris Sudut */}
+        <div className="absolute top-0 left-0 w-32 h-32 border-l-4 border-t-4 border-[#dc2626]/20 rounded-tl-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-40 h-40 border-r-4 border-b-4 border-[#1e3a8a]/10 rounded-br-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto text-center"
+            className="max-w-4xl mx-auto text-center relative"
           >
-            <div className="relative">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-1 bg-[#dc2626] rounded-full" />
-              <p className="text-2xl md:text-3xl font-bold text-[#1e3a8a] leading-relaxed italic">
-                &ldquo;STTB merupakan sekolah Alkitab yang membentuk dan
-                memperlengkapi para pelayan Tuhan bagi pelayanan di dalam tubuh
-                Kristus dan di tengah dunia.&rdquo;
-              </p>
-            </div>
-            <p className="text-lg text-gray-600 mt-6">
+            {/* Dekorasi Garis Merah */}
+            <div className="w-20 h-1.5 bg-[#dc2626] rounded-full mx-auto mb-10" />
+
+            <p className="text-2xl md:text-3xl font-bold leading-relaxed italic relative z-10 px-6">
+              <span className="text-5xl text-[#dc2626]/40 absolute -top-5 -left-2 font-serif">
+                &ldquo;
+              </span>
+              STTB merupakan sekolah Alkitab yang membentuk dan memperlengkapi
+              para pelayan Tuhan bagi pelayanan di dalam tubuh Kristus dan di
+              tengah dunia.
+              <span className="text-5xl text-[#dc2626]/40 absolute -bottom-10 -right-2 font-serif">
+                &rdquo;
+              </span>
+            </p>
+
+            <p className="text-lg md:text-xl text-gray-700 mt-12 leading-relaxed font-medium">
               Fasilitas-fasilitas di kampus dan asrama STTB dirancang untuk
               mengoptimalkan proses pembentukan pribadi dan pemerlengkapan
               pelayanan mahasiswa. Sepanjang masa studi, mahasiswa akan{" "}
-              <strong>belajar bersama</strong>,{" "}
-              <strong>bertumbuh bersama</strong>, dan{" "}
-              <strong>hidup bersama</strong> dalam komunitas.
+              <strong className="text-[#1e3a8a] font-extrabold">
+                belajar bersama
+              </strong>
+              ,{" "}
+              <strong className="text-[#1e3a8a] font-extrabold">
+                bertumbuh bersama
+              </strong>
+              , dan{" "}
+              <strong className="text-[#1e3a8a] font-extrabold">
+                hidup bersama
+              </strong>{" "}
+              dalam komunitas.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Three Pillars - Belajar, Bertumbuh, Hidup Bersama */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="space-y-16">
+      {/* --- THREE PILLARS SECTION --- */}
+      <section className="relative py-24 bg-gray-50 overflow-hidden text-[#1e3a8a]">
+        <StructuralGridPattern />
+        {/* Aksen Sudut Besar samar di background */}
+        <div className="absolute -bottom-10 -left-10 w-96 h-96 bg-white rotate-45 rounded-3xl pointer-events-none z-0" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="space-y-20">
             {campusLifeSections.map((section, index) => (
               <motion.div
                 key={index}
@@ -182,31 +274,44 @@ export function FacilitiesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                  index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                }`}
+                className={`grid grid-cols-1 lg:grid-cols-12 gap-12 items-center`}
               >
-                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                {/* Text Content */}
+                <div
+                  className={`lg:col-span-7 ${index % 2 === 1 ? "lg:order-2" : ""
+                    }`}
+                >
                   <div
-                    className={`inline-flex items-center gap-2 bg-gradient-to-r ${section.color} text-white px-4 py-2 rounded-full mb-4`}
+                    className={`inline-flex items-center gap-3 bg-gradient-to-r ${section.color} text-white px-5 py-2.5 rounded-xl mb-6 shadow-md`}
                   >
-                    <section.icon size={20} />
-                    <span className="font-bold text-sm tracking-wider">
+                    <section.icon size={22} strokeWidth={2.5} />
+                    <span className="font-bold text-sm tracking-[0.2em]">
                       {section.title.toUpperCase()}
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-[#1e3a8a] mb-6">
-                    {section.title}
+                  <h2 className="text-3xl md:text-4xl font-black text-[#1e3a8a] mb-6 tracking-tight">
+                    {section.title} Bersama di Kampus STTB
                   </h2>
-                  <p className="text-lg text-gray-700 leading-relaxed">
+                  <p className="text-lg text-gray-700 leading-relaxed font-medium">
                     {section.description}
                   </p>
                 </div>
-                <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+
+                {/* Image Content */}
+                <div
+                  className={`lg:col-span-5 relative ${index % 2 === 1 ? "lg:order-1" : ""
+                    }`}
+                >
+                  {/* Bingkai dekoratif geometris di belakang gambar */}
+                  <div className="absolute -inset-4 border-2 border-[#dc2626]/20 rounded-3xl transform rotate-3 z-0" />
+                  <div
+                    className={`absolute -inset-4 bg-gradient-to-r ${section.color} opacity-10 rounded-3xl transform -rotate-2 z-0`}
+                  />
+
                   <ImageWithFallback
                     src={section.image}
                     alt={section.title}
-                    className="rounded-2xl shadow-2xl w-full h-80 object-cover"
+                    className="rounded-2xl shadow-2xl w-full h-80 object-cover relative z-10 border-4 border-white"
                   />
                 </div>
               </motion.div>
@@ -215,19 +320,27 @@ export function FacilitiesPage() {
         </div>
       </section>
 
-      {/* Facilities Grid */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-4xl font-black text-[#1e3a8a] mb-4">
-              Fasilitas Kampus & Asrama
+      {/* --- FACILITIES GRID SECTION --- */}
+      <section className="relative py-24 bg-white overflow-hidden text-[#1e3a8a]">
+        <StructuralGridPattern />
+        {/* Aksen Sudut Merah di Kanan Atas */}
+        <div className="absolute top-0 right-0 w-64 h-64 border-r-8 border-t-8 border-[#dc2626]/10 rounded-tr-[50px] pointer-events-none" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-3xl mx-auto text-center mb-16 relative">
+            {/* Ikon dekoratif samar di bg judul */}
+            <Building2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#1e3a8a]/5 size-40 z-0" />
+
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-5 tracking-tight relative z-10">
+              Fasilitas Kampus Modern
             </h2>
-            <p className="text-lg text-gray-600">
-              Fasilitas yang mendukung proses belajar, bertumbuh, dan hidup
-              bersama di STTB
+            <p className="text-xl text-gray-600 font-medium relative z-10">
+              Infrastruktur lengkap yang mendukung proses belajar, bertumbuh, dan
+              hidup bersama dalam komunitas STTB.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {facilities.map((facility, index) => (
               <motion.div
                 key={index}
@@ -235,28 +348,36 @@ export function FacilitiesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border border-gray-100"
+                className="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2"
               >
-                <div className="relative h-40 overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
                   <ImageWithFallback
                     src={facility.image}
                     alt={facility.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-3 left-3">
-                    <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center">
-                      <facility.icon className="text-white" size={20} />
+                  {/* Overlay Gradien */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1930]/90 via-[#0a1930]/40 to-transparent" />
+
+                  {/* Icon Badge */}
+                  <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
+                      <facility.icon className="text-white" size={24} />
                     </div>
+                    <h3 className="text-xl font-extrabold text-white tracking-tight">
+                      {facility.name}
+                    </h3>
                   </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-[#1e3a8a] mb-2">
-                    {facility.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+
+                <div className="p-6">
+                  <p className="text-base text-gray-700 leading-relaxed font-medium">
                     {facility.description}
                   </p>
+                  <div className="mt-5 flex items-center gap-2 text-[#dc2626] font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0">
+                    <span>Lihat Detail</span>
+                    <ArrowRight size={16} />
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -264,34 +385,69 @@ export function FacilitiesPage() {
         </div>
       </section>
 
-      {/* Asrama & Sports */}
-      <section className="py-20 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af]">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-black text-white mb-4">
-                Fasilitas Asrama & Olahraga
-              </h2>
-              <p className="text-lg text-blue-100">
-                Empat asrama terintegrasi di lokasi kampus: asrama dosen, ASPRA
-                (putra), ASPRI (putri), dan asrama pascasarjana/tamu
-              </p>
-            </div>
+      {/* --- ASRAMA & SPORTS SECTION --- */}
+      <section className="relative py-28 bg-gradient-to-br from-[#0a1930] to-[#1e3a8a] overflow-hidden">
+        {/* Background Shapes khas area gelap */}
+        <GeometricDarkShapes />
+        {/* Aksen Grid Garis tipis untuk nuansa teknis/arsitektur */}
+        <svg
+          width="100%"
+          height="100%"
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute inset-0 opacity-[0.05] text-white"
+        >
+          <defs>
+            <pattern
+              id="asramaGrid"
+              width="50"
+              height="50"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(15)"
+            >
+              <circle cx="1" cy="1" r="1" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#asramaGrid)" />
+        </svg>
 
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="grid grid-cols-2 md:grid-cols-3 gap-4"
+              className="text-center mb-16"
+            >
+              <div className="inline-block bg-[#dc2626] text-white px-5 py-2 rounded-full text-xs tracking-[0.2em] mb-5 font-bold shadow-md">
+                LIVING IN COMMUNITY
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                Fasilitas Asrama & Olahraga terintegrasi
+              </h2>
+              <p className="text-xl md:text-2xl text-blue-100 font-light leading-relaxed max-w-3xl mx-auto">
+                Empat kompleks asrama terintegrasi di lokasi kampus: asrama
+                dosen, ASPRA (putra), ASPRI (putri), dan asrama pascasarjana/tamu,
+                dilengkapi berbagai sarana olahraga untuk kesehatan civitas.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"
             >
               {asramaFeatures.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20"
+                  className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl px-5 py-4 border border-white/10 hover:bg-white/10 transition-colors group"
                 >
-                  <Dumbbell className="text-[#dc2626] flex-shrink-0" size={18} />
-                  <span className="text-white font-medium text-sm">
+                  <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
+                    <Dumbbell className="text-[#dc2626]" size={20} strokeWidth={2.5} />
+                  </div>
+                  <span className="text-white font-semibold text-base tracking-tight">
                     {feature}
                   </span>
                 </div>
