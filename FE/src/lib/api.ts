@@ -268,6 +268,71 @@ export interface TestimonialsListResponse {
   data: TestimonialItem[];
 }
 
+// --- FAQ ---
+export interface FAQItem {
+  id: number;
+  question: string;
+  answer: string;
+  sortOrder: number;
+  category: string;
+}
+
+export interface FAQsListResponse {
+  success: boolean;
+  data: FAQItem[];
+}
+
+export interface CreateFAQPayload {
+  question: string;
+  answer: string;
+  sortOrder: number;
+  category: string;
+}
+
+export interface UpdateFAQPayload extends CreateFAQPayload {
+  id: number;
+}
+
+// --- Facilities ---
+export interface FacilityListItem {
+  id: number;
+  name: string;
+  slug: string;
+  shortDescription: string;
+  iconName: string;
+  featuredImage: string;
+}
+
+export interface FacilityDetail extends FacilityListItem {
+  longDescription: string;
+  photos: string[];
+}
+
+export interface FacilitiesListResponse {
+  success: boolean;
+  data: FacilityListItem[];
+}
+
+export interface FacilityDetailResponse {
+  success: boolean;
+  message?: string;
+  data?: FacilityDetail;
+}
+
+export interface CreateFacilityPayload {
+  name: string;
+  slug: string;
+  shortDescription: string;
+  longDescription: string;
+  iconName: string;
+  featuredImage: string;
+  photos: string[];
+}
+
+export interface UpdateFacilityPayload extends CreateFacilityPayload {
+  id: number;
+}
+
 // --- Upload ---
 export interface UploadResponse {
   success: boolean;
@@ -607,6 +672,18 @@ export const testimonialsApi = {
 };
 
 // =============================================================================
+// FAQ API (Public)
+// =============================================================================
+
+export const faqApi = {
+  /** GET /api/v1/faq */
+  async getList(): Promise<FAQsListResponse> {
+    const res = await fetch(`${API_BASE_URL}/faq`);
+    return handleResponse<FAQsListResponse>(res);
+  },
+};
+
+// =============================================================================
 // UPLOAD API (requires auth)
 // =============================================================================
 
@@ -826,6 +903,94 @@ export const adminStaffApi = {
   /** DELETE /api/v1/admin/staff/{id} */
   async delete(id: number): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/admin/staff/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN FAQ API (requires auth)
+// =============================================================================
+
+export const adminFaqApi = {
+  /** POST /api/v1/admin/faq */
+  async create(payload: CreateFAQPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/faq`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/faq/{id} */
+  async update(id: number, payload: UpdateFAQPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/faq/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/faq/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/faq/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// FACILITIES API (Public)
+// =============================================================================
+
+export const facilitiesApi = {
+  /** GET /api/v1/facilities */
+  async getList(): Promise<FacilitiesListResponse> {
+    const res = await fetch(`${API_BASE_URL}/facilities`);
+    return handleResponse<FacilitiesListResponse>(res);
+  },
+
+  /** GET /api/v1/facilities/{slug} */
+  async getDetail(slug: string): Promise<FacilityDetailResponse> {
+    const res = await fetch(`${API_BASE_URL}/facilities/${slug}`);
+    return handleResponse<FacilityDetailResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN FACILITIES API (requires auth)
+// =============================================================================
+
+export const adminFacilitiesApi = {
+  /** POST /api/v1/admin/facilities */
+  async create(payload: CreateFacilityPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/facilities`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/facilities/{id} */
+  async update(id: number, payload: UpdateFacilityPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/facilities/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/facilities/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/facilities/${id}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

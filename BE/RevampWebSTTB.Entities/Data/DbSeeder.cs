@@ -26,6 +26,56 @@ namespace RevampWebSTTB.Entities.Data
                 context.SaveChanges();
             }
 
+            // ==========================================
+            // 0.1 SEED FACILITIES (Independent)
+            // ==========================================
+            if (!context.Facilities.Any())
+            {
+                var facilities = new[]
+                {
+                    new Facility
+                    {
+                        Name = "Laboratorium Komputer",
+                        Slug = "laboratorium-komputer",
+                        ShortDescription = "Laboratorium komputer modern dengan spesifikasi tinggi untuk mendukung praktikum mahasiswa.",
+                        LongDescription = "Laboratorium Komputer STTB dilengkapi dengan unit komputer terbaru, koneksi internet cepat, dan perangkat lunak pendukung akademik yang lengkap. Digunakan untuk praktikum pemrograman, basis data, jaringan komputer, dan desain grafis.",
+                        IconName = "Monitor",
+                        FeaturedImage = "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1000",
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Facility
+                    {
+                        Name = "Perpustakaan Digital",
+                        Slug = "perpustakaan-digital",
+                        ShortDescription = "Akses ribuan buku dan jurnal ilmiah baik fisik maupun digital.",
+                        LongDescription = "Perpustakaan STTB menyediakan ribuan koleksi buku teks, jurnal ilmiah, dan akses ke e-library. Fasilitas baca yang nyaman dan sistem pencarian digital memudahkan mahasiswa dalam riset dan tugas akhir.",
+                        IconName = "Library",
+                        FeaturedImage = "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1000",
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Facility
+                    {
+                        Name = "Aula Serbaguna",
+                        Slug = "aula-serbaguna",
+                        ShortDescription = "Ruangan luas untuk berbagai acara kampus dan kegiatan mahasiswa.",
+                        LongDescription = "Aula STTB dapat menampung hingga 500 orang, dilengkapi dengan sound system dan proyektor. Digunakan untuk seminar, workshop, wisuda, dan kegiatan organisasi mahasiswa.",
+                        IconName = "Users",
+                        FeaturedImage = "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1000",
+                        CreatedAt = DateTime.UtcNow
+                    }
+                };
+                context.Facilities.AddRange(facilities);
+                context.SaveChanges();
+
+                var computerLabPhotos = new[]
+                {
+                    new FacilityPhoto { FacilityId = facilities[0].Id, ImageUrl = "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1000", SortOrder = 1 },
+                    new FacilityPhoto { FacilityId = facilities[0].Id, ImageUrl = "https://images.unsplash.com/photo-1525547718511-b056023d7ff2?q=80&w=1000", SortOrder = 2 }
+                };
+                context.FacilityPhotos.AddRange(computerLabPhotos);
+                context.SaveChanges();
+            }
+
             // Check if database is already seeded
             if (context.News.Any())
             {
@@ -289,9 +339,6 @@ namespace RevampWebSTTB.Entities.Data
         };
             context.Testimonials.AddRange(testimonials);
 
-            // ==========================================
-            // SAVE ALL CHANGES
-            // ==========================================
             context.SaveChanges();
         }
     }

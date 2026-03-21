@@ -51,6 +51,17 @@ import {
   type UpdateStaffPayload,
   type AdminContactMessagesListResponse,
   type UsersListResponse,
+  faqApi,
+  adminFaqApi,
+  type FAQItem,
+  type CreateFAQPayload,
+  type UpdateFAQPayload,
+  facilitiesApi,
+  adminFacilitiesApi,
+  type FacilityListItem,
+  type FacilityDetail,
+  type CreateFacilityPayload,
+  type UpdateFacilityPayload,
 } from "./api";
 
 // =============================================================================
@@ -151,6 +162,11 @@ export function useStaff() {
 /** Ambil daftar testimonial */
 export function useTestimonials() {
   return useFetch<TestimonialItem[]>(() => testimonialsApi.getList(), []);
+}
+
+/** Ambil daftar FAQ untuk halaman publik */
+export function useFAQs() {
+  return useFetch<FAQItem[]>(() => faqApi.getList(), []);
 }
 
 // =============================================================================
@@ -320,4 +336,47 @@ export function useUpdateStaff() {
 
 export function useDeleteStaff() {
   return useMutation<number>((id) => adminStaffApi.delete(id));
+}
+
+/** CRUD FAQ (Admin) */
+export function useCreateFAQ() {
+  return useMutation<CreateFAQPayload>((payload) => adminFaqApi.create(payload));
+}
+
+export function useUpdateFAQ() {
+  return useMutation<UpdateFAQPayload>((payload) => adminFaqApi.update(payload.id, payload));
+}
+
+export function useDeleteFAQ() {
+  return useMutation<number>((id) => adminFaqApi.delete(id));
+}
+
+// =============================================================================
+// FACILITIES HOOKS
+// =============================================================================
+
+/** Ambil daftar fasilitas untuk halaman publik */
+export function useFacilities() {
+  return useFetch<FacilityListItem[]>(() => facilitiesApi.getList(), []);
+}
+
+/** Ambil detail fasilitas berdasarkan slug */
+export function useFacilityDetail(slug: string) {
+  return useFetch<FacilityDetail>(
+    () => facilitiesApi.getDetail(slug) as Promise<{ success: boolean; data: FacilityDetail }>,
+    [slug]
+  );
+}
+
+/** CRUD Fasilitas (Admin) */
+export function useCreateFacility() {
+  return useMutation<CreateFacilityPayload>((payload) => adminFacilitiesApi.create(payload));
+}
+
+export function useUpdateFacility() {
+  return useMutation<UpdateFacilityPayload>((payload) => adminFacilitiesApi.update(payload.id, payload));
+}
+
+export function useDeleteFacility() {
+  return useMutation<number>((id) => adminFacilitiesApi.delete(id));
 }

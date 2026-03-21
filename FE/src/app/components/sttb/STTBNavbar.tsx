@@ -237,6 +237,7 @@ export function STTBNavbar() {
               onMouseLeave={() => setActiveDropdown(null)}
             >
               <button
+                suppressHydrationWarning
                 className={`flex items-center gap-1 transition-colors ${scrolled
                   ? "text-gray-700 hover:text-[#1e3a8a]"
                   : "text-white hover:text-[#dc2626]"

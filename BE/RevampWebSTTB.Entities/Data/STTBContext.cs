@@ -26,10 +26,22 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<Scholarship> Scholarships { get; set; } = null!;
         public DbSet<TuitionFee> TuitionFees { get; set; } = null!;
         public DbSet<FAQ> FAQs { get; set; } = null!;
+        public DbSet<Facility> Facilities { get; set; } = null!;
+        public DbSet<FacilityPhoto> FacilityPhotos { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Facility>()
+                .HasIndex(f => f.Slug)
+                .IsUnique();
+
+            modelBuilder.Entity<FacilityPhoto>()
+                .HasOne(p => p.Facility)
+                .WithMany(f => f.Photos)
+                .HasForeignKey(p => p.FacilityId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NewsCategory>()
                 .HasIndex(n => n.Slug)

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "motion/react";
 import {
   Library,
@@ -14,72 +15,31 @@ import {
   Users,
   Dumbbell,
   ArrowRight,
+  Camera,
+  Heart,
+  Music,
+  Briefcase,
+  LucideIcon,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+import Link from "next/link";
+import { useFacilities } from "@/lib/hooks";
+import type { FacilityListItem } from "@/lib/api";
+
+// Icon string → lucide-react component mapper
+const iconMap: Record<string, LucideIcon> = {
+  Library, Video, BookOpen, Computer, Building2, Coffee, Users, Wifi,
+  Camera, Dumbbell, GraduationCap, Home, Heart, Music, Briefcase,
+};
+function getIcon(name: string): LucideIcon {
+  return iconMap[name] || Building2;
+}
 
 // ==========================================
 // 1. DATA
 // ==========================================
 
-const facilities = [
-  {
-    name: "Perpustakaan",
-    description:
-      "Desain nyaman dan instagramable, koleksi >10.000 buku teologi, jurnal internasional, dan referensi digital.",
-    icon: Library,
-    image: "https://images.unsplash.com/photo-1763811938846-0de457436794",
-  },
-  {
-    name: "Studio Didasko",
-    description:
-      "Studio audio-visual untuk produksi media pengajaran STTB dan tempat belajar pelayanan media bagi mahasiswa.",
-    icon: Video,
-    image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
-  },
-  {
-    name: "Ruang Kelas",
-    description:
-      "Didesain untuk berbagai format pembelajaran, dilengkapi teknologi untuk pembelajaran hybrid (onsite-online).",
-    icon: BookOpen,
-    image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
-  },
-  {
-    name: "Ruang Teleconference",
-    description:
-      "Fasilitas siap pakai untuk pembelajaran hybrid, memungkinkan interaksi real-time mahasiswa onsite dan online.",
-    icon: Computer,
-    image: "https://images.unsplash.com/photo-1766297247924-6638d54e7c89",
-  },
-  {
-    name: "Aula Pertemuan",
-    description:
-      "Aula untuk ibadah, seminar besar, acara kemahasiswaan, dan konferensi.",
-    icon: Building2,
-    image: "https://images.unsplash.com/photo-1764471444363-e6dc0f9773bc",
-  },
-  {
-    name: "Rumah Doa Bethel",
-    description:
-      "Rumah retreat di luar kampus untuk refleksi spiritual, doa, dan retret mahasiswa.",
-    icon: Coffee,
-    image: "https://images.unsplash.com/photo-1543702404-38c2035462ad",
-  },
-  {
-    name: "Ruang Konseling",
-    description:
-      "Konseling pribadi dan kelompok untuk pertumbuhan rohani dan psikologis mahasiswa.",
-    icon: Users,
-    image: "https://images.unsplash.com/photo-1652086378906-4d648d832ed9",
-  },
-  {
-    name: "Internet & Wi-Fi",
-    description:
-      "Akses internet cepat di seluruh area kampus mendukung pembelajaran digital dan riset.",
-    icon: Wifi,
-    image: "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7",
-  },
-];
-
+// Old hardcoded array removed
 const campusLifeSections = [
   {
     title: "Belajar Bersama",
@@ -176,6 +136,30 @@ const GeometricDarkShapes = () => (
 // ==========================================
 
 export function FacilitiesPage() {
+  const { data: apiFacilities, loading } = useFacilities();
+
+  // Map API data to display format
+  const displayFacilities = useMemo(() => {
+    if (!apiFacilities) return [];
+    
+    return apiFacilities.map(f => ({
+      slug: f.slug,
+      name: f.name,
+      description: f.shortDescription,
+      image: f.featuredImage,
+      icon: getIcon(f.iconName),
+    }));
+  }, [apiFacilities]);
+
+  if (loading) {
+    return (
+      <div className="pt-20 bg-white min-h-screen flex flex-col items-center justify-center">
+        <div className="w-16 h-16 border-4 border-[#dc2626] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-[#1e3a8a] font-bold animate-pulse uppercase tracking-widest text-sm">Menyiapkan Fasilitas Kampus...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="pt-20 bg-white">
       {/* --- HERO SECTION --- */}
@@ -341,45 +325,49 @@ export function FacilitiesPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {facilities.map((facility, index) => (
-              <motion.div
+            {displayFacilities.map((facility, index) => (
+              <Link
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2"
+                href={`/facilities/${facility.slug}`}
               >
-                <div className="relative h-48 overflow-hidden">
-                  <ImageWithFallback
-                    src={facility.image}
-                    alt={facility.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  {/* Overlay Gradien */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1930]/90 via-[#0a1930]/40 to-transparent" />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 transform hover:-translate-y-2"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <ImageWithFallback
+                      src={facility.image}
+                      alt={facility.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    {/* Overlay Gradien */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1930]/90 via-[#0a1930]/40 to-transparent" />
 
-                  {/* Icon Badge */}
-                  <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
-                      <facility.icon className="text-white" size={24} />
+                    {/* Icon Badge */}
+                    <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3">
+                      <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 shadow-inner">
+                        <facility.icon className="text-white" size={24} />
+                      </div>
+                      <h3 className="text-xl font-extrabold text-white tracking-tight">
+                        {facility.name}
+                      </h3>
                     </div>
-                    <h3 className="text-xl font-extrabold text-white tracking-tight">
-                      {facility.name}
-                    </h3>
                   </div>
-                </div>
 
-                <div className="p-6">
-                  <p className="text-base text-gray-700 leading-relaxed font-medium">
-                    {facility.description}
-                  </p>
-                  <div className="mt-5 flex items-center gap-2 text-[#dc2626] font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0">
-                    <span>Lihat Detail</span>
-                    <ArrowRight size={16} />
+                  <div className="p-6">
+                    <p className="text-base text-gray-700 leading-relaxed font-medium">
+                      {facility.description}
+                    </p>
+                    <div className="mt-5 flex items-center gap-2 text-[#dc2626] font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0">
+                      <span>Lihat Detail</span>
+                      <ArrowRight size={16} />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
