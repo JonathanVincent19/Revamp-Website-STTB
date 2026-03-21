@@ -21,10 +21,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
             {
                 Name = request.Name,
                 Level = request.Level,
-                Description = request.Description,
-                Semesters = request.Semesters,
-                Status = request.Status,
-                Curriculum = request.Curriculum
+                Degree = request.Degree,
+                TotalCredits = request.TotalCredits,
+                StudyDuration = request.StudyDuration,
+                LearningSystem = request.LearningSystem
             };
 
             _context.StudyPrograms.Add(program);
@@ -39,12 +39,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
                     Id = program.Id,
                     Name = program.Name,
                     Level = program.Level,
-                    Description = program.Description,
-                    Semesters = program.Semesters,
-                    Status = program.Status,
-                    Curriculum = program.Curriculum
+                    Degree = program.Degree,
+                    TotalCredits = program.TotalCredits,
+                    StudyDuration = program.StudyDuration,
+                    LearningSystem = program.LearningSystem
                 }
             };
         }
     }
 }
+

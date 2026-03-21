@@ -26,6 +26,8 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<Scholarship> Scholarships { get; set; } = null!;
         public DbSet<TuitionFee> TuitionFees { get; set; } = null!;
         public DbSet<FAQ> FAQs { get; set; } = null!;
+        public DbSet<CourseCategory> CourseCategories { get; set; } = null!;
+        public DbSet<Course> Courses { get; set; } = null!;
         public DbSet<Facility> Facilities { get; set; } = null!;
         public DbSet<FacilityPhoto> FacilityPhotos { get; set; } = null!;
 
@@ -82,6 +84,12 @@ namespace RevampWebSTTB.Entities.Data
             modelBuilder.Entity<ContactMessage>()
                 .Property(c => c.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Category)
+                .WithMany(cc => cc.Courses)
+                .HasForeignKey(c => c.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

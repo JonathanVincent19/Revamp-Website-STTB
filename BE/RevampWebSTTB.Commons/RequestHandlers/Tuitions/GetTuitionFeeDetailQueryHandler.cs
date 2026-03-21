@@ -37,8 +37,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
                 {
                     Id = fee.Id,
                     Program = fee.Program,
+                    Category = fee.Category,
                     ItemName = fee.ItemName,
-                    Amount = fee.Amount
+                    Amount = fee.Amount,
+                    SortOrder = fee.SortOrder
                 }
             };
         }

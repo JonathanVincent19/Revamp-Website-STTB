@@ -20,8 +20,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
             var fee = new TuitionFee
             {
                 Program = request.Program,
+                Category = request.Category,
                 ItemName = request.ItemName,
-                Amount = request.Amount
+                Amount = request.Amount,
+                SortOrder = request.SortOrder
             };
 
             _context.TuitionFees.Add(fee);
@@ -35,8 +37,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
                 {
                     Id = fee.Id,
                     Program = fee.Program,
+                    Category = fee.Category,
                     ItemName = fee.ItemName,
-                    Amount = fee.Amount
+                    Amount = fee.Amount,
+                    SortOrder = fee.SortOrder
                 }
             };
         }
