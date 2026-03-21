@@ -29,8 +29,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
             }
 
             fee.Program = request.Program;
+            fee.Category = request.Category;
             fee.ItemName = request.ItemName;
             fee.Amount = request.Amount;
+            fee.SortOrder = request.SortOrder;
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -42,8 +44,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
                 {
                     Id = fee.Id,
                     Program = fee.Program,
+                    Category = fee.Category,
                     ItemName = fee.ItemName,
-                    Amount = fee.Amount
+                    Amount = fee.Amount,
+                    SortOrder = fee.SortOrder
                 }
             };
         }
