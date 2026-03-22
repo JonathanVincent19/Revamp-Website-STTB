@@ -30,10 +30,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
 
             program.Name = request.Name;
             program.Level = request.Level;
-            program.Description = request.Description;
-            program.Semesters = request.Semesters;
-            program.Status = request.Status;
-            program.Curriculum = request.Curriculum;
+            program.Degree = request.Degree;
+            program.TotalCredits = request.TotalCredits;
+            program.StudyDuration = request.StudyDuration;
+            program.LearningSystem = request.LearningSystem;
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -46,12 +46,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
                     Id = program.Id,
                     Name = program.Name,
                     Level = program.Level,
-                    Description = program.Description,
-                    Semesters = program.Semesters,
-                    Status = program.Status,
-                    Curriculum = program.Curriculum
+                    Degree = program.Degree,
+                    TotalCredits = program.TotalCredits,
+                    StudyDuration = program.StudyDuration,
+                    LearningSystem = program.LearningSystem
                 }
             };
         }
     }
 }
+

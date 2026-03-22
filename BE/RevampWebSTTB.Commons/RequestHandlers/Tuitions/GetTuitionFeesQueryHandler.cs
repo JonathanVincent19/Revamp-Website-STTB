@@ -19,12 +19,15 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Tuitions
         {
             var fees = await _context.TuitionFees
                 .AsNoTracking()
+                .OrderBy(f => f.SortOrder)
                 .Select(f => new TuitionFeeDto
                 {
                     Id = f.Id,
                     Program = f.Program,
+                    Category = f.Category,
                     ItemName = f.ItemName,
-                    Amount = f.Amount
+                    Amount = f.Amount,
+                    SortOrder = f.SortOrder
                 })
                 .ToListAsync(cancellationToken);
 

@@ -144,6 +144,53 @@ namespace RevampWebSTTB.Entities.Migrations
                     b.ToTable("ContactMessages");
                 });
 
+            modelBuilder.Entity("RevampWebSTTB.Entities.Models.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("RevampWebSTTB.Entities.Models.CourseCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("TotalSKS")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CourseCategories");
+                });
+
             modelBuilder.Entity("RevampWebSTTB.Entities.Models.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -548,11 +595,15 @@ namespace RevampWebSTTB.Entities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Curriculum")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("LearningSystem")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Level")
                         .IsRequired()
@@ -564,12 +615,13 @@ namespace RevampWebSTTB.Entities.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Semesters")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("StudyDuration")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("TotalCredits")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -624,6 +676,11 @@ namespace RevampWebSTTB.Entities.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -633,6 +690,9 @@ namespace RevampWebSTTB.Entities.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -673,6 +733,17 @@ namespace RevampWebSTTB.Entities.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("RevampWebSTTB.Entities.Models.Course", b =>
+                {
+                    b.HasOne("RevampWebSTTB.Entities.Models.CourseCategory", "Category")
+                        .WithMany("Courses")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("RevampWebSTTB.Entities.Models.FacilityPhoto", b =>
                 {
                     b.HasOne("RevampWebSTTB.Entities.Models.Facility", "Facility")
@@ -702,6 +773,11 @@ namespace RevampWebSTTB.Entities.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("RevampWebSTTB.Entities.Models.CourseCategory", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("RevampWebSTTB.Entities.Models.Facility", b =>

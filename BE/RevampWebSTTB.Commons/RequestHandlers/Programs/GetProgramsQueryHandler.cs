@@ -24,10 +24,10 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
                     Id = p.Id,
                     Name = p.Name,
                     Level = p.Level,
-                    Description = p.Description,
-                    Semesters = p.Semesters,
-                    Status = p.Status,
-                    Curriculum = p.Curriculum
+                    Degree = p.Degree,
+                    TotalCredits = p.TotalCredits,
+                    StudyDuration = p.StudyDuration,
+                    LearningSystem = p.LearningSystem
                 })
                 .ToListAsync(cancellationToken);
 
@@ -39,3 +39,4 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
         }
     }
 }
+

@@ -38,12 +38,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Programs
                     Id = program.Id,
                     Name = program.Name,
                     Level = program.Level,
-                    Description = program.Description,
-                    Semesters = program.Semesters,
-                    Status = program.Status,
-                    Curriculum = program.Curriculum
+                    Degree = program.Degree,
+                    TotalCredits = program.TotalCredits,
+                    StudyDuration = program.StudyDuration,
+                    LearningSystem = program.LearningSystem
                 }
             };
         }
     }
 }
+
