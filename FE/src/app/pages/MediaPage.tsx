@@ -1,130 +1,381 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Video, FileText, Book, Loader2, AlertCircle, Image as ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Search,
+  X,
+  ChevronRight,
+  PlayCircle,
+  FileText,
+  Share2,
+  Calendar,
+  Filter,
+  ArrowRight
+} from "lucide-react";
+import Link from "next/link";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
-import { useGalleryAlbums } from "@/lib/hooks";
+
+// ==========================================
+// 1. DUMMY DATA (Siap diganti dengan API GET)
+// ==========================================
+
+const DUMMY_MEDIA = [
+  {
+    id: "1",
+    title: 'City TransForMission #2: "Fokus Strategis Misi Urban"',
+    category: "LEAD",
+    type: "Video",
+    date: "20 April 2023",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  },
+  {
+    id: "2",
+    title: 'City TransForMission #01: "Urbanisasi & Misi"',
+    category: "UMC",
+    type: "Video",
+    date: "3 Maret 2023",
+    image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  },
+  {
+    id: "3",
+    title: 'Persembahan Pujian STTB untuk Pelayanan Sekolah Minggu',
+    category: "STT BANDUNG",
+    type: "Video",
+    date: "3 Desember 2022",
+    image: "https://images.unsplash.com/photo-1609220136736-443140cffec6?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  },
+  {
+    id: "4",
+    title: 'Unboxing Bahan Pemuridan LifeGuide',
+    category: "DISCIPLESIGHT",
+    type: "Video",
+    date: "10 November 2022",
+    image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  },
+  {
+    id: "5",
+    title: 'Membuat Kompos dari Sampah Organik',
+    category: "STT BANDUNG",
+    type: "Artikel",
+    date: "6 September 2022",
+    image: "https://images.unsplash.com/photo-1558904541-efa843a96f0f?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  },
+  {
+    id: "6",
+    title: 'Webinar Teologi Kontemporer 2022',
+    category: "AKADEMIK",
+    type: "Video",
+    date: "15 Agustus 2022",
+    image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=800&auto=format&fit=crop",
+    url: "#"
+  }
+];
+
+const SIDEBAR_LINKS = [
+  {
+    title: "PERPUSTAKAAN",
+    url: "/library",
+    subLinks: [
+      { title: "Katalog Fisik", url: "/library" },
+      { title: "EBSCO Host", url: "https://login.ebsco.com/?requestIdentifier=f931f9d8-c73f-4b87-8a4d-1db74405fbc4&acrValues=uid&ui_locales&redirect_uri=https://logon.ebsco.zone/api/dispatcher/continue/prompted?state=YzAxYjJlODY5ZjZjNDA5YmI3YjkyYzNiN2I1NThjZmQ=&authRequest=eyJraWQiOiIxNzY5MTEwMjQ0MDQ3IiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczpcL1wvYXV0aC5lYnNjby56b25lXC9hcGlcL2Rpc3BhdGNoZXIiLCJhdXRoUmVxdWVzdCI6eyJsb2dpbl9oaW50IjpudWxsLCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgYWZmaWxpYXRpb24iLCJhY3JfdmFsdWVzIjoidWlkIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJyZWRpcmVjdF91cmkiOiJodHRwczpcL1wvc2VhcmNoLmVic2NvaG9zdC5jb21cL3dlYmF1dGhcL1Byb21wdGVkQ2FsbGJhY2suYXNweCIsInN0YXRlIjoiQXhFZ0ZoYnh3M1RCa056eTlRdDRiXzVFaWplQkZ4UlN4U2htR0pJTjB1b21fYTJjLTdIdkx5MFc3Tjh0VEJPanNiQ3FocWRJMmtyd3prWlJ6Z2NDMmhUSnZZT1k0RGoyZ2N2V3pJS0tDaWlUU3dwd0ozNjBIOUxTRUsxazdReElLYlVrRG0zamN0N3ZRSEFnOFR5U0RheFdUdjB5RjZ4T3FmUzN5MHkzbzZaeVVnbEJOVGZLa0hZUjFuMFlGUURacnhWX3hrN19wb0xUN3FpVlo1RU5UN1J4NFVMal8zMjFZR2RsZ0FsWjEyU3otR2dMTE52NEZGTXE1QmlMbTJVR3JwUUZKcnhyYm1DcURqR2w3VzFtVTZHMGJMc2JUTGpUM2tFb3lUdW1wZFZXVnNFQjNPbWJBc0tTa1BFc0M3VVJ1OE1YR3Q1dGJaNE9JLXFmZmlhV3FFWEo3QjR6MG9xaE5yd2UwZzBNNERFIiwiY2xpZW50X2lkIjoiYXdneWNJeDU3TXJ3bkRRNWg0VWU2eUNWRVAwcjVNdDkiLCJyZXNwb25zZV9tb2RlIjoicXVlcnkiLCJyZXFJZCI6ImY5MzFmOWQ4LWM3M2YtNGI4Ny04YTRkLTFkYjc0NDA1ZmJjNCJ9LCJpYXQiOjE3NzQwODM3ODgsImp0aSI6IjMxNTNiNjkxLTExMTAtNGFjMS1iMGU4LTZiYjA1YWY5MDIxYyIsInJlcUlkIjoiZjkzMWY5ZDgtYzczZi00Yjg3LThhNGQtMWRiNzQ0MDVmYmM0In0.SPUo2RjfYLMQXsk3Qy6TGTbqAS7wZTpk59kVPWVcOg-Sa__31jOmVS8GlCcfwBPAai2msmkdFcEd9YjgHKBJiaEQROB182QFwRv7dyvwlNXxrtlVkJnORvAiZkQqiDH1BUkhR_chOQsCDq8KSOW0HcvWH_ga6mt4SSsyUEvUMVymABfamj6dMsmZhMuwUwVtKc5bV1OGlwXSSZNPfiuPA-fsxMDL02r6nVegiAOV07iZgq5QA9X6wTSWsYOrHkItShVrbWoV-jkDs0psnu5FciEqJM7ccoI1GogWeIxGsZynDMqQUi0Glm08Z7IdAwiBKQgzpHcXPdNFOzDHa1VBfA" },
+      { title: "Jurnal ATLA", url: "https://login.ebsco.com/?requestIdentifier=f931f9d8-c73f-4b87-8a4d-1db74405fbc4&acrValues=uid&ui_locales&redirect_uri=https://logon.ebsco.zone/api/dispatcher/continue/prompted?state=NTBlZWY0NWQ5M2YyNDQyMzg5MzMyZTA3YTkwYjYyODE=&authRequest=eyJraWQiOiIxNzY5MTEwMjQ0MDQ3IiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczpcL1wvYXV0aC5lYnNjby56b25lXC9hcGlcL2Rpc3BhdGNoZXIiLCJhdXRoUmVxdWVzdCI6eyJsb2dpbl9oaW50IjpudWxsLCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgYWZmaWxpYXRpb24iLCJhY3JfdmFsdWVzIjoidWlkIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJyZWRpcmVjdF91cmkiOiJodHRwczpcL1wvc2VhcmNoLmVic2NvaG9zdC5jb21cL3dlYmF1dGhcL1Byb21wdGVkQ2FsbGJhY2suYXNweCIsInN0YXRlIjoiQXhIYm1vaGtPbHhSb19aZU1raHNzWHplOEw3eFd4UlN4U2htR0pJTjB1b21fYTJjLTdIdkx5MFc3Tjh0VEJPanNiQ3FocWRJMmtyd3prWlJ6Z2NDMmhUSnZZT1lBSFcyMWRteTFWajh1OXZjQ2FQRWFucUxJOU9vYlRIT1FWYXBfdTBZZ19HN2xUOUE5UmozdnZzV3A1WVZVOFNZZEVoU3VkeUxmUHJRdEtVMkpGbS1HM0ZPYmJwampDbHNacEtuVGNIaTJqTXVwekMtU3ZRMXQ0RkdWTC1kMW9vNHdNTVVqbS1JZTU3UzIyZmJkc3daWE41WV9FQUxjRFdlTjRMR1NhQVlLX3J0YXllX2tmQVVsa3liOGNlNjZaNUE2X1NidDl5OTNIMFM2cU9DLWczWjBGOVN2T1JNOHo3VEp4elBuWmtkVU5jSkR4VTdITjFRdHZsNGFFX1FOMVMzZzdwWDh4MlVxQlZWUUtBIiwiY2xpZW50X2lkIjoiYXdneWNJeDU3TXJ3bkRRNWg0VWU2eUNWRVAwcjVNdDkiLCJyZXNwb25zZV9tb2RlIjoicXVlcnkiLCJyZXFJZCI6ImY5MzFmOWQ4LWM3M2YtNGI4Ny04YTRkLTFkYjc0NDA1ZmJjNCJ9LCJpYXQiOjE3NzQwODM2OTgsImp0aSI6ImJlMjE1NzkwLWE3MDgtNGViOS1hNmZkLWU4M2QzZWZhYWMyMyIsInJlcUlkIjoiZjkzMWY5ZDgtYzczZi00Yjg3LThhNGQtMWRiNzQ0MDVmYmM0In0.GDEtBR4aQ-_x9p4QJvdYE4rp9-Q9ifqBiSA3R56mMuwnMI-FProX0dS_AoLKbf8RGpoo-bAutVhTwiIpMm1wzDCKdtabtORjVIJ5d9FTrUECXgOZgu4e_zfF8aRcF2briZwkdBP3NczyGtJusaUVoKEA6tm87BWn0EH35yy7HXFyrm7GBWITD_xy99cGRF-6-wOPF5h_XVTP4so3fU6-pCglNEuLW7eN6MjTxrp3lJETmQ5i0YzxomZ6dcs7IZUqO2xTvy-1VecdqHW9-bByFYhXxh-iWPTk4gQbQz9S0tN6couIXESsOmJ_EiWuRJawclsZv_jLCFs_vP5JjD-J6Q" }
+    ]
+  },
+  { title: "JURNAL STULOS", url: "/journal" },
+  { title: "OJS", url: "#" },
+  { title: "BULETIN STTB", url: "#" },
+  { title: "MONOGRAF", url: "#" }
+];
+
+// ==========================================
+// 2. MAIN PAGE COMPONENT
+// ==========================================
 
 export function MediaPage() {
-  const { data: albums, loading, error } = useGalleryAlbums();
+  // States untuk filter & pencarian
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFormat, setActiveFormat] = useState<string | null>(null); // "Artikel" | "Video" | null
+  const [activeCategory, setActiveCategory] = useState<string>("");
+  const [sortBy, setSortBy] = useState("date-desc");
+
+  // Simulasi Filter (Di dunia nyata, ini bisa dihandle oleh API Backend via query params)
+  const filteredMedia = DUMMY_MEDIA.filter((item) => {
+    const matchSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchFormat = activeFormat ? item.type === activeFormat : true;
+    const matchCategory = activeCategory ? item.category === activeCategory : true;
+    return matchSearch && matchFormat && matchCategory;
+  });
+
+  // Extract unique categories for dropdown
+  const categories = Array.from(new Set(DUMMY_MEDIA.map(item => item.category)));
 
   return (
-    <div className="pt-20">
-      <section className="relative py-20 bg-gradient-to-br from-[#1e3a8a] to-[#1e40af]">
-        <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
-              Media & Sumber Daya
-            </h1>
-            <p className="text-xl text-blue-50">
-              Akses khotbah digital, artikel teologi, dan media pendidikan Kristen
-            </p>
-          </motion.div>
+    <div className="pt-20 bg-[#f8fafc] min-h-screen pb-32">
+
+      {/* --- HERO HEADER --- */}
+      <section className="bg-[#0a1930] py-12 md:py-16 border-b-4 border-[#dc2626] relative overflow-hidden">
+        {/* Background Patterns */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="mediaGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1" opacity="0.3" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#mediaGrid)" />
+          </svg>
+        </div>
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-3">Galeri Media</h1>
+          <p className="text-blue-200 font-medium text-lg">Kumpulan video, artikel, dan dokumentasi kegiatan STT Bandung.</p>
         </div>
       </section>
 
-      {/* Kategori Media (Statis) */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Video, title: "Video Khotbah", desc: "Kumpulan khotbah dari dosen dan alumni" },
-              { icon: FileText, title: "Artikel Teologi", desc: "Artikel dan esai teologi kontekstual" },
-              { icon: Book, title: "Media PAK", desc: "Bahan Pendidikan Agama Kristen" },
-            ].map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-8 text-center">
-                <item.icon className="mx-auto mb-4 text-[#1e3a8a]" size={48} />
-                <h3 className="text-2xl font-bold text-[#1e3a8a] mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* --- MAIN LAYOUT (SIDEBAR + GRID) --- */}
+      <div className="container mx-auto px-4 lg:px-8 mt-10">
+        <div className="flex flex-col lg:flex-row gap-10">
 
-      {/* Galeri Album dari API */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <span className="inline-block bg-[#dbeafe] text-[#1e3a8a] px-4 py-1.5 rounded-full text-sm tracking-wider mb-2">
-              GALERI FOTO
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-[#1e3a8a]">
-              Album Galeri
-            </h2>
-          </div>
+          {/* ------------------------------------------- */}
+          {/* LEFT SIDEBAR (Filters & Quick Links) */}
+          {/* ------------------------------------------- */}
+          <aside className="w-full lg:w-1/4 xl:w-1/5 flex flex-col gap-10">
 
-          {/* Loading */}
-          {loading && (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Loader2 className="animate-spin text-[#1e3a8a] mb-4" size={36} />
-              <p className="text-gray-500">Memuat album...</p>
-            </div>
-          )}
-
-          {/* Error */}
-          {error && !loading && (
-            <div className="flex flex-col items-center justify-center py-12 bg-red-50 rounded-xl max-w-xl mx-auto">
-              <AlertCircle className="text-[#dc2626] mb-3" size={36} />
-              <p className="text-[#dc2626] font-semibold">Gagal memuat album</p>
-              <p className="text-sm text-gray-500 mt-1">{error}</p>
-            </div>
-          )}
-
-          {/* Empty */}
-          {!loading && !error && (!albums || albums.length === 0) && (
-            <div className="text-center py-16">
-              <ImageIcon className="mx-auto mb-4 text-gray-300" size={48} />
-              <p className="text-gray-500">Belum ada album galeri.</p>
-            </div>
-          )}
-
-          {/* Albums Grid */}
-          {!loading && !error && albums && albums.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {albums.map((album, index) => (
-                <motion.div
-                  key={album.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group cursor-pointer"
+            {/* Format Media Filter */}
+            <div>
+              <h3 className="text-[#dc2626] font-black text-lg tracking-tight uppercase mb-4 flex items-center gap-2">
+                Format Media
+              </h3>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => setActiveFormat(activeFormat === "Artikel" ? null : "Artikel")}
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all font-bold ${activeFormat === "Artikel"
+                    ? "bg-blue-50 border-[#1e3a8a] text-[#1e3a8a]"
+                    : "bg-white border-gray-100 text-gray-600 hover:border-gray-300"
+                    }`}
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    <ImageWithFallback
-                      src={album.coverImage || "https://images.unsplash.com/photo-1738949538943-e54722a44ffc"}
-                      alt={album.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {album.media && album.media.length > 0 && (
-                      <div className="absolute bottom-3 right-3 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        {album.media.length} foto
-                      </div>
-                    )}
+                  <div className="flex items-center gap-2">
+                    <FileText size={18} className={activeFormat === "Artikel" ? "text-[#1e3a8a]" : "text-gray-400"} />
+                    Artikel
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-bold text-[#1e3a8a] mb-2">{album.title}</h3>
-                    {album.description && (
-                      <p className="text-sm text-gray-600 line-clamp-2">{album.description}</p>
-                    )}
-                    {album.eventDate && (
-                      <p className="text-xs text-gray-400 mt-2">
-                        {new Date(album.eventDate).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
-                      </p>
-                    )}
+                  {activeFormat === "Artikel" && <X size={16} className="text-gray-400 hover:text-red-500" />}
+                </button>
+                <button
+                  onClick={() => setActiveFormat(activeFormat === "Video" ? null : "Video")}
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all font-bold ${activeFormat === "Video"
+                    ? "bg-blue-50 border-[#1e3a8a] text-[#1e3a8a]"
+                    : "bg-white border-gray-100 text-gray-600 hover:border-gray-300"
+                    }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <PlayCircle size={18} className={activeFormat === "Video" ? "text-[#1e3a8a]" : "text-gray-400"} />
+                    Video
                   </div>
-                </motion.div>
+                  {activeFormat === "Video" && <X size={16} className="text-gray-400 hover:text-red-500" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Topik Kategori Filter */}
+            <div>
+              <h3 className="text-[#1e3a8a] font-black text-lg tracking-tight uppercase mb-4 flex items-center gap-2">
+                Topik Kategori
+              </h3>
+              <div className="relative">
+                <select
+                  value={activeCategory}
+                  onChange={(e) => setActiveCategory(e.target.value)}
+                  className="w-full appearance-none bg-white border-2 border-gray-100 px-4 py-3.5 rounded-xl font-bold text-gray-700 focus:outline-none focus:border-[#1e3a8a] focus:ring-0 transition-colors cursor-pointer"
+                >
+                  <option value="">Semua Kategori Media</option>
+                  {categories.map((cat, idx) => (
+                    <option key={idx} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <Filter size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Red Quick Links */}
+            <div className="space-y-3 pt-6 border-t border-gray-200">
+              {SIDEBAR_LINKS.map((link, idx) => (
+                <div key={idx} className="flex flex-col gap-2">
+                  <Link
+                    href={link.url}
+                    className="group bg-[#dc2626] hover:bg-[#b91c1c] text-white flex items-center justify-between px-5 py-4 rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5"
+                  >
+                    <span className="font-black text-sm tracking-widest uppercase">{link.title}</span>
+                    <ChevronRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
+
+                  {/* Render Sublinks if exists (e.g., Katalog Fisik, dll) */}
+                  {link.subLinks && (
+                    <div className="flex flex-col gap-1.5 pl-4 pr-2 py-2">
+                      {link.subLinks.map((sub, sIdx) => (
+                        <Link
+                          key={sIdx}
+                          href={sub.url}
+                          className="text-sm font-bold text-gray-500 hover:text-[#1e3a8a] py-1.5 transition-colors flex items-center gap-2"
+                        >
+                          <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                          {sub.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
-          )}
+          </aside>
+
+          {/* ------------------------------------------- */}
+          {/* RIGHT MAIN CONTENT (Search & Grid) */}
+          {/* ------------------------------------------- */}
+          <main className="w-full lg:w-3/4 xl:w-4/5 flex flex-col gap-8">
+
+            {/* Top Action Bar */}
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row gap-4 justify-between items-center z-10 relative">
+
+              {/* Search Box */}
+              <div className="relative w-full sm:w-96">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari media..."
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-11 pr-10 font-medium text-gray-700 focus:outline-none focus:bg-white focus:border-[#1e3a8a] focus:ring-4 focus:ring-blue-500/10 transition-all"
+                />
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-600 transition-colors"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              {/* Sort Dropdown */}
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider hidden sm:block">Urutkan:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full sm:w-auto bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 font-bold text-[#1e3a8a] focus:outline-none focus:border-[#1e3a8a] cursor-pointer"
+                >
+                  <option value="date-desc">Terbaru</option>
+                  <option value="date-asc">Terlama</option>
+                  <option value="title-asc">A - Z</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Media Grid */}
+            {filteredMedia.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <AnimatePresence>
+                  {filteredMedia.map((item, idx) => (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    >
+                      {/* Media Card Premium Design */}
+                      <Link href={item.url} className="group block h-full">
+                        <div className="bg-white rounded-[2rem] p-3 border-2 border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(30,58,138,0.1)] hover:border-[#1e3a8a]/30 transition-all duration-500 h-full flex flex-col">
+
+                          {/* Image Container */}
+                          <div className="relative w-full aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden bg-gray-100">
+                            <ImageWithFallback
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                            />
+
+                            {/* Overlay Gradient for readability */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 opacity-70 group-hover:opacity-90 transition-opacity duration-300" />
+
+                            {/* Top Badges (Category & Type) */}
+                            <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                              <span className="bg-[#dc2626] text-white px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase shadow-md">
+                                {item.category}
+                              </span>
+                              <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white p-2 rounded-xl shadow-md">
+                                {item.type === "Video" ? <PlayCircle size={20} /> : <FileText size={20} />}
+                              </span>
+                            </div>
+
+                            {/* Share Button (Shows on Hover - Replacing the old rotated text) */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 z-10">
+                              <div className="bg-white/90 backdrop-blur-md text-[#1e3a8a] w-14 h-14 rounded-full flex items-center justify-center shadow-2xl">
+                                {item.type === "Video" ? <PlayCircle size={28} strokeWidth={2.5} /> : <ArrowRight size={28} strokeWidth={2.5} />}
+                              </div>
+                            </div>
+
+                            {/* Date Badge */}
+                            <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white/90 text-xs font-bold tracking-wider">
+                              <Calendar size={14} />
+                              {item.date}
+                            </div>
+                          </div>
+
+                          {/* Content Section */}
+                          <div className="p-4 flex-1 flex flex-col justify-between">
+                            <h4 className="text-[#0a1930] font-black text-lg leading-snug line-clamp-2 group-hover:text-[#1e3a8a] transition-colors mb-4">
+                              {item.title}
+                            </h4>
+
+                            {/* Interactive Footer */}
+                            <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                              <span className="text-sm font-bold text-gray-400 group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
+                                Buka {item.type} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                              </span>
+
+                              <button
+                                onClick={(e) => { e.preventDefault(); /* Handle Share */ }}
+                                className="text-gray-300 hover:text-[#1e3a8a] transition-colors p-2"
+                                title="Bagikan"
+                              >
+                                <Share2 size={18} />
+                              </button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            ) : (
+              /* Empty State */
+              <div className="w-full bg-white rounded-3xl border border-gray-100 py-32 flex flex-col items-center justify-center shadow-sm">
+                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                  <Search size={40} className="text-gray-300" />
+                </div>
+                <h3 className="text-2xl font-black text-[#0a1930] mb-2">Media Tidak Ditemukan</h3>
+                <p className="text-gray-500 font-medium">Coba gunakan kata kunci atau filter yang berbeda.</p>
+                <button
+                  onClick={() => { setSearchQuery(""); setActiveFormat(null); setActiveCategory(""); }}
+                  className="mt-6 bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#0a1930] transition-colors"
+                >
+                  Reset Filter
+                </button>
+              </div>
+            )}
+
+          </main>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

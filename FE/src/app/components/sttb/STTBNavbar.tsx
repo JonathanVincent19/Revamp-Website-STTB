@@ -71,11 +71,10 @@ const navItems: NavItem[] = [
   {
     label: "Media",
     href: "/media",
-    subItems: [
-      { label: "Video Khotbah", href: "/media#sermons" },
-      { label: "Artikel", href: "/media#articles" },
-      { label: "Perpustakaan Digital", href: "/library" },
-    ],
+  },
+  {
+    label: "Perpustakaan Digital",
+    href: "/library",
   },
   {
     label: "E-Journal",
@@ -88,6 +87,10 @@ const navItems: NavItem[] = [
   {
     label: "Alumni",
     href: "/alumni",
+  },
+  {
+    label: "LEAD Center",
+    href: "/lead",
   },
   {
     label: "Kontak",

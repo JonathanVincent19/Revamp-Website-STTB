@@ -1,8 +1,22 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { Target, History, Users, Award, BookOpen, Shield, Star, Flame, Cross, Wand2, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import {
+  Target,
+  History,
+  Users,
+  BookOpen,
+  Shield,
+  Star,
+  Flame,
+  Wand2,
+  Loader2,
+  AlertCircle,
+  ArrowRight,
+  PlayCircle,
+  Play
+} from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
 import { DosenCarousel, DosenCard } from "../components/sttb/DosenCarousel";
@@ -11,6 +25,10 @@ import { useLecturers } from "@/lib/hooks";
 export function AboutPage() {
   const { data: lecturers, loading: lecturersLoading, error: lecturersError } = useLecturers();
   const historyRef = useRef<HTMLDivElement>(null);
+
+  // State untuk mengontrol pemutaran video Campus Tour
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: historyRef,
     offset: ["start center", "end center"],
@@ -47,9 +65,6 @@ export function AboutPage() {
 
       {/* Vision & Mission */}
       <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="vision">
-
-        <div className="container relative mx-auto px-4 lg:px-8">
-        </div>
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -100,11 +115,84 @@ export function AboutPage() {
         </div>
       </section>
 
+      {/* --- CAMPUS TOUR SECTION --- */}
+      <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="campus-tour">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-flex items-center justify-center gap-2 bg-red-50 text-[#dc2626] px-5 py-2.5 rounded-full text-xs font-black tracking-widest uppercase mb-5 shadow-sm border border-red-100">
+              <PlayCircle size={16} className="fill-current" />
+              CAMPUS TOUR
+            </span>
+            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-6 tracking-tight">
+              Jelajahi Kampus STTB
+            </h2>
+            <p className="text-lg text-gray-800 font-medium leading-relaxed">
+              Lihat lebih dekat fasilitas, ruangan kelas, dan suasana lingkungan belajar yang mendukung pembentukan spiritualitas dan keunggulan akademik.
+            </p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-5xl mx-auto"
+          >
+            {/* Wrapper Video Premium - Kesan "Dark Frame" di sekeliling video */}
+            <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_rgba(10,25,48,0.15)] bg-[#0a1930] p-3 md:p-5 border border-gray-200">
+              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-black ring-1 ring-white/10 shadow-inner group">
+
+                {!isVideoPlaying ? (
+                  <div
+                    className="w-full h-full relative cursor-pointer"
+                    onClick={() => setIsVideoPlaying(true)}
+                  >
+                    {/* Thumbnail Video dari YouTube */}
+                    <ImageWithFallback
+                      src="https://img.youtube.com/vi/hTh0QkKxNhg/maxresdefault.jpg"
+                      alt="Campus Tour STTB 2022"
+                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                    {/* Tombol Play Raksasa yang Interaktif */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-24 md:h-24 bg-[#dc2626]/90 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-[0_0_40px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-all duration-300 border border-red-400/50">
+                        <PlayCircle size={48} strokeWidth={2} />
+                      </div>
+                    </div>
+
+                    {/* Text Keterangan di Bawah Thumbnail */}
+                    <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full pointer-events-none">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="bg-[#1e3a8a] text-white px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                          Video Tur
+                        </span>
+                        <span className="text-white/80 text-sm font-bold">Durasi: 8 Menit</span>
+                      </div>
+                      <h3 className="text-2xl md:text-4xl font-black text-white drop-shadow-lg tracking-tight group-hover:text-blue-200 transition-colors">
+                        Campus Tour STTB 2022
+                      </h3>
+                    </div>
+                  </div>
+                ) : (
+                  <iframe
+                    src="https://www.youtube.com/embed/hTh0QkKxNhg?autoplay=1&rel=0"
+                    title="Campus Tour STTB 2022"
+                    className="absolute inset-0 w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                )}
+
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Core Values */}
       <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="core-values">
-        <div className="container relative mx-auto px-4 lg:px-8">
-          {/* Konten Core Values */}
-        </div>
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
@@ -179,10 +267,8 @@ export function AboutPage() {
 
       {/* --- HISTORY TIMELINE SECTION --- */}
       <section className="relative overflow-hidden py-24 bg-white" id="history">
-
-        {/* --- BACKGROUND SHAPES: EVOLVING SPIRAL & NETWORK --- */}
+        {/* BACKGROUND SHAPES */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {/* Swirling Spiral Patterns (Representing Organic Growth) */}
           <div className="absolute inset-0 opacity-[0.03] text-[#1e3a8a]">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -193,8 +279,6 @@ export function AboutPage() {
               <rect width="100%" height="100%" fill="url(#spiralpattern)" />
             </svg>
           </div>
-
-          {/* Faint Network (Titik dan Garis) */}
           <div className="absolute inset-0 opacity-[0.04] text-[#dc2626]">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -206,15 +290,11 @@ export function AboutPage() {
               <rect width="100%" height="100%" fill="url(#networkpattern)" />
             </svg>
           </div>
-
-          {/* Glow pudar di pojok */}
           <div className="absolute top-1/4 left-[-10%] w-[500px] h-[500px] bg-[#1e3a8a] opacity-[0.05] rounded-full blur-[100px]" />
           <div className="absolute bottom-1/4 right-[-10%] w-[400px] h-[400px] bg-[#dc2626] opacity-[0.03] rounded-full blur-[100px]" />
         </div>
-        {/* -------------------------------------------------------------------------------- */}
 
         <div className="container relative z-10 mx-auto px-4 lg:px-8 max-w-7xl">
-          {/* Section Header (Editorial Alignment - Rata Kiri) */}
           <div className="max-w-3xl mb-16 md:mb-20 text-center md:text-left mx-auto md:mx-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -232,18 +312,12 @@ export function AboutPage() {
             </motion.div>
           </div>
 
-          {/* Timeline Structure */}
           <div className="relative max-w-5xl mx-auto pl-10 md:pl-0" ref={historyRef}>
-
-            {/* Garis Vertikal Statis (Abu-abu) */}
             <div className="absolute left-[20px] md:left-1/2 top-4 bottom-12 w-[2px] bg-gray-200 -translate-x-1/2" />
-
-            {/* Garis Progress Animasi (Biru/Merah) */}
             <motion.div
               className="absolute left-[20px] md:left-1/2 top-4 bottom-12 w-[2px] bg-gradient-to-b from-[#1e3a8a] via-[#dc2626] to-[#1e3a8a] origin-top -translate-x-1/2 z-10"
               style={{ scaleY: lineHeight }}
             />
-
             <div className="space-y-16">
               {[
                 {
@@ -307,29 +381,21 @@ export function AboutPage() {
                     transition={{ duration: 0.6 }}
                     className="flex flex-col md:flex-row gap-6 md:gap-16 items-start relative group"
                   >
-
-                    {/* --- MARKER (Pentagon Panah Kustom) --- */}
                     <div className="absolute left-[20px] md:left-1/2 top-4 -translate-x-1/2 z-20">
                       <div className="w-10 h-10 bg-white border border-gray-100 shadow-md group-hover:border-[#1e3a8a] flex items-center justify-center relative transition-colors duration-300" style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}>
                         <milestone.icon size={16} className="text-[#1e3a8a]" />
                       </div>
                     </div>
-                    {/* -------------------------------------- */}
 
-                    {/* Date Column (Editorial Alignment) */}
                     <div className={`w-full md:w-[calc(50%-48px)] ${isEven ? 'md:text-right md:order-1' : 'md:text-left md:order-2'} pt-2.5`}>
                       <span className="text-3xl md:text-4xl font-black text-[#1e3a8a] leading-none block tracking-tighter ml-10">
                         {milestone.year}
                       </span>
                     </div>
 
-                    {/* Card Column (Borderless Style) */}
                     <div className={`w-full md:w-[calc(50%-48px)] ${isEven ? 'md:order-2 md:pl-6' : 'md:order-1 md:pr-6'}`}>
                       <div className="bg-white p-8 transition-all duration-300 relative overflow-hidden group border border-gray-100 hover:border-gray-200 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] rounded-2xl">
-
-                        {/* Garis Aksen Atas Animasi Hover */}
                         <div className="absolute top-0 left-0 w-full h-[3px] bg-gray-100 group-hover:bg-[#1e3a8a] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-
                         <h3 className="text-xl md:text-2xl font-bold text-[#1e3a8a] mb-5 leading-tight">
                           {milestone.title}
                         </h3>
@@ -342,7 +408,6 @@ export function AboutPage() {
                         </div>
                       </div>
                     </div>
-
                   </motion.div>
                 );
               })}
@@ -353,18 +418,12 @@ export function AboutPage() {
 
       {/* --- Arti Logo Section --- */}
       <section className="relative py-24 bg-white overflow-hidden" id="arti-logo">
-
-        {/* --- BACKGROUND DESAIN SHAPE (DIPERJELAS) --- */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-
-          {/* Soft Pulse Gradient Lingkaran di Kiri Atas (Biru STTB) - Diperjelas */}
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full"
             style={{
               background: 'radial-gradient(circle, rgba(30,58,138,0.2) 0%, rgba(30,58,138,0) 70%)',
               animation: 'pulseLogo 8s ease-in-out infinite'
             }} />
-
-          {/* Pola Garis Cross-Hatch Geometris Tipis di Kanan Bawah (Merah) - Opacity naik ke 8% */}
           <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] opacity-[0.08] text-red-600">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -376,8 +435,6 @@ export function AboutPage() {
               <rect width="100%" height="100%" fill="url(#crossHatch)" />
             </svg>
           </div>
-
-          {/* Aksentuasi Shape Linear Abstrak di Tengah - Opacity naik ke 6% */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.06]">
             <svg width="100%" height="100%" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,500 C200,400 300,600 500,500 C700,400 800,600 1000,500 L1000,1000 L0,1000 Z" fill="#1e3a8a" opacity="0.4" />
@@ -386,19 +443,15 @@ export function AboutPage() {
           </div>
         </div>
 
-        {/* --- Custom CSS untuk Animasi Pulse (Opacity batas atas dinaikkan) --- */}
         <style>{`
           @keyframes pulseLogo {
             0%, 100% { transform: scale(1) translate(-10px, -10px); opacity: 0.4; }
             50% { transform: scale(1.1) translate(10px, 10px); opacity: 0.8; }
           }
         `}</style>
-        {/* ---------------------------------------------------------------------------------- */}
 
-        {/* --- Konten Utama (relative z-10 agar di atas shape) --- */}
         <div className="container relative z-10 mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16 relative">
-            {/* Garis aksen kecil di atas judul */}
             <div className="w-12 h-1 bg-red-500 mx-auto mb-4 rounded-full"></div>
             <h2 className="text-sm font-black text-red-500 mb-2 tracking-[0.2em] uppercase">
               ARTI LOGO
@@ -409,7 +462,6 @@ export function AboutPage() {
           </div>
 
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
-            {/* 2x2 Grid for Elements */}
             <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 shadow-2xl shadow-blue-900/5 border border-gray-100 rounded-3xl overflow-hidden bg-white/80 backdrop-blur-sm">
               {[
                 {
@@ -451,7 +503,6 @@ export function AboutPage() {
               ))}
             </div>
 
-            {/* Right Side: Main Logo */}
             <div className="lg:col-span-4 flex flex-col items-center justify-center text-center px-6 py-10 rounded-3xl bg-gray-50/50 border border-gray-100 backdrop-blur-sm">
               <div className="w-full max-w-[260px] mb-10 group">
                 <ImageWithFallback
@@ -460,11 +511,10 @@ export function AboutPage() {
                   className="w-full h-auto object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
               </div>
-              <div className="w-16 h-1 bg-[#1e3a8a] mb-6 rounded-fullOpacity-60"></div>
+              <div className="w-16 h-1 bg-[#1e3a8a] mb-6 rounded-full opacity-60"></div>
               <h3 className="text-3xl font-black text-[#1e3a8a] mb-5 tracking-tight">LOGO STTB</h3>
               <p className="text-gray-600 text-sm leading-relaxed max-w-sm font-medium">
                 Logo STTB menggambarkan pola pendidikan teologi yang akan memperlengkapi para mahasiswa untuk menjadi hamba Allah yang baik, setia, dan penuh hikmat, serta siap dipakai dalam pelayanan di ladangNya.
-                {/* description */}
               </p>
             </div>
           </div>
@@ -527,7 +577,6 @@ export function AboutPage() {
       {/* Dewan Dosen */}
       <section className="py-20 bg-white" id="leadership">
         <div className="container mx-auto px-4 lg:px-8">
-          {/* Section Header */}
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
               <Users size={20} />
@@ -545,7 +594,6 @@ export function AboutPage() {
           </div>
 
           <div className="max-w-7xl mx-auto flex flex-col gap-8">
-            {/* Tier 1: Ketua — offset RIGHT */}
             <div className="relative">
               <div className="flex justify-end items-center gap-4 mb-6 md:pr-24">
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
@@ -578,7 +626,6 @@ export function AboutPage() {
               </div>
             </div>
 
-            {/* Tier 2: Wakil Ketua — offset LEFT */}
             <div className="relative">
               <div className="flex items-center gap-4 mb-6">
                 <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
@@ -636,7 +683,6 @@ export function AboutPage() {
               </div>
             </div>
 
-            {/* Tier 3: Kaprodi — offset RIGHT */}
             <div className="relative">
               <div className="flex justify-end items-center gap-4 mb-6">
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
@@ -698,7 +744,6 @@ export function AboutPage() {
               </div>
             </div>
 
-            {/* Tier 4: Jajaran Dosen — offset LEFT, carousel */}
             <div className="relative">
               <div className="flex items-center gap-4 mb-6">
                 <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
@@ -706,24 +751,18 @@ export function AboutPage() {
                 </span>
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
               </div>
-
-              {/* Loading */}
               {lecturersLoading && (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="animate-spin text-[#1e3a8a] mr-3" size={28} />
                   <span className="text-gray-500">Memuat data dosen...</span>
                 </div>
               )}
-
-              {/* Error */}
               {lecturersError && !lecturersLoading && (
                 <div className="flex items-center justify-center py-8 bg-red-50 rounded-xl">
                   <AlertCircle className="text-[#dc2626] mr-3" size={24} />
                   <span className="text-[#dc2626]">Gagal memuat data dosen.</span>
                 </div>
               )}
-
-              {/* Dosen Carousel from API */}
               {!lecturersLoading && !lecturersError && lecturers && lecturers.length > 0 && (
                 <DosenCarousel
                   dosenList={lecturers.map((d) => ({
@@ -735,8 +774,6 @@ export function AboutPage() {
                   }))}
                 />
               )}
-
-              {/* Empty */}
               {!lecturersLoading && !lecturersError && (!lecturers || lecturers.length === 0) && (
                 <div className="text-center py-8 bg-gray-50 rounded-xl">
                   <p className="text-gray-500">Data dosen belum tersedia.</p>
@@ -746,6 +783,7 @@ export function AboutPage() {
           </div>
         </div>
       </section>
+
       {/* MARS */}
       <section className="py-20" id="mars">
         <div className="container mx-auto px-4 lg:px-8">
@@ -763,7 +801,6 @@ export function AboutPage() {
           </div>
         </div>
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-8 mt-12 pb-16">
-          {/* Foto Lirik */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -771,15 +808,12 @@ export function AboutPage() {
             transition={{ duration: 0.5 }}
             className="w-full rounded-2xl overflow-hidden shadow-xl bg-white p-4 border border-gray-100"
           >
-            {/* The image placeholder for lyrics */}
             <ImageWithFallback
               src="/images/09-MARS-STTB.jpg"
               alt="Lirik Mars STTB"
               className="w-full h-auto rounded-xl"
             />
           </motion.div>
-
-          {/* Audio Player */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -807,9 +841,7 @@ export function AboutPage() {
               Prinsip-prinsip teologis dan doktrin fundamental Sekolah Tinggi Teologi Bandung yang kami pegang teguh.
             </p>
           </div>
-
           <div className="max-w-6xl mx-auto flex flex-col gap-6">
-            {/* Row 1: Full width - Allah Tritunggal */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -825,8 +857,6 @@ export function AboutPage() {
                 </p>
               </div>
             </motion.div>
-
-            {/* Row 2: 2 columns - Alkitab & Yesus Kristus */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -861,8 +891,6 @@ export function AboutPage() {
                 </div>
               </motion.div>
             </div>
-
-            {/* Row 3: 3 columns - Roh Kudus, Manusia, Keselamatan */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -913,8 +941,6 @@ export function AboutPage() {
                 </div>
               </motion.div>
             </div>
-
-            {/* Row 4: 2 columns - Gereja & Baptisan */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -949,8 +975,6 @@ export function AboutPage() {
                 </div>
               </motion.div>
             </div>
-
-            {/* Row 5: Full width - Kedatangan Kristus */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -973,7 +997,6 @@ export function AboutPage() {
       {/* Yayasan */}
       <section className="py-20 bg-white" id="yayasan">
         <div className="container mx-auto px-4 lg:px-8">
-          {/* Header */}
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
               <Shield size={20} />
@@ -986,9 +1009,7 @@ export function AboutPage() {
               Struktur organisasi yayasan yang menaungi Sekolah Tinggi Teologi Bandung
             </p>
           </div>
-
           <div className="max-w-6xl mx-auto flex flex-col gap-14">
-            {/* Tier 1: Dewan Pembina — offset RIGHT */}
             <div className="relative">
               <div className="flex justify-end items-center gap-4 mb-6">
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
@@ -1026,8 +1047,6 @@ export function AboutPage() {
                 </div>
               </div>
             </div>
-
-            {/* Tier 2: Dewan Pengurus — offset LEFT */}
             <div className="relative">
               <div className="flex items-center gap-4 mb-6">
                 <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
@@ -1067,8 +1086,6 @@ export function AboutPage() {
                 </div>
               </div>
             </div>
-
-            {/* Tier 3: Anggota — offset RIGHT */}
             <div className="relative">
               <div className="flex justify-end items-center gap-4 mb-6">
                 <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
