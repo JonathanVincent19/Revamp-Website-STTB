@@ -84,5 +84,63 @@ namespace RevampWebSTTB.WebApi.Controllers
 
             return Ok(response);
         }
+
+        // =============================================
+        // TUITION NOTES ENDPOINTS
+        // =============================================
+
+        [HttpGet("notes")]
+        public async Task<IActionResult> GetTuitionNotes()
+        {
+            var query = new GetTuitionNotesQuery();
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
+
+        [HttpPost("notes")]
+        public async Task<IActionResult> CreateTuitionNote([FromBody] CreateTuitionNoteCommand command)
+        {
+            var response = await _mediator.Send(command);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPut("notes/{id}")]
+        public async Task<IActionResult> UpdateTuitionNote(int id, [FromBody] UpdateTuitionNoteCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest(new { Success = false, Message = "Route ID and payload ID mismatch." });
+            }
+
+            var response = await _mediator.Send(command);
+
+            if (!response.Success)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("notes/{id}")]
+        public async Task<IActionResult> DeleteTuitionNote(int id)
+        {
+            var command = new DeleteTuitionNoteCommand { Id = id };
+            var response = await _mediator.Send(command);
+
+            if (!response.Success)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
     }
 }
+

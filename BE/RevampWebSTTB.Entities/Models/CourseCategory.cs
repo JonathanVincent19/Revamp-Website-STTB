@@ -12,6 +12,7 @@ namespace RevampWebSTTB.Entities.Models
         public string Name { get; set; } = string.Empty;
 
         public int TotalSKS { get; set; }
+        public int? StudyProgramId { get; set; }
 
         public ICollection<Course> Courses { get; set; } = new List<Course>();
     }

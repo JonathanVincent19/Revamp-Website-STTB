@@ -17,8 +17,9 @@ import {
     ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Program } from "../data/programs";
+import { usePrograms, useCourseCategories, useCourses } from "@/lib/hooks";
 
 interface ProgramDetailPageProps {
     program: Program;
@@ -27,8 +28,55 @@ interface ProgramDetailPageProps {
 export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const total = program.curriculum.length;
-    const activeData = program.curriculum[activeIndex] ?? program.curriculum[0];
+    const { data: allPrograms } = usePrograms();
+    const { data: allCategories, loading: catLoading } = useCourseCategories();
+    const { data: allCourses } = useCourses();
+
+    const dbProgram = useMemo(() => {
+        if (!allPrograms) return null;
+        // Match by label or name
+        // Match by level AND (label or name)
+        return allPrograms.find(p =>
+            p.level === program.level && (
+                p.name.toLowerCase().includes(program.label.toLowerCase()) ||
+                program.fullName.toLowerCase().includes(p.name.toLowerCase())
+            )
+        );
+    }, [allPrograms, program]);
+
+    const dynamicCurriculum = useMemo(() => {
+        if (!dbProgram || !allCategories || !allCourses) return null;
+
+        // Filter categories for this program (or global ones)
+        const relevantCats = allCategories.filter(c =>
+            !c.studyProgramId || c.studyProgramId === dbProgram.id
+        );
+
+        if (relevantCats.length === 0) return null;
+
+        return relevantCats.map(cat => {
+            const courses = allCourses
+                .filter(course => course.categoryId === cat.id)
+                .map(course => ({ name: course.name, sks: course.credits }));
+
+            // Calculate sum dynamically
+            const calculatedSks = courses.reduce((sum, c) => sum + c.sks, 0);
+
+            return {
+                category: cat.name,
+                sks: calculatedSks > 0 ? calculatedSks : cat.totalSKS, // Use actual sum if there are courses
+                courses: courses
+            };
+        });
+    }, [dbProgram, allCategories, allCourses]);
+
+    // UI DataSource: Use dynamic if available, otherwise static
+    const displayCurriculum = dynamicCurriculum && dynamicCurriculum.length > 0
+        ? dynamicCurriculum
+        : program.curriculum;
+
+    const total = displayCurriculum.length;
+    const activeData = displayCurriculum[activeIndex] ?? displayCurriculum[0];
 
     return (
         <div className="pt-20 bg-gray-50">
@@ -115,26 +163,26 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                         {
                             icon: <BookOpen className="text-[#1e3a8a]" size={32} strokeWidth={2.5} />,
                             title: "Jumlah SKS",
-                            value: `${program.totalSKS} SKS`,
+                            value: dbProgram?.totalCredits ? `${dbProgram.totalCredits} SKS` : `${program.totalSKS} SKS`,
                             desc: "Total SKS kelulusan",
                         },
                         {
                             icon: <Clock className="text-[#1e3a8a]" size={32} strokeWidth={2.5} />,
                             title: "Masa Studi",
-                            value: program.level === "S1" ? "4 Tahun" : "2 Tahun",
-                            desc: program.masaStudi,
+                            value: dbProgram?.studyDuration || (program.level === "S1" ? "8 Semester (4 Tahun)" : "4 Semester (2 Tahun)"),
+                            desc: "Estimasi lama masa studi",
                         },
                         {
                             icon: <CalendarDays className="text-[#1e3a8a]" size={32} strokeWidth={2.5} />,
                             title: "Sistem Perkuliahan",
-                            value: "Blok Teaching",
-                            desc: program.level === "S1" ? "Tatap Muka Intensif" : "Intensif Akhir Pekan",
+                            value: dbProgram?.learningSystem || "Blok Teaching",
+                            desc: "Metode & model belajar",
                         },
                         {
                             icon: <FileBadge className="text-[#1e3a8a]" size={32} strokeWidth={2.5} />,
                             title: "Gelar",
-                            value: program.degree,
-                            desc: program.fullName,
+                            value: dbProgram?.degree || program.degree,
+                            desc: dbProgram && dbProgram.name ? `${dbProgram.level === 'S1' ? 'Sarjana' : 'Magister'} ${dbProgram.name}` : program.fullName,
                         },
                     ].map((item, i) => (
                         <motion.div
@@ -151,7 +199,7 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
                             <h3 className="text-gray-400 font-extrabold text-xs tracking-[0.2em] mb-2 uppercase">
                                 {item.title}
                             </h3>
-                            <p className="text-3xl font-black text-[#0a1930] mb-2 tracking-tight drop-shadow-sm">{item.value}</p>
+                            <p className="text-2xl font-black text-[#0a1930] mb-2 tracking-tight drop-shadow-sm">{item.value}</p>
                             <p className="text-gray-600 text-sm font-bold leading-snug">{item.desc}</p>
                         </motion.div>
                     ))}
@@ -348,11 +396,11 @@ export function ProgramDetailPage({ program }: ProgramDetailPageProps) {
 
                         {/* Category tabs */}
                         <div className="flex flex-wrap gap-2 bg-gray-100/80 p-2 rounded-[2rem] overflow-hidden border border-gray-200 mb-12 shadow-inner">
-                            {program.curriculum.map((cat, idx) => (
+                            {displayCurriculum.map((cat, idx) => (
                                 <button
-                                    key={cat.category}
+                                    key={cat.category + idx}
                                     onClick={() => setActiveIndex(idx)}
-                                    style={{ flexBasis: `calc(${100 / program.curriculum.length}% - 0.5rem)` }}
+                                    style={{ flexBasis: `calc(${100 / displayCurriculum.length}% - 0.5rem)` }}
                                     className={`flex-1 min-w-[140px] flex flex-col items-center justify-center py-6 px-4 gap-2 rounded-2xl transition-all duration-300 ${activeIndex === idx
                                         ? "bg-[#1e3a8a] text-white shadow-xl scale-100"
                                         : "bg-white text-gray-500 hover:bg-white hover:text-[#dc2626] hover:shadow-md scale-[0.98]"

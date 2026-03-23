@@ -339,6 +339,102 @@ namespace RevampWebSTTB.Entities.Data
         };
             context.Testimonials.AddRange(testimonials);
 
+            // ==========================================
+            // 10. SEED TUITION FEES
+            // ==========================================
+            if (!context.TuitionFees.Any())
+            {
+                var tuitionFees = new[]
+                {
+                    // S1 Data
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Administrasi", ItemName = "Pendaftaran & Tes masuk", Amount = 500000, SortOrder = 1 },
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Administrasi", ItemName = "Administrasi Per Semester", Amount = 500000, SortOrder = 2 },
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Pendidikan (Biaya Kuliah) Per Semester", Amount = 9000000, SortOrder = 3 },
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan Tugas Akhir", Amount = 1500000, SortOrder = 4 },
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Lain-lain", ItemName = "Wisuda", Amount = 2000000, SortOrder = 5 },
+                    new TuitionFee { Program = "Program Sarjana Teologi (S.Th.)", Category = "Lain-lain", ItemName = "Cuti Akademik (bila mengambil cuti) Per Semester", Amount = 500000, SortOrder = 6 },
+
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Administrasi", ItemName = "Pendaftaran & Tes masuk", Amount = 500000, SortOrder = 1 },
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Administrasi", ItemName = "Administrasi Per Semester", Amount = 500000, SortOrder = 2 },
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Pendidikan (Biaya Kuliah) Per Semester", Amount = 9000000, SortOrder = 3 },
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan Tugas Akhir", Amount = 1500000, SortOrder = 4 },
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Lain-lain", ItemName = "Wisuda", Amount = 2000000, SortOrder = 5 },
+                    new TuitionFee { Program = "Program Sarjana Pendidikan (S.Pd.)", Category = "Lain-lain", ItemName = "Cuti Akademik (bila mengambil cuti) Per Semester", Amount = 500000, SortOrder = 6 },
+
+                    // S2 Data
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Administrasi", ItemName = "Pendaftaran & Tes Masuk", Amount = 500000, SortOrder = 1 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Administrasi", ItemName = "Administrasi Per Semester", Amount = 500000, SortOrder = 2 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Pendidikan (Kuliah) Per Mata Kuliah", Amount = 1500000, SortOrder = 3 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan & Ujian Proposal Tesis", Amount = 2000000, SortOrder = 4 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan & Sidang Tesis", Amount = 5000000, SortOrder = 5 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Lain-lain", ItemName = "Wisuda", Amount = 2500000, SortOrder = 6 },
+                    new TuitionFee { Program = "Program Magister Teologi (M.Th.)", Category = "Lain-lain", ItemName = "Cuti Akademik (bila mengambil cuti) Per Semester", Amount = 500000, SortOrder = 7 },
+
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Administrasi", ItemName = "Pendaftaran & Tes Masuk", Amount = 500000, SortOrder = 1 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Administrasi", ItemName = "Administrasi Per Semester", Amount = 500000, SortOrder = 2 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Pendidikan (Kuliah) Per Mata Kuliah", Amount = 1500000, SortOrder = 3 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan & Ujian Proposal Tesis", Amount = 2000000, SortOrder = 4 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Bimbingan & Sidang Tesis", Amount = 5000000, SortOrder = 5 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Lain-lain", ItemName = "Wisuda", Amount = 2500000, SortOrder = 6 },
+                    new TuitionFee { Program = "Program Magister Pendidikan (M.Pd.)", Category = "Lain-lain", ItemName = "Cuti Akademik (bila mengambil cuti) Per Semester", Amount = 500000, SortOrder = 7 },
+
+                    // Matrikulasi Data
+                    new TuitionFee { Program = "Program Matrikulasi M.Th.", Category = "Biaya Program Matrikulasi", ItemName = "Pendidikan (Biaya Kuliah) Per Semester", Amount = 7800000, SortOrder = 1 },
+
+                    // S3 Data (M.Min.)
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Administrasi", ItemName = "Pendaftaran & Tes Masuk", Amount = 500000, SortOrder = 1 },
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Administrasi", ItemName = "Administrasi Per Semester", Amount = 500000, SortOrder = 2 },
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Pendidikan (Kuliah) Per Mata Kuliah", Amount = 1500000, SortOrder = 3 },
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Kuliah/Bimbingan Khusus", ItemName = "Tugas Akhir (Proyek)", Amount = 2500000, SortOrder = 4 },
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Lain-lain", ItemName = "Wisuda", Amount = 2500000, SortOrder = 5 },
+                    new TuitionFee { Program = "Program Magister Ministri (M.Min.)", Category = "Lain-lain", ItemName = "Cuti Akademik (bila mengambil cuti) Per Semester", Amount = 500000, SortOrder = 6 }
+                };
+
+                context.TuitionFees.AddRange(tuitionFees);
+            }
+
+            // ==========================================
+            // 11. SEED TUITION NOTES
+            // ==========================================
+            if (!context.TuitionNotes.Any())
+            {
+                var tuitionNotes = new[]
+                {
+                    // S.Th. notes
+                    new TuitionNote { Program = "Program Sarjana Teologi (S.Th.)", NoteText = "Pembayaran biaya pendidikan selama 1 semester (poin no. 3 sebesar Rp.9.000.000,-) dapat dilakukan sekaligus per 1 semester atau dengan mencicil selama 6 bulan (Januari-Juni atau Juli-Desember) sebesar Rp.1.500.000,-/bulan", SortOrder = 1 },
+                    new TuitionNote { Program = "Program Sarjana Teologi (S.Th.)", NoteText = "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)", SortOrder = 2 },
+                    new TuitionNote { Program = "Program Sarjana Teologi (S.Th.)", NoteText = "STTB memberikan subsidi untuk biaya akomodasi & konsumsi", SortOrder = 3 },
+                    new TuitionNote { Program = "Program Sarjana Teologi (S.Th.)", NoteText = "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)", SortOrder = 4 },
+
+                    // S.Pd. notes (same as S.Th.)
+                    new TuitionNote { Program = "Program Sarjana Pendidikan (S.Pd.)", NoteText = "Pembayaran biaya pendidikan selama 1 semester (poin no. 3 sebesar Rp.9.000.000,-) dapat dilakukan sekaligus per 1 semester atau dengan mencicil selama 6 bulan (Januari-Juni atau Juli-Desember) sebesar Rp.1.500.000,-/bulan", SortOrder = 1 },
+                    new TuitionNote { Program = "Program Sarjana Pendidikan (S.Pd.)", NoteText = "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)", SortOrder = 2 },
+                    new TuitionNote { Program = "Program Sarjana Pendidikan (S.Pd.)", NoteText = "STTB memberikan subsidi untuk biaya akomodasi & konsumsi", SortOrder = 3 },
+                    new TuitionNote { Program = "Program Sarjana Pendidikan (S.Pd.)", NoteText = "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)", SortOrder = 4 },
+
+                    // M.Th. notes
+                    new TuitionNote { Program = "Program Magister Teologi (M.Th.)", NoteText = "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai", SortOrder = 1 },
+                    new TuitionNote { Program = "Program Magister Teologi (M.Th.)", NoteText = "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)", SortOrder = 2 },
+                    new TuitionNote { Program = "Program Magister Teologi (M.Th.)", NoteText = "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)", SortOrder = 3 },
+                    new TuitionNote { Program = "Program Magister Teologi (M.Th.)", NoteText = "Bagi mahasiswa baru Prodi M.Th. yang tidak memiliki gelar S.Th, maka ybs wajib mengikuti program matrikulasi terlebih dahulu selama 4 semester (2 tahun) dengan biaya studi matrikulasi terlampir", SortOrder = 4 },
+
+                    // Matrikulasi M.Th. notes
+                    new TuitionNote { Program = "Program Matrikulasi M.Th.", NoteText = "Pembayaran biaya pendidikan program matrikulasi selama 1 semester (poin no. 1 sebesar Rp.7.800.000,-) dapat dilakukan sekaligus per 1 semester atau dengan mencicil selama 6 bulan (Januari-Juni atau Juli-Desember) sebesar Rp.1.300.000,-/bulan", SortOrder = 1 },
+
+                    // M.Pd. notes
+                    new TuitionNote { Program = "Program Magister Pendidikan (M.Pd.)", NoteText = "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai", SortOrder = 1 },
+                    new TuitionNote { Program = "Program Magister Pendidikan (M.Pd.)", NoteText = "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)", SortOrder = 2 },
+                    new TuitionNote { Program = "Program Magister Pendidikan (M.Pd.)", NoteText = "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)", SortOrder = 3 },
+
+                    // M.Min. notes
+                    new TuitionNote { Program = "Program Magister Ministri (M.Min.)", NoteText = "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai", SortOrder = 1 },
+                    new TuitionNote { Program = "Program Magister Ministri (M.Min.)", NoteText = "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)", SortOrder = 2 },
+                    new TuitionNote { Program = "Program Magister Ministri (M.Min.)", NoteText = "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)", SortOrder = 3 }
+                };
+
+                context.TuitionNotes.AddRange(tuitionNotes);
+            }
+
             context.SaveChanges();
         }
     }

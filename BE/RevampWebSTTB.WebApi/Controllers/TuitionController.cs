@@ -37,5 +37,14 @@ namespace RevampWebSTTB.WebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("notes")]
+        public async Task<IActionResult> GetTuitionNotes()
+        {
+            var query = new GetTuitionNotesQuery();
+            var response = await _mediator.Send(query);
+            return Ok(response);
+        }
     }
 }
+

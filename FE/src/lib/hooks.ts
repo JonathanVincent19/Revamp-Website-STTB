@@ -62,6 +62,33 @@ import {
   type FacilityDetail,
   type CreateFacilityPayload,
   type UpdateFacilityPayload,
+  tuitionApi,
+  adminTuitionApi,
+  type TuitionFeeItem,
+  type CreateTuitionFeePayload,
+  type UpdateTuitionFeePayload,
+  type TuitionNoteItem,
+  type CreateTuitionNotePayload,
+  type UpdateTuitionNotePayload,
+  programsApi,
+  adminProgramsApi,
+  type StudyProgramItem,
+  type CreateStudyProgramPayload,
+  type UpdateStudyProgramPayload,
+  coursesApi,
+  adminCoursesApi,
+  courseCategoriesApi,
+  adminCourseCategoriesApi,
+  type CourseItem,
+  type CourseCategoryItem,
+  type CreateCoursePayload,
+  type UpdateCoursePayload,
+  type CreateCourseCategoryPayload,
+  type UpdateCourseCategoryPayload,
+  type CourseListResponse,
+  type CourseCategoryListResponse,
+  type CourseDetailResponse,
+  type CourseCategoryDetailResponse
 } from "./api";
 
 // =============================================================================
@@ -379,4 +406,113 @@ export function useUpdateFacility() {
 
 export function useDeleteFacility() {
   return useMutation<number>((id) => adminFacilitiesApi.delete(id));
+}
+
+// =============================================================================
+// TUITION FEES HOOKS
+// =============================================================================
+
+export function useTuitionFees() {
+  return useFetch<TuitionFeeItem[]>(() => tuitionApi.getList(), []);
+}
+
+export function useCreateTuitionFee() {
+  return useMutation<CreateTuitionFeePayload>((payload) => adminTuitionApi.create(payload));
+}
+
+export function useUpdateTuitionFee() {
+  return useMutation<UpdateTuitionFeePayload>((payload) => adminTuitionApi.update(payload.id, payload));
+}
+
+export function useDeleteTuitionFee() {
+  return useMutation<number>((id) => adminTuitionApi.delete(id));
+}
+
+// =============================================================================
+// TUITION NOTES HOOKS
+// =============================================================================
+
+export function useTuitionNotes() {
+  return useFetch<TuitionNoteItem[]>(() => tuitionApi.getNotes(), []);
+}
+
+export function useCreateTuitionNote() {
+  return useMutation<CreateTuitionNotePayload>((payload) => adminTuitionApi.createNote(payload));
+}
+
+export function useUpdateTuitionNote() {
+  return useMutation<UpdateTuitionNotePayload>((payload) => adminTuitionApi.updateNote(payload.id, payload));
+}
+
+export function useDeleteTuitionNote() {
+  return useMutation<number>((id) => adminTuitionApi.deleteNote(id));
+}
+
+// =============================================================================
+// STUDY PROGRAMS HOOKS
+// =============================================================================
+
+export function usePrograms() {
+  return useFetch<StudyProgramItem[]>(() => programsApi.getList(), []);
+}
+
+export function useAdminPrograms() {
+  return useFetch<StudyProgramItem[]>(() => adminProgramsApi.getList(), []);
+}
+
+export function useCreateProgram() {
+  return useMutation<CreateStudyProgramPayload>((payload) => adminProgramsApi.create(payload));
+}
+
+export function useUpdateProgram() {
+  return useMutation<UpdateStudyProgramPayload>((payload) => adminProgramsApi.update(payload.id, payload));
+}
+
+export function useDeleteProgram() {
+  const deleteProgram = useMutation((id: number) => adminProgramsApi.delete(id));
+  return deleteProgram;
+}
+
+// --- Courses Hooks ---
+
+export function useCourses() {
+  return useFetch(() => coursesApi.getList());
+}
+
+export function useAdminCourses() {
+  return useFetch(() => adminCoursesApi.getList());
+}
+
+export function useCreateCourse() {
+  return useMutation((payload: CreateCoursePayload) => adminCoursesApi.create(payload));
+}
+
+export function useUpdateCourse() {
+  return useMutation((payload: UpdateCoursePayload) => adminCoursesApi.update(payload.id, payload));
+}
+
+export function useDeleteCourse() {
+  return useMutation((id: number) => adminCoursesApi.delete(id));
+}
+
+// --- Course Categories Hooks ---
+
+export function useCourseCategories() {
+  return useFetch(() => courseCategoriesApi.getList());
+}
+
+export function useAdminCourseCategories() {
+  return useFetch(() => adminCourseCategoriesApi.getList());
+}
+
+export function useCreateCourseCategory() {
+  return useMutation((payload: CreateCourseCategoryPayload) => adminCourseCategoriesApi.create(payload));
+}
+
+export function useUpdateCourseCategory() {
+  return useMutation((payload: UpdateCourseCategoryPayload) => adminCourseCategoriesApi.update(payload.id, payload));
+}
+
+export function useDeleteCourseCategory() {
+  return useMutation((id: number) => adminCourseCategoriesApi.delete(id));
 }

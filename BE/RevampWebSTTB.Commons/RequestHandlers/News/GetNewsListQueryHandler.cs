@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using RevampWebSTTB.Entities.Data;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.News;
@@ -47,7 +47,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                     Category = n.Category != null ? n.Category.Name : string.Empty,
                     FeaturedImage = n.FeaturedImage ?? string.Empty,
                     Author = n.Author ?? string.Empty,
-                    PublishedAt = n.PublishedAt ?? DateTime.MinValue
+                    PublishedAt = n.PublishedAt ?? DateTime.MinValue,
+                    Content = n.Content ?? string.Empty
                 })
                 .ToListAsync(cancellationToken);
 

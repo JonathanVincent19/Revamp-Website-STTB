@@ -20,7 +20,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.CourseCategories
             var category = new CourseCategory
             {
                 Name = request.Name,
-                TotalSKS = request.TotalSKS
+                TotalSKS = request.TotalSKS,
+                StudyProgramId = request.StudyProgramId
             };
 
             _context.CourseCategories.Add(category);
@@ -34,7 +35,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.CourseCategories
                 {
                     Id = category.Id,
                     Name = category.Name,
-                    TotalSKS = category.TotalSKS
+                    TotalSKS = category.TotalSKS,
+                    StudyProgramId = category.StudyProgramId
                 }
             };
         }

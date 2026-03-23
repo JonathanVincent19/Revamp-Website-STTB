@@ -450,14 +450,14 @@ export function NewsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className={`group ${index === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
+                  className={`group ${index === 0 ? "md:col-span-2" : ""}`}
                 >
                   <Link href={`/news/${news.slug}`} className="block h-full">
                     <div
-                      className="bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(30,58,138,0.1)] transition-all duration-500 border border-gray-100 hover:border-[#1e3a8a]/30 h-full flex flex-col group-hover:-translate-y-2"
+                      className={`bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(30,58,138,0.1)] transition-all duration-500 border border-gray-100 hover:border-[#1e3a8a]/30 h-full flex ${index === 0 ? "flex-col lg:flex-row" : "flex-col"} group-hover:-translate-y-2`}
                     >
                       {/* Image */}
-                      <div className={`relative overflow-hidden ${index === 0 ? "h-72 md:h-96" : "h-56"}`}>
+                      <div className={`relative overflow-hidden shrink-0 ${index === 0 ? "h-64 lg:h-full lg:w-[45%]" : "h-56"}`}>
                         <ImageWithFallback
                           src={news.featuredImage || "https://images.unsplash.com/photo-1738949538943-e54722a44ffc"}
                           alt={news.title}
@@ -485,9 +485,9 @@ export function NewsPage() {
                       </div>
 
                       {/* Content */}
-                      <div className="p-6 md:p-8 flex-1 flex flex-col bg-white relative">
+                      <div className={`p-6 md:p-8 flex-1 flex flex-col bg-white relative ${index === 0 ? "lg:justify-center" : ""}`}>
                         {/* Garis Aksen Hover */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1e3a8a] to-[#dc2626] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                        <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1e3a8a] to-[#dc2626] transform ${index === 0 ? "lg:w-1 lg:h-full lg:origin-top lg:scale-y-0 group-hover:lg:scale-y-100 origin-left scale-x-0 group-hover:scale-x-100" : "origin-left scale-x-0 group-hover:scale-x-100"} transition-transform duration-500`} />
 
                         <div className="flex items-center gap-2 mb-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
                           <Clock size={14} className="text-[#dc2626]" />
@@ -503,9 +503,9 @@ export function NewsPage() {
                           {news.title}
                         </h3>
 
-                        <p className={`text-gray-500 leading-relaxed font-medium mb-6 flex-1 ${index === 0 ? "line-clamp-3 text-base" : "line-clamp-2 text-sm"
+                        <p className={`text-gray-500 leading-relaxed font-medium mb-6 flex-1 ${index === 0 ? "line-clamp-6 text-base" : "line-clamp-3 text-sm"
                           }`}>
-                          {(news.content || "").replace(/<[^>]*>/g, "").substring(0, 200)}...
+                          {(news.content || "").replace(/<[^>]*>/g, "").substring(0, index === 0 ? 500 : 150)}...
                         </p>
 
                         <div className="flex items-center gap-2 text-[#dc2626] font-black text-sm group-hover:text-[#1e3a8a] transition-colors mt-auto">

@@ -5,5 +5,6 @@ namespace RevampWebSTTB.Contracts.Requests.CourseCategories
 {
     public record GetCourseCategoriesQuery : IRequest<GetCourseCategoriesResponse>
     {
+        public int? StudyProgramId { get; init; }
     }
 }

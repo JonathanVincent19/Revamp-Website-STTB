@@ -346,6 +346,147 @@ export interface ApiResponse {
   message?: string;
 }
 
+// --- Tuition Fees ---
+export interface TuitionFeeItem {
+  id: number;
+  program: string;
+  category: string;
+  itemName: string;
+  amount: number;
+  sortOrder: number;
+}
+
+export interface TuitionFeesListResponse {
+  success: boolean;
+  data: TuitionFeeItem[];
+}
+
+export interface CreateTuitionFeePayload {
+  program: string;
+  category: string;
+  itemName: string;
+  amount: number;
+  sortOrder: number;
+}
+
+export interface UpdateTuitionFeePayload extends CreateTuitionFeePayload {
+  id: number;
+}
+
+// --- Tuition Notes ---
+export interface TuitionNoteItem {
+  id: number;
+  program: string;
+  noteText: string;
+  sortOrder: number;
+}
+
+export interface TuitionNotesListResponse {
+  success: boolean;
+  data: TuitionNoteItem[];
+}
+
+export interface CreateTuitionNotePayload {
+  program: string;
+  noteText: string;
+  sortOrder: number;
+}
+
+export interface UpdateTuitionNotePayload extends CreateTuitionNotePayload {
+  id: number;
+}
+
+// --- Study Programs ---
+export interface StudyProgramItem {
+  id: number;
+  name: string;
+  level: string;
+  degree: string;
+  totalCredits: number;
+  studyDuration: string;
+  learningSystem: string;
+}
+
+export interface StudyProgramsListResponse {
+  success: boolean;
+  data: StudyProgramItem[];
+}
+
+export interface StudyProgramDetailResponse {
+  success: boolean;
+  data: StudyProgramItem;
+}
+
+export interface CreateStudyProgramPayload {
+  name: string;
+  level: string;
+  degree: string;
+  totalCredits: number;
+  studyDuration: string;
+  learningSystem: string;
+}
+
+export interface UpdateStudyProgramPayload extends CreateStudyProgramPayload {
+  id: number;
+}
+
+// --- Courses & Categories ---
+
+export interface CourseCategoryItem {
+  id: number;
+  name: string;
+  totalSKS: number;
+  studyProgramId?: number;
+}
+
+export interface CourseItem {
+  id: number;
+  name: string;
+  credits: number;
+  categoryId: number;
+  category?: CourseCategoryItem;
+}
+
+export interface CreateCourseCategoryPayload {
+  name: string;
+  totalSKS: number;
+  studyProgramId?: number | null;
+}
+
+export interface UpdateCourseCategoryPayload extends CreateCourseCategoryPayload {
+  id: number;
+}
+
+export interface CreateCoursePayload {
+  name: string;
+  credits: number;
+  categoryId: number;
+}
+
+export interface UpdateCoursePayload extends CreateCoursePayload {
+  id: number;
+}
+
+export interface CourseListResponse {
+  success: boolean;
+  data: CourseItem[];
+}
+
+export interface CourseCategoryListResponse {
+  success: boolean;
+  data: CourseCategoryItem[];
+}
+
+export interface CourseDetailResponse {
+  success: boolean;
+  data: CourseItem;
+}
+
+export interface CourseCategoryDetailResponse {
+  success: boolean;
+  data: CourseCategoryItem;
+}
+
 // =============================================================================
 // Helper Utilities
 // =============================================================================
@@ -991,6 +1132,268 @@ export const adminFacilitiesApi = {
   /** DELETE /api/v1/admin/facilities/{id} */
   async delete(id: number): Promise<ApiResponse> {
     const res = await fetch(`${API_BASE_URL}/admin/facilities/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// TUITION FEES API (Public)
+// =============================================================================
+
+export const tuitionApi = {
+  /** GET /api/v1/tuition */
+  async getList(): Promise<TuitionFeesListResponse> {
+    const res = await fetch(`${API_BASE_URL}/tuition`);
+    return handleResponse<TuitionFeesListResponse>(res);
+  },
+
+  /** GET /api/v1/tuition/notes */
+  async getNotes(): Promise<TuitionNotesListResponse> {
+    const res = await fetch(`${API_BASE_URL}/tuition/notes`);
+    return handleResponse<TuitionNotesListResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN TUITION FEES API (requires auth)
+// =============================================================================
+
+export const adminTuitionApi = {
+  /** POST /api/v1/admin/tuition */
+  async create(payload: CreateTuitionFeePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/tuition/{id} */
+  async update(id: number, payload: UpdateTuitionFeePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/tuition/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  // --- Notes CRUD ---
+
+  /** POST /api/v1/admin/tuition/notes */
+  async createNote(payload: CreateTuitionNotePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition/notes`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/tuition/notes/{id} */
+  async updateNote(id: number, payload: UpdateTuitionNotePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition/notes/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/tuition/notes/{id} */
+  async deleteNote(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/tuition/notes/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// STUDY PROGRAMS API (Public)
+// =============================================================================
+
+export const programsApi = {
+  /** GET /api/v1/programs */
+  async getList(): Promise<StudyProgramsListResponse> {
+    const res = await fetch(`${API_BASE_URL}/programs`);
+    return handleResponse<StudyProgramsListResponse>(res);
+  },
+
+  /** GET /api/v1/programs/{id} */
+  async getDetail(id: number): Promise<StudyProgramDetailResponse> {
+    const res = await fetch(`${API_BASE_URL}/programs/${id}`);
+    return handleResponse<StudyProgramDetailResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN STUDY PROGRAMS API (requires auth)
+// =============================================================================
+
+export const adminProgramsApi = {
+  /** GET /api/v1/admin/programs */
+  async getList(): Promise<StudyProgramsListResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/programs`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<StudyProgramsListResponse>(res);
+  },
+
+  /** POST /api/v1/admin/programs */
+  async create(payload: CreateStudyProgramPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/programs`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/programs/{id} */
+  async update(id: number, payload: UpdateStudyProgramPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/programs/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/programs/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/programs/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// COURSE CATEGORIES API
+// =============================================================================
+
+export const courseCategoriesApi = {
+  /** GET /api/v1/course-categories */
+  async getList(): Promise<CourseCategoryListResponse> {
+    const res = await fetch(`${API_BASE_URL}/course-categories`);
+    return handleResponse<CourseCategoryListResponse>(res);
+  },
+
+  /** GET /api/v1/course-categories/{id} */
+  async getDetail(id: number): Promise<CourseCategoryDetailResponse> {
+    const res = await fetch(`${API_BASE_URL}/course-categories/${id}`);
+    return handleResponse<CourseCategoryDetailResponse>(res);
+  },
+};
+
+export const adminCourseCategoriesApi = {
+  /** GET /api/v1/admin/course-categories */
+  async getList(): Promise<CourseCategoryListResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/course-categories`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<CourseCategoryListResponse>(res);
+  },
+
+  /** POST /api/v1/admin/course-categories */
+  async create(payload: CreateCourseCategoryPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/course-categories`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/course-categories/{id} */
+  async update(id: number, payload: UpdateCourseCategoryPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/course-categories/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/course-categories/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/course-categories/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+};
+
+// =============================================================================
+// COURSES API
+// =============================================================================
+
+export const coursesApi = {
+  /** GET /api/v1/courses */
+  async getList(): Promise<CourseListResponse> {
+    const res = await fetch(`${API_BASE_URL}/courses`);
+    return handleResponse<CourseListResponse>(res);
+  },
+
+  /** GET /api/v1/courses/{id} */
+  async getDetail(id: number): Promise<CourseDetailResponse> {
+    const res = await fetch(`${API_BASE_URL}/courses/${id}`);
+    return handleResponse<CourseDetailResponse>(res);
+  },
+};
+
+export const adminCoursesApi = {
+  /** GET /api/v1/admin/courses */
+  async getList(): Promise<CourseListResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/courses`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<CourseListResponse>(res);
+  },
+
+  /** POST /api/v1/admin/courses */
+  async create(payload: CreateCoursePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/courses`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/courses/{id} */
+  async update(id: number, payload: UpdateCoursePayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/courses/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/courses/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/courses/${id}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

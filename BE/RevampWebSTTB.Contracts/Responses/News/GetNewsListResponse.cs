@@ -1,4 +1,4 @@
-﻿namespace RevampWebSTTB.Contracts.Responses.News
+namespace RevampWebSTTB.Contracts.Responses.News
 {
     public record GetNewsListResponse
     {
@@ -16,6 +16,7 @@
         public string FeaturedImage { get; init; } = string.Empty;
         public string Author { get; init; } = string.Empty;
         public DateTime PublishedAt { get; init; }
+        public string Content { get; init; } = string.Empty;
     }
 
     public record PaginationDto

@@ -25,6 +25,7 @@ namespace RevampWebSTTB.Entities.Data
         public DbSet<StudyProgram> StudyPrograms { get; set; } = null!;
         public DbSet<Scholarship> Scholarships { get; set; } = null!;
         public DbSet<TuitionFee> TuitionFees { get; set; } = null!;
+        public DbSet<TuitionNote> TuitionNotes { get; set; } = null!;
         public DbSet<FAQ> FAQs { get; set; } = null!;
         public DbSet<CourseCategory> CourseCategories { get; set; } = null!;
         public DbSet<Course> Courses { get; set; } = null!;

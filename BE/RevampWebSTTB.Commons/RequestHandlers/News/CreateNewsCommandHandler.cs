@@ -35,7 +35,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                 Status = request.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                PublishedAt = request.Status == "published" ? DateTime.UtcNow : null
+                PublishedAt = request.PublishedAt ?? (request.Status == "published" ? DateTime.UtcNow : null)
             };
 
             _context.News.Add(news);

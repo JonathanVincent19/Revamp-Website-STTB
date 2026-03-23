@@ -49,8 +49,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
 
                 if (request.Status == "published" && !wasPublished)
                 {
-                    news.PublishedAt = DateTime.UtcNow;
+                    news.PublishedAt = request.PublishedAt ?? DateTime.UtcNow;
                 }
+            }
+
+            if (request.PublishedAt.HasValue)
+            {
+                news.PublishedAt = request.PublishedAt;
             }
 
             news.UpdatedAt = DateTime.UtcNow;

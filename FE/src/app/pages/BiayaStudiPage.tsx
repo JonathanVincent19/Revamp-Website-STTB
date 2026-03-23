@@ -1,84 +1,15 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { motion } from "motion/react";
 import { DollarSign, FileText, Calendar, CheckCircle2, Info, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
+import { useTuitionFees, useTuitionNotes, usePrograms } from "@/lib/hooks";
+
 // ==========================================
-// 1. DATA (TIDAK ADA YANG DIUBAH)
+// 1. DATA CONSTANTS
 // ==========================================
-
-const s1Data = [
-  { type: 'header', title: 'Administrasi' },
-  { no: '1', jenis: 'Pendaftaran & Tes masuk', nominal: 'Rp. 500.000,-' },
-  { no: '2', jenis: 'Administrasi Per Semester', nominal: 'Rp. 500.000,-' },
-  { type: 'header', title: 'Kuliah/Bimbingan Khusus' },
-  { no: '3', jenis: 'Pendidikan (Biaya Kuliah) Per Semester', nominal: 'Rp. 9.000.000,-' },
-  { no: '4', jenis: 'Bimbingan Tugas Akhir', nominal: 'Rp. 1.500.000,-' },
-  { type: 'header', title: 'Lain-lain' },
-  { no: '5', jenis: 'Wisuda', nominal: 'Rp. 2.000.000,-' },
-  { no: '6', jenis: 'Cuti Akademik (bila mengambil cuti) Per Semester', nominal: 'Rp. 500.000,-' }
-];
-
-const s1Notes = [
-  "Pembayaran biaya pendidikan selama 1 semester (poin no. 3 sebesar Rp.9.000.000,-) dapat dilakukan sekaligus per 1 semester atau dengan mencicil selama 6 bulan (Januari-Juni atau Juli-Desember) sebesar Rp.1.500.000,-/bulan",
-  "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)",
-  "STTB memberikan subsidi untuk biaya akomodasi & konsumsi",
-  "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)"
-];
-
-const s2Data = [
-  { type: 'header', title: 'Administrasi' },
-  { no: '1', jenis: 'Pendaftaran & Tes Masuk', nominal: 'Rp. 500.000,-' },
-  { no: '2', jenis: 'Administrasi Per Semester', nominal: 'Rp. 500.000,-' },
-  { type: 'header', title: 'Kuliah/Bimbingan Khusus' },
-  { no: '3', jenis: 'Pendidikan (Kuliah) Per Mata Kuliah', nominal: 'Rp. 1.500.000,-' },
-  { no: '4', jenis: 'Bimbingan & Ujian Proposal Tesis', nominal: 'Rp. 2.000.000,-' },
-  { no: '5', jenis: 'Bimbingan & Sidang Tesis', nominal: 'Rp. 5.000.000,-' },
-  { type: 'header', title: 'Lain-lain' },
-  { no: '6', jenis: 'Wisuda', nominal: 'Rp. 2.500.000,-' },
-  { no: '7', jenis: 'Cuti Akademik (bila mengambil cuti) Per Semester', nominal: 'Rp. 500.000,-' }
-];
-
-const s3Data = [
-  { type: 'header', title: 'Administrasi' },
-  { no: '1', jenis: 'Pendaftaran & Tes Masuk', nominal: 'Rp. 500.000,-' },
-  { no: '2', jenis: 'Administrasi Per Semester', nominal: 'Rp. 500.000,-' },
-  { type: 'header', title: 'Kuliah/Bimbingan Khusus' },
-  { no: '3', jenis: 'Pendidikan (Kuliah) Per Mata Kuliah', nominal: 'Rp. 1.500.000,-' },
-  { no: '4', jenis: 'Tugas Akhir (Proyek)', nominal: 'Rp. 2.500.000,-' },
-  { type: 'header', title: 'Lain-lain' },
-  { no: '5', jenis: 'Wisuda', nominal: 'Rp. 2.500.000,-' },
-  { no: '6', jenis: 'Cuti Akademik (bila mengambil cuti) Per Semester', nominal: 'Rp. 500.000,-' }
-];
-
-const s2MatrikulasiData = [
-  { type: 'header', title: 'Biaya Program Matrikulasi' },
-  { no: '1', jenis: 'Pendidikan (Biaya Kuliah) Per Semester', nominal: 'Rp. 7.800.000,-' }
-];
-
-const mthNotes = [
-  "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai",
-  "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)",
-  "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)",
-  "Bagi mahasiswa baru Prodi M.Th. yang tidak memiliki gelar S.Th, maka ybs wajib mengikuti program matrikulasi terlebih dahulu selama 4 semester (2 tahun) dengan biaya studi matrikulasi terlampir"
-];
-
-const s2MatrikulasiNotes = [
-  "Pembayaran biaya pendidikan program matrikulasi selama 1 semester (poin no. 1 sebesar Rp.7.800.000,-) dapat dilakukan sekaligus per 1 semester atau dengan mencicil selama 6 bulan (Januari-Juni atau Juli-Desember) sebesar Rp.1.300.000,-/bulan"
-];
-
-const mpdNotes = [
-  "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai",
-  "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)",
-  "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)"
-];
-
-const mminNotes = [
-  "Biaya pendidikan/kuliah dibayarkan selambat-lambatnya 2 (dua) minggu sebelum perkuliahan dimulai",
-  "Biaya administrasi semester dibayarkan di awal semester (bulan Januari & Juli) selama mahasiswa berstatus mahasiswa aktif (hingga wisuda)",
-  "Biaya sewaktu-waktu dapat berubah (dengan pemberitahuan sebelumnya)"
-];
 
 const paymentMethods = [
   {
@@ -142,7 +73,9 @@ const FeeTable = ({ title, data, notes }: { title: string, data: any[], notes: s
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => {
+            {data.length === 0 ? (
+              <tr className="border-b border-gray-100"><td colSpan={3} className="py-4 text-center text-gray-500 font-medium">Belum ada data</td></tr>
+            ) : data.map((row, index) => {
               if (row.type === 'header') {
                 return (
                   <tr key={index} className="bg-gray-100/50 text-[#1e3a8a] border-y border-gray-200">
@@ -190,6 +123,57 @@ const FeeTable = ({ title, data, notes }: { title: string, data: any[], notes: s
 // ==========================================
 
 export function BiayaStudiPage() {
+  const { data: tuitions, loading } = useTuitionFees();
+  const { data: notes, loading: notesLoading } = useTuitionNotes();
+  const { data: programList, loading: programsLoading } = usePrograms();
+
+  const formatIDR = (num: number) => {
+    return "Rp. " + new Intl.NumberFormat("id-ID").format(num) + ",-";
+  };
+
+  const dynamicPrograms = useMemo(() => {
+    if (!programList || programList.length === 0) return [];
+    return programList.map(p => {
+      if (p.name.includes("Matrikulasi")) return p.name;
+      const levelName = p.level === "S1" ? "Sarjana" : p.level === "S2" ? "Magister" : p.level;
+      return `Program ${levelName} ${p.name} (${p.degree})`;
+    });
+  }, [programList]);
+
+  const getProgramNotes = (program: string) => {
+    if (!notes) return [];
+    return notes
+      .filter((n) => n.program === program)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((n) => n.noteText);
+  };
+
+  const getProgramData = (program: string) => {
+    if (!tuitions) return [];
+    const filtered = tuitions.filter(t => t.program === program).sort((a,b) => a.sortOrder - b.sortOrder);
+    
+    const categoriesSet = new Set<string>();
+    filtered.forEach(t => categoriesSet.add(t.category));
+    
+    let formattedData: any[] = [];
+    let no = 1;
+
+    categoriesSet.forEach(cat => {
+      formattedData.push({ type: 'header', title: cat });
+      const items = filtered.filter(t => t.category === cat);
+      items.forEach(item => {
+        formattedData.push({
+          no: no.toString(),
+          jenis: item.itemName,
+          nominal: formatIDR(item.amount)
+        });
+        no++;
+      });
+    });
+    
+    return formattedData;
+  };
+
   return (
     <div className="pt-20">
 
@@ -283,14 +267,17 @@ export function BiayaStudiPage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-14 w-full relative z-20">
-            <FeeTable title="Program Sarjana Teologi (S.Th.)" data={s1Data} notes={s1Notes} />
-            <FeeTable title="Program Sarjana Pendidikan (S.Pd.)" data={s1Data} notes={s1Notes} />
-            <FeeTable title="Program Magister Teologi (M.Th.)" data={s2Data} notes={mthNotes} />
-            <FeeTable title="Program Matrikulasi M.Th." data={s2MatrikulasiData} notes={s2MatrikulasiNotes} />
-            <FeeTable title="Program Magister Pendidikan (M.Pd.)" data={s2Data} notes={mpdNotes} />
-            <FeeTable title="Program Magister Ministri (M.Min.)" data={s3Data} notes={mminNotes} />
-          </div>
+          {loading || notesLoading || programsLoading ? (
+            <div className="flex justify-center items-center py-20 relative z-20">
+              <div className="w-12 h-12 border-4 border-[#1e3a8a] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-14 w-full relative z-20">
+              {dynamicPrograms.map((p) => (
+                <FeeTable key={p} title={p} data={getProgramData(p)} notes={getProgramNotes(p)} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

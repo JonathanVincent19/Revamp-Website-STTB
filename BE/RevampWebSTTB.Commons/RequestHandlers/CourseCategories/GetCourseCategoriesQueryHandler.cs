@@ -17,13 +17,20 @@ namespace RevampWebSTTB.Commons.RequestHandlers.CourseCategories
 
         public async Task<GetCourseCategoriesResponse> Handle(GetCourseCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = await _context.CourseCategories
-                .AsNoTracking()
+            var query = _context.CourseCategories.AsNoTracking();
+
+            if (request.StudyProgramId.HasValue)
+            {
+                query = query.Where(c => c.StudyProgramId == request.StudyProgramId.Value);
+            }
+
+            var categories = await query
                 .Select(c => new CourseCategoryDto
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    TotalSKS = c.TotalSKS
+                    TotalSKS = c.TotalSKS,
+                    StudyProgramId = c.StudyProgramId
                 })
                 .ToListAsync(cancellationToken);
 

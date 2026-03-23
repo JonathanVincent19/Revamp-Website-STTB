@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RevampWebSTTB.Entities.Data;
 
@@ -11,9 +12,11 @@ using RevampWebSTTB.Entities.Data;
 namespace RevampWebSTTB.Entities.Migrations
 {
     [DbContext(typeof(STTBContext))]
-    partial class STTBContextModelSnapshot : ModelSnapshot
+    [Migration("20260322150811_AddTuitionNotesTable")]
+    partial class AddTuitionNotesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,9 +185,6 @@ namespace RevampWebSTTB.Entities.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("StudyProgramId")
-                        .HasColumnType("int");
 
                     b.Property<int>("TotalSKS")
                         .HasColumnType("int");

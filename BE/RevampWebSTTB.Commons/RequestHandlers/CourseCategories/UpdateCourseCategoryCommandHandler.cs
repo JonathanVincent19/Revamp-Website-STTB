@@ -30,6 +30,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.CourseCategories
 
             category.Name = request.Name;
             category.TotalSKS = request.TotalSKS;
+            category.StudyProgramId = request.StudyProgramId;
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -41,7 +42,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.CourseCategories
                 {
                     Id = category.Id,
                     Name = category.Name,
-                    TotalSKS = category.TotalSKS
+                    TotalSKS = category.TotalSKS,
+                    StudyProgramId = category.StudyProgramId
                 }
             };
         }

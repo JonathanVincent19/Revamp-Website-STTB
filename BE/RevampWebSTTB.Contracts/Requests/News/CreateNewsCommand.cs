@@ -12,5 +12,6 @@ namespace RevampWebSTTB.Contracts.Requests.News
         public string? FeaturedImage { get; init; }
         public string? Author { get; init; }
         public string Status { get; init; } = "draft";
+        public DateTime? PublishedAt { get; init; }
     }
 }

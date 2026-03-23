@@ -21,6 +21,7 @@ import { Card, CardContent } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Badge } from "@/app/components/ui/badge";
+import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import {
   Table,
   TableBody,
@@ -137,13 +138,25 @@ export default function BeritaPage() {
 
     const finalContent = `${content}\n${galleryHtml}`;
 
+    const inputDate = fd.get("publishedAt") as string;
+    let finalPublishedAt = new Date().toISOString();
+    
+    // Check if user changed the date, otherwise keep the original exact time
+    if (inputDate) {
+      if (editingNews && editingNews.publishedAt && new Date(editingNews.publishedAt).toLocaleDateString("en-CA") === inputDate) {
+        finalPublishedAt = editingNews.publishedAt;
+      } else {
+        finalPublishedAt = new Date(inputDate).toISOString();
+      }
+    }
+
     const payload = {
       title,
       slug,
       content: finalContent,
       status: "published", // Default to published when status management is disabled
       author: "Admin",
-      publishedAt: fd.get("publishedAt") ? new Date(fd.get("publishedAt") as string).toISOString() : new Date().toISOString(),
+      publishedAt: finalPublishedAt,
       featuredImage: featuredImageUrl || undefined,
     };
 
@@ -337,7 +350,7 @@ export default function BeritaPage() {
                   <Input
                     name="publishedAt"
                     type="date"
-                    defaultValue={editingNews?.publishedAt ? new Date(editingNews.publishedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                    defaultValue={editingNews?.publishedAt ? new Date(editingNews.publishedAt).toLocaleDateString("en-CA") : new Date().toLocaleDateString("en-CA")}
                   />
                 </div>
                 <div className="md:col-span-1">
@@ -361,8 +374,16 @@ export default function BeritaPage() {
                       </label>
                     </div>
                     {featuredImageUrl && (
-                      <div className="h-10 w-10 rounded border overflow-hidden shrink-0">
-                        <img src={featuredImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                      <div className="h-10 w-10 relative group rounded border overflow-hidden shrink-0">
+                        <ImageWithFallback src={featuredImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setFeaturedImageUrl("")}
+                          title="Hapus Foto Utama"
+                          className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white"
+                        >
+                          <X size={16} />
+                        </button>
                       </div>
                     )}
                   </div>
@@ -393,7 +414,7 @@ export default function BeritaPage() {
                     <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                       {galleryImageUrls.map((url, idx) => (
                         <div key={idx} className="relative aspect-video group rounded-lg overflow-hidden border">
-                          <img src={url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                          <ImageWithFallback src={url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
                           <button
                             type="button"
                             onClick={() => removeGalleryImage(idx)}

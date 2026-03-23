@@ -16,9 +16,8 @@ namespace RevampWebSTTB.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCourseCategories()
+        public async Task<IActionResult> GetCourseCategories([FromQuery] GetCourseCategoriesQuery query)
         {
-            var query = new GetCourseCategoriesQuery();
             var response = await _mediator.Send(query);
             return Ok(response);
         }
