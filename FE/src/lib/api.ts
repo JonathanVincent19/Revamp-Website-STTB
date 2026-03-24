@@ -110,7 +110,10 @@ export interface GalleryAlbum {
   id: number;
   title: string;
   description?: string;
+  category?: string;
+  type?: string;
   coverImage?: string;
+  url?: string;
   eventDate?: string;
   createdAt: string;
   media?: GalleryMedia[];

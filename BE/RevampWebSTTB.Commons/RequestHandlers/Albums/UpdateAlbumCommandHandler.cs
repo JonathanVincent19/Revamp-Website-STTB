@@ -33,6 +33,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
 
             albumEntity.Title = request.Title;
             albumEntity.Description = request.Description;
+            albumEntity.Category = request.Category;
+            albumEntity.Type = request.Type;
             albumEntity.CoverImage = request.CoverImage;
             albumEntity.EventDate = request.EventDate;
 

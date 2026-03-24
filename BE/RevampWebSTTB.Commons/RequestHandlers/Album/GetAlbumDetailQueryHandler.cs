@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using RevampWebSTTB.Entities.Data;
 using RevampWebSTTB.Contracts.Responses.Albums;
 using RevampWebSTTB.Contracts.Requests.Albums;
@@ -18,7 +18,6 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Album
         public async Task<GetAlbumDetailResponse> Handle(GetAlbumDetailQuery request, CancellationToken cancellationToken)
         {
             var album = await _context.GalleryAlbums
-                .Include(a => a.Media) // Assuming navigation property
                 .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
             if (album == null)
@@ -26,7 +25,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Album
                 return new GetAlbumDetailResponse
                 {
                     Success = false,
-                    Data = null // This overrides the default empty object
+                    Data = null 
                 };
             }
 
@@ -35,13 +34,14 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Album
                 Success = true,
                 Data = new AlbumDetailDto
                 {
-                    AlbumTitle = album.Title,
-                    Media = album.Media.Select(m => new MediaDto
-                    {
-                        Id = m.Id,
-                        FilePath = m.FilePath,
-                        Caption = m.Caption
-                    }).ToList()
+                    Id = album.Id,
+                    Title = album.Title,
+                    Description = album.Description,
+                    Category = album.Category,
+                    Type = album.Type,
+                    CoverImage = album.CoverImage,
+                    Url = album.Url,
+                    EventDate = album.EventDate
                 }
             };
         }

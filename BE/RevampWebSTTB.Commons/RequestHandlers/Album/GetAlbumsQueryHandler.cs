@@ -31,6 +31,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Album
                 {
                     Id = a.Id,
                     Title = a.Title,
+                    Category = a.Category,
+                    Type = a.Type,
                     CoverImage = a.CoverImage,
                     EventDate = a.EventDate
                 }).ToList()

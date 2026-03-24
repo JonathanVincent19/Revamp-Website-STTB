@@ -10,6 +10,8 @@ namespace RevampWebSTTB.Contracts.Responses.Albums
     {
         public int Id { get; init; }
         public string Title { get; init; } = string.Empty;
+        public string? Category { get; init; }
+        public string? Type { get; init; }
         public string? CoverImage { get; init; }
         public DateTime? EventDate { get; init; }
     }

@@ -13,7 +13,10 @@ namespace RevampWebSTTB.Entities.Models
         [MaxLength(150)]
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public string? Category { get; set; }
+        public string? Type { get; set; }
         public string? CoverImage { get; set; } 
+        public string? Url { get; set; }
         public DateTime? EventDate { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

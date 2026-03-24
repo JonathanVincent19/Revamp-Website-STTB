@@ -24,6 +24,8 @@ namespace RevampWebSTTB.Commons.RequestHandlers.Albums
             {
                 Title = request.Title,
                 Description = request.Description,
+                Category = request.Category,
+                Type = request.Type,
                 CoverImage = request.CoverImage,
                 EventDate = request.EventDate,
                 CreatedAt = DateTime.UtcNow

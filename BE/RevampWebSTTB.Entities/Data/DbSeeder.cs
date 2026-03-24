@@ -266,21 +266,37 @@ namespace RevampWebSTTB.Entities.Data
             // ==========================================
             var albums = new[]
             {
-            new GalleryAlbum
-            {
-                Title = "Wisuda 2023",
-                Description = "Suasana acara wisuda periode pertama 2023.",
-                CoverImage = "https://picsum.photos/seed/album1/800/400",
-                EventDate = DateTime.UtcNow.AddMonths(-3)
-            },
-            new GalleryAlbum
-            {
-                Title = "Seminar Teknologi",
-                Description = "Dokumentasi seminar nasional.",
-                CoverImage = "https://picsum.photos/seed/album2/800/400",
-                EventDate = DateTime.UtcNow.AddDays(-5)
-            }
-        };
+                new GalleryAlbum
+                {
+                    Title = "City TransForMission #1: \"Fokus Strategis Misi Urban\"",
+                    Category = "LEAD",
+                    Type = "Video",
+                    EventDate = DateTime.UtcNow.AddMonths(-6),
+                    CoverImage = "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
+                    Url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                    Description = "Seminar Misi Urban STTB membahas fokus strategis."
+                },
+                new GalleryAlbum
+                {
+                    Title = "Integrasi Iman dan Ilmu Menuju Pendekatan yang Lebih Holistik",
+                    Category = "Press Release",
+                    Type = "Artikel",
+                    EventDate = DateTime.UtcNow.AddMonths(-1),
+                    CoverImage = "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=1200&auto=format&fit=crop",
+                    Url = "",
+                    Description = "<p>Di era modern ini, perkembangan teknologi dan ilmu pengetahuan sering kali dianggap berjalan terpisah dari nilai-nilai spiritualitas. Namun, Sekolah Tinggi Teologi Bandung (STTB) mengambil langkah progresif dengan mengadakan seminar nasional yang mengangkat tema krusial ini.</p><br/><h3>Definisi Integrasi Iman & Ilmu</h3><p>Pendekatan holistik dalam pendidikan teologi bukan sekadar menggabungkan dua disiplin, melainkan melihat ilmu pengetahuan sebagai alat untuk lebih memahami kebesaran Sang Pencipta.</p><br/><blockquote>\"Pendidikan yang sejati tidak hanya mencerdaskan akal, tetapi juga mencerahkan roh dan meneguhkan iman di tengah tantangan zaman.\" – Rektor STTB</blockquote><br/><h3>Kesimpulan</h3><p>Melalui kegiatan ini, diharapkan mahasiswa dan dosen dapat terus bersinergi mengaplikasikan nilai-nilai kristiani dalam setiap inovasi dan karya akademis mereka, membawa dampak nyata bagi gereja dan masyarakat luas.</p>"
+                },
+                new GalleryAlbum
+                {
+                    Title = "Persembahan Pujian STTB untuk Pelayanan Sekolah Minggu",
+                    Category = "STT BANDUNG",
+                    Type = "Video",
+                    EventDate = DateTime.UtcNow.AddMonths(-3),
+                    CoverImage = "https://images.unsplash.com/photo-1609220136736-443140cffec6?q=80&w=800&auto=format&fit=crop",
+                    Url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                    Description = "Pelayanan puji-pujian yang diadakan khusus untuk melayani ibadah sekolah minggu oleh tim pujian STT Bandung."
+                }
+            };
             context.GalleryAlbums.AddRange(albums);
             context.SaveChanges(); // Save to get Album IDs
 

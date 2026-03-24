@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -11,71 +11,26 @@ import {
   Share2,
   Calendar,
   Filter,
-  ArrowRight
+  ArrowRight,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+import { galleryApi } from "../../lib/api";
 
 // ==========================================
-// 1. DUMMY DATA (Siap diganti dengan API GET)
+// 1. DUMMY DATA (Now acting as fallback format)
 // ==========================================
-
-const DUMMY_MEDIA = [
-  {
-    id: "1",
-    title: 'City TransForMission #2: "Fokus Strategis Misi Urban"',
-    category: "LEAD",
-    type: "Video",
-    date: "20 April 2023",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  },
-  {
-    id: "2",
-    title: 'City TransForMission #01: "Urbanisasi & Misi"',
-    category: "UMC",
-    type: "Video",
-    date: "3 Maret 2023",
-    image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  },
-  {
-    id: "3",
-    title: 'Persembahan Pujian STTB untuk Pelayanan Sekolah Minggu',
-    category: "STT BANDUNG",
-    type: "Video",
-    date: "3 Desember 2022",
-    image: "https://images.unsplash.com/photo-1609220136736-443140cffec6?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  },
-  {
-    id: "4",
-    title: 'Unboxing Bahan Pemuridan LifeGuide',
-    category: "DISCIPLESIGHT",
-    type: "Video",
-    date: "10 November 2022",
-    image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  },
-  {
-    id: "5",
-    title: 'Membuat Kompos dari Sampah Organik',
-    category: "STT BANDUNG",
-    type: "Artikel",
-    date: "6 September 2022",
-    image: "https://images.unsplash.com/photo-1558904541-efa843a96f0f?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  },
-  {
-    id: "6",
-    title: 'Webinar Teologi Kontemporer 2022',
-    category: "AKADEMIK",
-    type: "Video",
-    date: "15 Agustus 2022",
-    image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=800&auto=format&fit=crop",
-    url: "#"
-  }
-];
+interface MappedMedia {
+  id: string;
+  title: string;
+  category: string;
+  type: string;
+  date: string;
+  rawDate: number;
+  image: string;
+  url: string;
+}
 
 const SIDEBAR_LINKS = [
   {
@@ -104,16 +59,58 @@ export function MediaPage() {
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [sortBy, setSortBy] = useState("date-desc");
 
+  const [mediaList, setMediaList] = useState<MappedMedia[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch API Data
+  useEffect(() => {
+    const fetchMedia = async () => {
+      try {
+        const res = await galleryApi.getAlbums();
+        if (res.success && res.data) {
+          const formatted = res.data.map(album => {
+             // Fallback to createdAt if eventDate is null
+             const rawDate = album.eventDate ? new Date(album.eventDate) : new Date(album.createdAt ?? Date.now());
+             return {
+               id: album.id.toString(),
+               title: album.title,
+               category: album.category || "STT BANDUNG",
+               type: album.type || "Album",
+               date: rawDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+               rawDate: rawDate.getTime(),
+               image: album.coverImage || "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=800&auto=format&fit=crop",
+               url: `/media/${album.id}`
+             };
+          });
+          setMediaList(formatted);
+        }
+      } catch (error) {
+        console.error("Failed to fetch albums:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMedia();
+  }, []);
+
   // Simulasi Filter (Di dunia nyata, ini bisa dihandle oleh API Backend via query params)
-  const filteredMedia = DUMMY_MEDIA.filter((item) => {
+  let filteredMedia = mediaList.filter((item) => {
     const matchSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchFormat = activeFormat ? item.type === activeFormat : true;
     const matchCategory = activeCategory ? item.category === activeCategory : true;
     return matchSearch && matchFormat && matchCategory;
   });
 
-  // Extract unique categories for dropdown
-  const categories = Array.from(new Set(DUMMY_MEDIA.map(item => item.category)));
+  // Apply Sorting
+  filteredMedia.sort((a, b) => {
+    if (sortBy === "date-desc") return b.rawDate - a.rawDate;
+    if (sortBy === "date-asc") return a.rawDate - b.rawDate;
+    if (sortBy === "title-asc") return a.title.localeCompare(b.title);
+    return 0;
+  });
+
+  // Extract unique categories for dropdown dynamically from fetched UI data
+  const categories = Array.from(new Set(mediaList.map(item => item.category)));
 
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen pb-32">
@@ -277,7 +274,12 @@ export function MediaPage() {
             </div>
 
             {/* Media Grid */}
-            {filteredMedia.length > 0 ? (
+            {isLoading ? (
+              <div className="w-full bg-white rounded-3xl border border-gray-100 py-32 flex flex-col items-center justify-center shadow-sm">
+                <Loader2 size={40} className="animate-spin text-[#1e3a8a] mb-4" />
+                <p className="text-gray-500 font-medium">Memuat Galeri Media...</p>
+              </div>
+            ) : filteredMedia.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 <AnimatePresence>
                   {filteredMedia.map((item, idx) => (
@@ -337,7 +339,7 @@ export function MediaPage() {
                             {/* Interactive Footer */}
                             <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                               <span className="text-sm font-bold text-gray-400 group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
-                                Buka {item.type} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                {item.type === "Video" ? "Play Video" : item.type === "Artikel" || item.type.toLowerCase().includes("study") ? "Read More" : "See More"} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                               </span>
 
                               <button
