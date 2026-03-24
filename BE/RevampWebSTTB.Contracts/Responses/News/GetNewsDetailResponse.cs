@@ -15,6 +15,7 @@ namespace RevampWebSTTB.Contracts.Responses.News
         public string Author { get; init; } = string.Empty;
         public int ViewCount { get; init; }
         public DateTime PublishedAt { get; init; }
+        public DateTime CreatedAt { get; init; }
         public List<RelatedNewsDto> RelatedNews { get; init; } = new();
     }
 

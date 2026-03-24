@@ -36,7 +36,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
 
             var items = await query
                 .Include(n => n.Category)
-                .OrderByDescending(n => n.PublishedAt)
+                .OrderByDescending(n => n.CreatedAt)
                 .Skip((page - 1) * limit)
                 .Take(limit)
                 .Select(n => new NewsItemDto
@@ -48,6 +48,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                     FeaturedImage = n.FeaturedImage ?? string.Empty,
                     Author = n.Author ?? string.Empty,
                     PublishedAt = n.PublishedAt ?? DateTime.MinValue,
+                    CreatedAt = n.CreatedAt,
                     Content = n.Content ?? string.Empty
                 })
                 .ToListAsync(cancellationToken);

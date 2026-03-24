@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using RevampWebSTTB.Entities.Data;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.News;
@@ -29,7 +29,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
             // Logic for related news (e.g., same category, excluding current)
             var relatedNews = await _context.News
                 .Where(n => n.CategoryId == news.CategoryId && n.Id != news.Id)
-                .OrderByDescending(n => n.PublishedAt)
+                .OrderByDescending(n => n.CreatedAt)
                 .Take(3)
                 .Select(n => new RelatedNewsDto
                 {
@@ -51,6 +51,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.News
                     Author = news.Author ?? string.Empty,
                     ViewCount = news.ViewCount,
                     PublishedAt = news.PublishedAt ?? DateTime.MinValue,
+                    CreatedAt = news.CreatedAt,
                     RelatedNews = relatedNews
                 }
             };

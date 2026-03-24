@@ -16,6 +16,7 @@ namespace RevampWebSTTB.Contracts.Responses.News
         public string FeaturedImage { get; init; } = string.Empty;
         public string Author { get; init; } = string.Empty;
         public DateTime PublishedAt { get; init; }
+        public DateTime CreatedAt { get; init; }
         public string Content { get; init; } = string.Empty;
     }
 
