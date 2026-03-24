@@ -40,6 +40,9 @@ import {
   type UpdateMediaPayload,
   adminContactsApi,
   adminUsersApi,
+  adminTestimonialsApi,
+  type CreateTestimonialPayload,
+  type UpdateTestimonialPayload,
   adminLecturersApi,
   adminStaffApi,
   type User,
@@ -376,6 +379,22 @@ export function useUpdateFAQ() {
 
 export function useDeleteFAQ() {
   return useMutation<number>((id) => adminFaqApi.delete(id));
+}
+
+// =============================================================================
+// ADMIN TESTIMONIALS HOOKS
+// =============================================================================
+
+export function useCreateTestimonial() {
+  return useMutation<CreateTestimonialPayload>((payload) => adminTestimonialsApi.create(payload));
+}
+
+export function useUpdateTestimonial() {
+  return useMutation<UpdateTestimonialPayload>((payload) => adminTestimonialsApi.update(payload.id, payload));
+}
+
+export function useDeleteTestimonial() {
+  return useMutation<number>((id) => adminTestimonialsApi.delete(id));
 }
 
 // =============================================================================

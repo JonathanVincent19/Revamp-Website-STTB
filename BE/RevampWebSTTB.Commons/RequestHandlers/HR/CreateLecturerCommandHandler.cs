@@ -29,6 +29,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.HR
                 EducationLevel = request.EducationLevel,
                 Expertise = request.Expertise,
                 Email = request.Email,
+                SortOrder = request.SortOrder,
                 CreatedAt = DateTime.UtcNow
             };
 

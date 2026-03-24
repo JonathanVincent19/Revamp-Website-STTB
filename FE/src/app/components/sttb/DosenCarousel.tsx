@@ -33,7 +33,7 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
   const scroll = (direction: "left" | "right") => {
     const el = scrollContainerRef.current;
     if (el) {
-      const scrollAmount = 300;
+      const scrollAmount = 350;
       el.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -43,14 +43,14 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative group">
       {/* Left Arrow */}
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
+          className="absolute left-0 top-1/3 -translate-y-1/2 -translate-x-5 z-20 w-14 h-14 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white transition-all border border-gray-100 opacity-0 group-hover:opacity-100"
         >
-          <ChevronLeft size={20} className="text-[#1e3a8a]" />
+          <ChevronLeft size={28} strokeWidth={2.5} />
         </button>
       )}
 
@@ -58,9 +58,9 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200"
+          className="absolute right-0 top-1/3 -translate-y-1/2 translate-x-5 z-20 w-14 h-14 bg-white rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#1e3a8a] text-[#1e3a8a] hover:text-white transition-all border border-gray-100 opacity-0 group-hover:opacity-100"
         >
-          <ChevronRight size={20} className="text-[#1e3a8a]" />
+          <ChevronRight size={28} strokeWidth={2.5} />
         </button>
       )}
 
@@ -68,7 +68,7 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
       <div
         ref={scrollContainerRef}
         onScroll={checkScroll}
-        className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 px-1"
+        className="flex gap-8 overflow-x-auto scrollbar-hide pb-12 px-4 pt-4 snap-x snap-mandatory"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {dosenList.map((dosen, index) => (
@@ -78,7 +78,7 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: index * 0.05 }}
-            className="flex-shrink-0 w-52"
+            className="flex-shrink-0 w-[260px] md:w-[280px] snap-start"
           >
             <DosenCard dosen={dosen} />
           </motion.div>
@@ -88,33 +88,51 @@ export function DosenCarousel({ dosenList }: DosenCarouselProps) {
   );
 }
 
-export function DosenCard({ dosen }: { dosen: DosenData }) {
+export function DosenCard({ dosen, isFeatured = false }: { dosen: DosenData, isFeatured?: boolean }) {
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border-l-3 border-[#1e3a8a] h-full">
-      <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+    <div className="flex flex-col h-full group cursor-default">
+
+      {/* Bagian Foto (Aspect Ratio 3:4) dengan Efek Hover Canggih */}
+      <div className={`relative w-full aspect-[3/4] rounded-2xl mb-6 overflow-hidden bg-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.06)] group-hover:shadow-[0_20px_40px_rgba(30,58,138,0.15)] group-hover:-translate-y-2 transition-all duration-500 ease-out`}>
         <ImageWithFallback
           src={dosen.image}
           alt={dosen.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top filter contrast-[0.95] group-hover:scale-105 group-hover:contrast-100 transition-all duration-700 ease-out"
         />
+        {/* Glare Effect (Cahaya menyapu saat di-hover) */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 ease-in-out pointer-events-none" />
       </div>
-      <div className="p-3">
-        <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
+
+      {/* Bagian Teks Editorial */}
+      <div className="flex flex-col flex-1 px-1">
+
+        {/* Nama Dosen */}
+        <h4 className={`font-black text-[#1e3a8a] leading-tight mb-2 group-hover:text-[#dc2626] transition-colors ${isFeatured ? 'text-2xl' : 'text-xl'}`}>
           {dosen.name}
         </h4>
-        <p className="text-[11px] font-bold text-red-600 mt-1">
-          {dosen.position}
-        </p>
-        <p className="text-[11px] italic text-red-600">
-          ({dosen.teaching})
-        </p>
-        <div className="mt-2 space-y-0.5">
+
+        {/* Jabatan & Bidang */}
+        <div className="mb-4">
+          <p className={`font-black text-[#dc2626] uppercase tracking-[0.15em] mb-1 ${isFeatured ? 'text-sm' : 'text-xs'}`}>
+            {dosen.position}
+          </p>
+          <p className={`font-bold text-[#dc2626] ${isFeatured ? 'text-sm' : 'text-xs'}`}>
+            ({dosen.teaching})
+          </p>
+        </div>
+
+        {/* Garis Aksen Pendek */}
+        <div className="w-8 h-[2px] bg-gray-200 mb-4 group-hover:bg-[#1e3a8a] group-hover:w-12 transition-all duration-300" />
+
+        {/* Riwayat Pendidikan (Spasi lega) */}
+        <div className="space-y-2.5">
           {dosen.education.map((edu, i) => (
-            <p key={i} className="text-[10px] text-gray-500 leading-tight">
+            <p key={i} className={`text-gray-500 font-medium leading-snug hover:text-gray-800 transition-colors ${isFeatured ? 'text-[13px]' : 'text-xs'}`}>
               {edu}
             </p>
           ))}
         </div>
+
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-﻿namespace RevampWebSTTB.Contracts.Responses.Albums
+namespace RevampWebSTTB.Contracts.Responses.Albums
 {
     public record GetAlbumsResponse
     {

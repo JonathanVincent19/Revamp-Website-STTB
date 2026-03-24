@@ -1,4 +1,4 @@
-﻿namespace RevampWebSTTB.Contracts.Responses.HR
+namespace RevampWebSTTB.Contracts.Responses.HR
 {
     public record GetLecturersResponse
     {
@@ -11,9 +11,12 @@
         public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
         public string? Photo { get; init; }
+        public string? Nidn { get; init; }
         public string? Position { get; init; }
         public string? EducationLevel { get; init; }
         public string? Expertise { get; init; }
         public string? Email { get; init; }
+        public int SortOrder { get; init; }
+        public DateTime CreatedAt { get; init; }
     }
 }

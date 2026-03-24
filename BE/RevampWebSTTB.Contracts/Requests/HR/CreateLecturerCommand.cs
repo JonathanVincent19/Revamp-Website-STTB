@@ -12,5 +12,6 @@ namespace RevampWebSTTB.Contracts.Requests.HR
         public string? EducationLevel { get; init; }
         public string? Expertise { get; init; }
         public string? Email { get; init; }
+        public int SortOrder { get; init; } = 0;
     }
 }

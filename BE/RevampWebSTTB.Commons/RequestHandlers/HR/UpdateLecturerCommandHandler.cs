@@ -37,6 +37,7 @@ namespace RevampWebSTTB.Commons.RequestHandlers.HR
             lecturer.EducationLevel = request.EducationLevel;
             lecturer.Expertise = request.Expertise;
             lecturer.Email = request.Email;
+            lecturer.SortOrder = request.SortOrder;
 
             await _context.SaveChangesAsync(cancellationToken);
 

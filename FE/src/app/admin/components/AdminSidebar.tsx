@@ -24,6 +24,7 @@ import {
   UserCog,
   Settings,
   LogOut,
+  MessageSquareQuote,
 } from "lucide-react";
 
 import {
@@ -88,6 +89,8 @@ const navGroups: NavGroup[] = [
     label: "Kampus",
     items: [
       { label: "About", href: "/admin/about", icon: Info },
+      { label: "Dosen", href: "/admin/dosen", icon: GraduationCap },
+      { label: "Testimoni", href: "/admin/testimonials", icon: MessageSquareQuote },
       { label: "Fasilitas", href: "/admin/fasilitas", icon: Building2 },
       { label: "Pembinaan", href: "/admin/pembinaan", icon: Heart },
       { label: "Senat", href: "/admin/senat", icon: Users },

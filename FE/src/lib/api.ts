@@ -268,6 +268,32 @@ export interface TestimonialsListResponse {
   data: TestimonialItem[];
 }
 
+export interface CreateTestimonialPayload {
+  alumniName: string;
+  graduationYear?: number;
+  currentJob?: string;
+  photo?: string;
+  testimonialText: string;
+  isFeatured?: boolean;
+}
+
+export interface UpdateTestimonialPayload extends CreateTestimonialPayload {
+  id: number;
+}
+
+export interface CreateTestimonialPayload {
+  alumniName: string;
+  graduationYear?: number;
+  currentJob?: string;
+  photo?: string;
+  testimonialText: string;
+  isFeatured?: boolean;
+}
+
+export interface UpdateTestimonialPayload extends CreateTestimonialPayload {
+  id: number;
+}
+
 // --- FAQ ---
 export interface FAQItem {
   id: number;
@@ -809,6 +835,50 @@ export const testimonialsApi = {
   async getList(): Promise<TestimonialsListResponse> {
     const res = await fetch(`${API_BASE_URL}/testimonials`);
     return handleResponse<TestimonialsListResponse>(res);
+  },
+};
+
+// =============================================================================
+// ADMIN TESTIMONIALS API
+// =============================================================================
+
+export const adminTestimonialsApi = {
+  /** GET /api/v1/admin/testimonials */
+  async getList(): Promise<TestimonialsListResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/testimonials`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<TestimonialsListResponse>(res);
+  },
+
+  /** POST /api/v1/admin/testimonials */
+  async create(payload: CreateTestimonialPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/testimonials`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** PUT /api/v1/admin/testimonials/{id} */
+  async update(id: number, payload: UpdateTestimonialPayload): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/testimonials/${id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...payload, id }),
+    });
+    return handleResponse<ApiResponse>(res);
+  },
+
+  /** DELETE /api/v1/admin/testimonials/{id} */
+  async delete(id: number): Promise<ApiResponse> {
+    const res = await fetch(`${API_BASE_URL}/admin/testimonials/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<ApiResponse>(res);
   },
 };
 

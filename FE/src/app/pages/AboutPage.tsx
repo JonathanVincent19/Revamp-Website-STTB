@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import {
   Target,
   History,
@@ -15,7 +15,10 @@ import {
   AlertCircle,
   ArrowRight,
   PlayCircle,
-  Play
+  Play,
+  Sparkles,
+  Building2,
+  ChevronDown,
 } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { MarsAudioPlayer } from "../components/sttb/MarsAudioPlayer";
@@ -25,6 +28,9 @@ import { useLecturers } from "@/lib/hooks";
 export function AboutPage() {
   const { data: lecturers, loading: lecturersLoading, error: lecturersError } = useLecturers();
   const historyRef = useRef<HTMLDivElement>(null);
+
+  // State untuk Accordion Visi/Pilar
+  const [openPilar, setOpenPilar] = useState<number | null>(0);
 
   // State untuk mengontrol pemutaran video Campus Tour
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -63,54 +69,156 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Vision & Mission */}
-      <section className="relative py-20 bg-gray-50 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" id="vision">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
-                <Target size={20} />
-                <span className="font-bold">VISI & MISI</span>
-              </div>
-              <h2 className="text-4xl font-black text-[#1e3a8a] mb-6">
-                Visi Kami
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Menjadi institusi pendidikan teologi yang mempersiapkan yang transformatif dan memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban.
-              </p>
-              <h3 className="text-2xl font-bold text-[#1e3a8a] mb-4">Misi Kami</h3>
-              <ul className="space-y-3">
-                {[
-                  "Mempersiapkan pastor-scholar yang transformatif untuk melayanan dalam konteks urban.",
-                  "Memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban melalui penelitian dan pendidikan non-formal.",
-                  "Mengembangkan tim dosen, struktur organisasi dan keuangan, serta kemitraan untuk mendukung pencapaian visi STTB.",
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#dc2626] mt-2 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+      {/* --- VISI & MISI SECTION (COMPACT SPLIT LAYOUT) --- */}
+      <section className="relative py-24 bg-white overflow-hidden border-b border-gray-100" id="vision">
+        {/* Soft Grid Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02] text-[#1e3a8a]">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="visionGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#visionGrid)" />
+          </svg>
+        </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1543702404-38c2035462ad"
-                alt="STTB Vision"
-                className="rounded-2xl shadow-2xl"
-              />
-            </motion.div>
+        <div className="container mx-auto px-4 lg:px-8 relative z-10 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+            {/* LEFT COLUMN: VISI & 4 PILAR */}
+            <div>
+              <div className="mb-10">
+                <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6 font-black tracking-widest text-[10px] uppercase shadow-sm">
+                  <Target size={14} strokeWidth={2.5} />
+                  VISI STTB
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="bg-gray-50 rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm relative"
+                >
+                  <div className="absolute top-2 left-4 text-gray-200 font-serif text-7xl leading-none select-none pointer-events-none">"</div>
+                  <h2 className="relative z-10 text-xl md:text-2xl font-black text-[#0a1930] leading-snug md:leading-snug tracking-tight">
+                    Menjadi institusi pendidikan teologi yang mempersiapkan <span className="text-[#dc2626]">pastor-scholar</span> yang transformatif dan memberdayakan <span className="text-[#1e3a8a]">seluruh umat Allah</span> untuk menghadirkan Injil seutuhnya di tengah konteks <span className="text-[#dc2626]">masyarakat urban</span>.
+                  </h2>
+                </motion.div>
+              </div>
+
+              {/* 4 Pilar Accordions */}
+              <div className="space-y-4">
+                {[
+                  {
+                    title: "Pastor-Scholar",
+                    icon: BookOpen,
+                    color: "text-[#1e3a8a]",
+                    bgColor: "bg-blue-50",
+                    desc: "Memiliki jiwa gembala (kepemimpinan yg melayani di gereja, dunia pendidikan, maupun profesi lain) dan sekaligus pembelajar (semangat untuk terus belajar, daya nalar kritis seorang intelektual Kristen, dan kemampuan berkontribusi terhadap dunia ilmu pengetahuan dari perspektif Kristen)."
+                  },
+                  {
+                    title: "Berita Injil yang Utuh",
+                    icon: Sparkles,
+                    color: "text-[#dc2626]",
+                    bgColor: "bg-red-50",
+                    desc: "Kuasa Injil yg mampu mentransformasi seluruh aspek hidup manusia dan seluruh ciptaan yg sudah jatuh dalam dosa (total depravity), yg kesempurnaannya baru akan terjadi setelah kedatangan Kristus yang kedua, namun cicipan awalnya sudah bisa dirasakan hari ini."
+                  },
+                  {
+                    title: "Seluruh Umat Allah",
+                    icon: Users,
+                    color: "text-[#1e3a8a]",
+                    bgColor: "bg-blue-50",
+                    desc: "Keyakinan bahwa kuasa penebusan Kristus dinyatakan melalui hidup setiap pengikut Kristus, tidak hanya di mimbar, tetapi di tengah keluarga, gereja, dan masyarakat secara luas."
+                  },
+                  {
+                    title: "Masyarakat Urban",
+                    icon: Building2,
+                    color: "text-[#dc2626]",
+                    bgColor: "bg-red-50",
+                    desc: "Mahasiswa STTB dipersiapkan secara khusus dengan fokus untuk melayani masyarakat di dinamika perkotaan, tanpa menutup kemungkinan tuntunan lain yang Tuhan berikan kepada mereka di tempat lain."
+                  }
+                ].map((pillar, idx) => {
+                  const isOpen = openPilar === idx;
+                  return (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1 }}
+                      className={`bg-white border ${isOpen ? 'border-[#1e3a8a] shadow-md' : 'border-gray-100 hover:border-gray-200 hover:shadow-sm'} rounded-2xl overflow-hidden transition-all duration-300`}
+                    >
+                      <button
+                        onClick={() => setOpenPilar(isOpen ? null : idx)}
+                        className="w-full text-left px-5 py-3.5 flex items-center justify-between focus:outline-none group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${isOpen ? 'bg-[#1e3a8a] text-white' : `${pillar.bgColor} ${pillar.color} group-hover:scale-110`}`}>
+                            <pillar.icon size={20} strokeWidth={2.5} />
+                          </div>
+                          <h3 className={`font-black tracking-tight text-base transition-colors ${isOpen ? 'text-[#1e3a8a]' : 'text-gray-800'}`}>
+                            {pillar.title}
+                          </h3>
+                        </div>
+                        <ChevronDown
+                          className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#1e3a8a]' : 'text-gray-400 group-hover:text-gray-600'}`}
+                          size={18}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 pb-4 pt-1 text-gray-600 text-sm md:text-base font-medium leading-relaxed">
+                              {pillar.desc}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: MISI */}
+            <div className="h-full flex flex-col pt-8 lg:pt-0">
+              <div className="mb-8">
+                <span className="inline-flex items-center gap-2 bg-red-50 text-[#dc2626] px-4 py-2 rounded-full mb-6 font-black tracking-widest text-[10px] uppercase shadow-sm border border-red-100">
+                  MISI STTB
+                </span>
+                <h3 className="text-3xl md:text-4xl font-black text-[#0a1930] tracking-tight mb-4">
+                  Tiga Pilar Strategis
+                </h3>
+                <p className="text-gray-600 font-medium leading-relaxed text-lg">
+                  Komitmen teguh Sekolah Tinggi Teologi Bandung dalam mewujudkan visi pendidikan teologi masa depan.
+                </p>
+              </div>
+
+              <div className="flex-1 bg-gray-50 rounded-3xl p-6 md:p-8 border border-gray-100 flex flex-col justify-center">
+                <ul className="space-y-5">
+                  {[
+                    "Mempersiapkan pastor-scholar yang transformatif untuk pelayanan dalam konteks urban.",
+                    "Memberdayakan seluruh umat Allah untuk menghadirkan Injil seutuhnya di tengah konteks masyarakat urban melalui penelitian dan pendidikan non-formal.",
+                    "Mengembangkan tim dosen, struktur organisasi keuangan, serta kemitraan untuk mendukung pencapaian visi STTB."
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start gap-4 bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                      <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0 text-[#dc2626] font-black text-xl border border-red-100 group-hover:bg-[#dc2626] group-hover:text-white transition-colors">
+                        {index + 1}
+                      </div>
+                      <span className="text-gray-800 font-bold leading-snug pt-2">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -136,11 +244,38 @@ export function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-5xl mx-auto"
+            // Tambahkan class 'group' di sini agar menjadi trigger hover utama
+            className="relative max-w-5xl mx-auto group"
           >
-            {/* Wrapper Video Premium - Kesan "Dark Frame" di sekeliling video */}
-            <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_rgba(10,25,48,0.15)] bg-[#0a1930] p-3 md:p-5 border border-gray-200">
-              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-black ring-1 ring-white/10 shadow-inner group">
+            {/* Floating Badges dengan Efek Repulse (Menjauh) */}
+            {[
+              { text: "📖 Library", pos: "-top-6 left-10", color: "bg-[#1e3a8a]", delay: 0.4, hoverMove: "group-hover:-translate-x-10 group-hover:-translate-y-8" },
+              { text: "☕ Cafe", pos: "top-1/4 -right-6", color: "bg-[#dc2626]", delay: 0.5, hoverMove: "group-hover:translate-x-12 group-hover:-translate-y-4" },
+              { text: "🎨 Studio", pos: "-bottom-6 right-20", color: "bg-[#1e3a8a]", delay: 0.6, hoverMove: "group-hover:translate-x-10 group-hover:translate-y-8" },
+
+              // DORMITORY: Jarak menjauh ke kiri ditambah drastis (dari -x-12 menjadi -x-20)
+              { text: "🏢 Dormitory", pos: "top-1/3 -left-6", color: "bg-[#dc2626]", delay: 0.7, hoverMove: "group-hover:-translate-x-20" },
+
+              { text: "🍽️ Canteen", pos: "-bottom-6 left-20", color: "bg-[#1e3a8a]", delay: 0.8, hoverMove: "group-hover:-translate-x-10 group-hover:translate-y-8" },
+
+              // AUDITORIUM: Jarak menjauh ke kanan bawah ditambah drastis (dari x-10 y-6 menjadi x-20 y-12)
+              { text: "🏛️ Auditorium", pos: "bottom-1/4 -right-10", color: "bg-[#dc2626]", delay: 0.9, hoverMove: "group-hover:translate-x-20 group-hover:translate-y-12" },
+            ].map((badge, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: badge.delay, type: "spring", stiffness: 100 }}
+                className={`absolute ${badge.pos} ${badge.hoverMove} z-20 hidden lg:flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-[0_10px_30px_rgba(30,58,138,0.1)] border border-gray-100 group-hover:scale-110 transition-all duration-700 ease-out cursor-default`}
+              >
+                <div className={`w-2.5 h-2.5 rounded-full ${badge.color} animate-pulse`}></div>
+                <span className="text-[#0a1930] font-bold text-[13px] tracking-wide whitespace-nowrap">{badge.text}</span>
+              </motion.div>
+            ))}
+
+            {/* Wrapper Video Premium */}
+            <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(30,58,138,0.08)] bg-white p-3 md:p-5 border border-gray-100 z-10">
+              <div className="relative aspect-video rounded-[1.5rem] overflow-hidden bg-gray-100">
 
                 {!isVideoPlaying ? (
                   <div
@@ -151,26 +286,27 @@ export function AboutPage() {
                     <ImageWithFallback
                       src="https://img.youtube.com/vi/hTh0QkKxNhg/maxresdefault.jpg"
                       alt="Campus Tour STTB 2022"
-                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+                      // Perbesar sedikit foto saat grup di-hover
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
 
                     {/* Tombol Play Raksasa yang Interaktif */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 md:w-24 md:h-24 bg-[#dc2626]/90 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-[0_0_40px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-all duration-300 border border-red-400/50">
+                    <div className="absolute inset-0 flex items-center justify-center -translate-y-4 md:translate-y-0">
+                      <div className="w-20 h-20 md:w-24 md:h-24 bg-[#dc2626]/90 backdrop-blur-md rounded-full flex items-center justify-center text-white shadow-[0_0_40px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-[#dc2626] transition-all duration-500 border border-red-400/50">
                         <PlayCircle size={48} strokeWidth={2} />
                       </div>
                     </div>
 
                     {/* Text Keterangan di Bawah Thumbnail */}
-                    <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full pointer-events-none">
+                    <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full pointer-events-none bg-gradient-to-t from-black/60 to-transparent">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="bg-[#1e3a8a] text-white px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                        <span className="bg-white text-[#1e3a8a] px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
                           Video Tur
                         </span>
-                        <span className="text-white/80 text-sm font-bold">Durasi: 8 Menit</span>
+                        <span className="text-white text-sm font-bold shadow-sm">Durasi: 8 Menit</span>
                       </div>
-                      <h3 className="text-2xl md:text-4xl font-black text-white drop-shadow-lg tracking-tight group-hover:text-blue-200 transition-colors">
+                      <h3 className="text-2xl md:text-3xl font-black text-white drop-shadow-md tracking-tight group-hover:translate-x-2 transition-transform duration-500">
                         Campus Tour STTB 2022
                       </h3>
                     </div>
@@ -575,212 +711,161 @@ export function AboutPage() {
       </section>
 
       {/* Dewan Dosen */}
-      <section className="py-20 bg-white" id="leadership">
+      <section className="py-24 bg-gray-50/50 border-t border-gray-100" id="leadership">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-4 py-2 rounded-full mb-6">
-              <Users size={20} />
-              <span className="font-bold">KEPEMIMPINAN</span>
+          <div className="max-w-3xl mx-auto text-center mb-20">
+            <div className="inline-flex items-center gap-2 bg-[#dbeafe] text-[#1e3a8a] px-5 py-2.5 rounded-full mb-6 font-black tracking-widest text-xs uppercase shadow-sm">
+              <Users size={16} strokeWidth={2.5} />
+              KEPEMIMPINAN
             </div>
-            <h2 className="text-sm font-black text-red-500 mb-2 tracking-widest">
-              DEWAN PENGAJAR
+            <h2 className="text-4xl md:text-5xl font-black text-[#0a1930] mb-4 tracking-tight">
+              DEWAN <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-[#dc2626]">PENGAJAR</span>
             </h2>
-            <h2 className="text-4xl md:text-5xl font-black text-[#1e3a8a] mb-4">
-              DOSEN STTB
-            </h2>
-            <p className="text-lg text-gray-600">
-              Dipimpin oleh para akademisi dan pelayan yang berpengalaman
+            <p className="text-lg text-gray-500 font-medium">
+              Dipimpin oleh para akademisi dan pelayan Tuhan yang berpengalaman di bidangnya.
             </p>
           </div>
 
-          <div className="max-w-7xl mx-auto flex flex-col gap-8">
-            <div className="relative">
-              <div className="flex justify-end items-center gap-4 mb-6 md:pr-24">
-                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
-                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
-                  Ketua
-                </span>
-              </div>
-              <div className="flex justify-center md:justify-end md:pr-24">
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                  className="w-52"
-                >
-                  <DosenCard
-                    dosen={{
-                      name: "Dr. John Doe, M.Th.",
-                      position: "Ketua STTB",
-                      teaching: "Dosen Teologi Sistematika",
-                      education: [
-                        "Ph.D. University of Southern California USA",
-                        "M.BA. Graduate Theological Foundation Indiana",
-                        "M.Th. Calvin Theological Seminary USA",
-                      ],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    }}
-                  />
-                </motion.div>
-              </div>
-            </div>
+          {(() => {
+            // Helper function to convert lecturer to DosenData
+            const toDosenData = (d: any) => ({
+              name: d.name,
+              position: d.position || "Dosen Tetap",
+              teaching: d.expertise || "Dosen Teologi",
+              education: d.educationLevel ? d.educationLevel.split("\n").map((s: string) => s.trim()).filter(Boolean) : [],
+              image: d.photo || "https://images.unsplash.com/photo-1758270704524-596810e891b5",
+            });
 
-            <div className="relative">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
-                  Wakil Ketua
-                </span>
-                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
-              </div>
-              <div className="flex justify-center md:justify-start">
-                <div className="flex flex-wrap md:flex-nowrap gap-5">
-                  {[
-                    {
-                      name: "Tan Giok Lie",
-                      position: "Wakil Ketua I Akademik",
-                      teaching: "Dosen Pendidikan",
-                      education: [
-                        "Ed.D. Biola University Talbot School Theology USA",
-                        "M.A. Institut Alkitab Tiranus Bandung",
-                        "S.S. Universitas Kristen Maranatha Bandung",
-                      ],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dr. Jane Smith, M.Div.",
-                      position: "Wakil Ketua II Keuangan",
-                      teaching: "Dosen Perjanjian Baru",
-                      education: [
-                        "Ph.D. Trinity Evangelical Divinity School USA",
-                        "M.Div. Fuller Theological Seminary USA",
-                      ],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dr. Michael Brown, Th.D.",
-                      position: "Wakil Ketua III Kemahasiswaan",
-                      teaching: "Dosen Teologi Praktika",
-                      education: [
-                        "Th.D. South East Asia Graduate School of Theology",
-                        "M.Th. Calvin Theological Seminary USA",
-                      ],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                  ].map((dosen, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="w-44 md:w-52 flex-shrink-0"
-                    >
-                      <DosenCard dosen={dosen} />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            // Categorize lecturers by position
+            const pos = (d: any) => (d.position || "").toLowerCase();
+            const ketuaList = lecturers?.filter(d => pos(d).includes("ketua") && !pos(d).includes("wakil") && !pos(d).includes("kaprodi") && !pos(d).includes("program studi")) || [];
+            const wakilList = lecturers?.filter(d => pos(d).includes("wakil ketua")) || [];
+            const kaprodiList = lecturers?.filter(d => pos(d).includes("kaprodi") || pos(d).includes("ketua program studi")) || [];
+            const dosenList = lecturers?.filter(d => {
+              const p = pos(d);
+              const isKetua = p.includes("ketua") && !p.includes("wakil") && !p.includes("kaprodi") && !p.includes("program studi");
+              const isWakil = p.includes("wakil ketua");
+              const isKaprodi = p.includes("kaprodi") || p.includes("ketua program studi");
+              return !isKetua && !isWakil && !isKaprodi;
+            }) || [];
 
-            <div className="relative">
-              <div className="flex justify-end items-center gap-4 mb-6">
-                <div className="hidden md:block flex-1 h-px bg-gradient-to-r from-transparent to-[#1e3a8a]/30" />
-                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
-                  Ketua Program Studi
-                </span>
-              </div>
-              <div className="flex justify-center md:justify-end">
-                <div className="flex flex-wrap md:flex-nowrap gap-5">
-                  {[
-                    {
-                      name: "Dosen A",
-                      position: "Kaprodi S1 Teologi",
-                      teaching: "Dosen Perjanjian Lama",
-                      education: ["Ph.D. Universitas A", "M.Th. Universitas B"],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dosen B",
-                      position: "Kaprodi S1 PAK",
-                      teaching: "Dosen Pendidikan Agama Kristen",
-                      education: ["Ed.D. Universitas C", "M.A. Universitas D"],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dosen C",
-                      position: "Kaprodi S2 Teologi",
-                      teaching: "Dosen Sejarah Gereja",
-                      education: ["Ph.D. Universitas E", "M.Div. Universitas F"],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dosen D",
-                      position: "Kaprodi S2 PAK",
-                      teaching: "Dosen Filsafat",
-                      education: ["Th.D. Universitas G", "M.Th. Universitas H"],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                    {
-                      name: "Dosen E",
-                      position: "Kaprodi S3 Teologi",
-                      teaching: "Dosen Misiologi",
-                      education: ["Ph.D. Universitas I", "M.A. Universitas J"],
-                      image: "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                    },
-                  ].map((dosen, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="w-44 md:w-52 flex-shrink-0"
-                    >
-                      <DosenCard dosen={dosen} />
-                    </motion.div>
-                  ))}
+            if (lecturersLoading) {
+              return (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <Loader2 className="animate-spin text-[#1e3a8a] mb-4" size={40} />
+                  <span className="text-gray-500 font-bold tracking-widest uppercase text-sm">Memuat Profil Dosen...</span>
                 </div>
-              </div>
-            </div>
+              );
+            }
 
-            <div className="relative">
-              <div className="flex items-center gap-4 mb-6">
-                <span className="bg-[#1e3a8a] text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wider">
-                  Jajaran Dosen
-                </span>
-                <div className="hidden md:block flex-1 h-px bg-gradient-to-l from-transparent to-[#1e3a8a]/30" />
+            if (lecturersError && !lecturersLoading) {
+              return (
+                <div className="flex flex-col items-center justify-center py-12 bg-red-50 rounded-3xl max-w-2xl mx-auto border border-red-100">
+                  <AlertCircle className="text-[#dc2626] mb-3" size={40} />
+                  <span className="text-[#dc2626] font-black text-xl mb-1">Gagal Memuat</span>
+                  <span className="text-sm font-medium text-red-700">Silakan muat ulang halaman.</span>
+                </div>
+              );
+            }
+
+            if (!lecturers || lecturers.length === 0) {
+              return (
+                <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                  <Users className="mx-auto text-gray-300 mb-4" size={48} />
+                  <p className="text-gray-500 font-bold text-lg">Data dosen belum tersedia.</p>
+                </div>
+              );
+            }
+
+            return (
+              <div className="max-w-[90rem] mx-auto flex flex-col gap-16">
+
+                {/* Ketua (Centered, Extra Large) */}
+                {ketuaList.length > 0 && (
+                  <div className="relative flex flex-col items-center justify-center border-b border-gray-200 pb-16">
+                    <div className="inline-flex items-center gap-2 bg-[#1e3a8a] text-white px-5 py-2 rounded-full mb-10 shadow-md">
+                      <Star size={16} strokeWidth={2.5} className="text-yellow-400" />
+                      <span className="font-black text-xs tracking-widest uppercase">Pimpinan Utama</span>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-8 w-full">
+                      {ketuaList.map((d, index) => (
+                        <motion.div
+                          key={d.id}
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: index * 0.1 }}
+                          className="w-[320px] md:w-[360px]"
+                        >
+                          <DosenCard dosen={toDosenData(d)} isFeatured={true} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Wakil Ketua */}
+                {wakilList.length > 0 && (
+                  <div className="relative pt-4">
+                    <div className="flex items-center gap-6 mb-10">
+                      <h3 className="text-2xl font-black text-[#0a1930] tracking-tight">Wakil Ketua</h3>
+                      <div className="flex-1 h-px bg-gradient-to-r from-gray-200 to-transparent" />
+                    </div>
+                    {/* Menggunakan Grid yang responsif untuk kartu potret */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                      {wakilList.map((d, index) => (
+                        <motion.div
+                          key={d.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="w-full"
+                        >
+                          <DosenCard dosen={toDosenData(d)} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Ketua Program Studi */}
+                {kaprodiList.length > 0 && (
+                  <div className="relative pt-4">
+                    <div className="flex items-center gap-6 mb-10">
+                      <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent" />
+                      <h3 className="text-2xl font-black text-[#0a1930] tracking-tight">Ketua Program Studi</h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                      {kaprodiList.map((d, index) => (
+                        <motion.div
+                          key={d.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="w-full"
+                        >
+                          <DosenCard dosen={toDosenData(d)} />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Jajaran Dosen (Carousel) */}
+                {dosenList.length > 0 && (
+                  <div className="relative pt-16 border-t border-gray-200">
+                    <div className="text-center mb-12">
+                      <h3 className="text-3xl font-black text-[#0a1930] tracking-tight mb-2">Jajaran Dosen</h3>
+                      <p className="text-gray-500 font-medium">Pengajar tetap dan tidak tetap STT Bandung</p>
+                    </div>
+                    <DosenCarousel dosenList={dosenList.map(toDosenData)} />
+                  </div>
+                )}
               </div>
-              {lecturersLoading && (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="animate-spin text-[#1e3a8a] mr-3" size={28} />
-                  <span className="text-gray-500">Memuat data dosen...</span>
-                </div>
-              )}
-              {lecturersError && !lecturersLoading && (
-                <div className="flex items-center justify-center py-8 bg-red-50 rounded-xl">
-                  <AlertCircle className="text-[#dc2626] mr-3" size={24} />
-                  <span className="text-[#dc2626]">Gagal memuat data dosen.</span>
-                </div>
-              )}
-              {!lecturersLoading && !lecturersError && lecturers && lecturers.length > 0 && (
-                <DosenCarousel
-                  dosenList={lecturers.map((d) => ({
-                    name: d.name,
-                    position: d.position || "Dosen Tetap",
-                    teaching: d.expertise || "Dosen Teologi",
-                    education: d.educationLevel ? [d.educationLevel] : [],
-                    image: d.photo || "https://images.unsplash.com/photo-1758270704524-596810e891b5",
-                  }))}
-                />
-              )}
-              {!lecturersLoading && !lecturersError && (!lecturers || lecturers.length === 0) && (
-                <div className="text-center py-8 bg-gray-50 rounded-xl">
-                  <p className="text-gray-500">Data dosen belum tersedia.</p>
-                </div>
-              )}
-            </div>
-          </div>
+            );
+          })()}
         </div>
       </section>
 
@@ -1038,7 +1123,7 @@ export function AboutPage() {
                         <h4 className="text-sm font-bold text-[#1e3a8a] leading-tight">
                           {person.name}
                         </h4>
-                        <p className="text-[11px] font-semibold text-[#dc2626] mt-1">
+                        <p className="text-sm font-black text-[#dc2626] mt-1 uppercase">
                           {person.role}
                         </p>
                       </div>

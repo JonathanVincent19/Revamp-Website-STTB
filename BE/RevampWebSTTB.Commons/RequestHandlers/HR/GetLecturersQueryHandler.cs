@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RevampWebSTTB.Contracts.Requests.HR;
 using RevampWebSTTB.Contracts.Responses.HR;
@@ -29,10 +29,13 @@ namespace RevampWebSTTB.Commons.RequestHandlers.HR
                     Id = l.Id,
                     Name = l.Name,
                     Photo = l.Photo,
+                    Nidn = l.Nidn,
                     Position = l.Position,
                     EducationLevel = l.EducationLevel,
                     Expertise = l.Expertise,
-                    Email = l.Email
+                    Email = l.Email,
+                    SortOrder = l.SortOrder,
+                    CreatedAt = l.CreatedAt
                 }).ToList()
             };
         }
