@@ -75,7 +75,7 @@ export function MediaPage() {
                id: album.id.toString(),
                title: album.title,
                category: album.category || "STT BANDUNG",
-               type: album.type || "Album",
+               type: album.type || "Artikel",
                date: rawDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
                rawDate: rawDate.getTime(),
                image: album.coverImage || "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=800&auto=format&fit=crop",

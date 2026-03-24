@@ -142,7 +142,10 @@ export interface AlbumDetailResponse {
 export interface CreateAlbumPayload {
   title: string;
   description?: string;
+  category?: string;
+  type?: string;
   coverImage?: string;
+  url?: string;
   eventDate?: string;
 }
 
@@ -269,19 +272,6 @@ export interface TestimonialItem {
 export interface TestimonialsListResponse {
   success: boolean;
   data: TestimonialItem[];
-}
-
-export interface CreateTestimonialPayload {
-  alumniName: string;
-  graduationYear?: number;
-  currentJob?: string;
-  photo?: string;
-  testimonialText: string;
-  isFeatured?: boolean;
-}
-
-export interface UpdateTestimonialPayload extends CreateTestimonialPayload {
-  id: number;
 }
 
 export interface CreateTestimonialPayload {
